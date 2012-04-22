@@ -49,7 +49,7 @@ module Bosh::Gen
       
       def copy_src_files
         files.each do |f|
-          copy_file f, File.join("src", File.basename(f))
+          copy_file File.expand_path(f), File.join("src", File.basename(f))
         end
       end
       
