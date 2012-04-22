@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-require File.expand_path('../lib/bosh-gen/version', __FILE__)
+require File.expand_path('../lib/bosh/gen/version', __FILE__)
 
 Gem::Specification.new do |gem|
   gem.authors       = ["Dr Nic Williams"]
@@ -14,4 +14,6 @@ Gem::Specification.new do |gem|
   gem.name          = "bosh-gen"
   gem.require_paths = ["lib"]
   gem.version       = Bosh::Gen::VERSION
+  
+  gem.add_dependency "thor"
 end
