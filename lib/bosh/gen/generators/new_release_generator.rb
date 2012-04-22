@@ -6,6 +6,7 @@ module Bosh::Gen
       include Thor::Actions
 
       argument :app_path
+      argument :flags, :type => :hash
       
       def self.source_root
         File.join(File.dirname(__FILE__), "new_release_generator", "templates")
@@ -29,20 +30,41 @@ module Bosh::Gen
       
       # TODO - support other blobstores
       def local_blobstore
-        config = { "dev_name" => name, "latest_release_filename" => "" }
-        create_file "config/dev.yml", YAML.dump(config)
-
-        say_status "warning", "config/final.yml defaulting to local blobstore /tmp/blobstore", :yellow
-        config = { "blobstore" => {
-            "provider" => "local",
-            "options" => { "blobstore_path" => '/tmp/blobstore' }
+        case blobstore_type
+        when :local
+          say_status "warning", "config/final.yml defaulting to local blobstore /tmp/blobstore", :yellow
+          config_private = {}
+          config_final = { "blobstore" => {
+              "provider" => "local",
+              "options" => { "blobstore_path" => '/tmp/blobstore' }
+            }
           }
-        }
-        create_file "config/final.yml", YAML.dump(config)
-
-        # config = { "blobstore_secret" => blobstore_secret }
-        config = {}
-        create_file "config/private.yml", YAML.dump(config)
+        when :s3
+          config_private = { "blobstore_secret" => 'AWS_SECRET_KEY' }
+          config_final = { "blobstore" => {
+              "provider" => "s3",
+              "options" => {
+                "bucket_name" => "BOSH",
+                "access_key_id" => "AWS_ACCESS_KEY",
+                "encryption_key" => "AWS_ENCRYPTION_KEY",
+              }
+            }
+          }
+        when :atmos
+          config_private = { "blobstore_secret" => 'ATMOS_SECRET_KEY' }
+          config_final = { "blobstore" => {
+              "provider" => "atmos",
+              "options" => {
+                "tag" => "BOSH",
+                "url" => "https://blob.cfblob.com",
+                "uid" => "ATMOS_UID"
+              }
+            }
+          }
+        end
+        
+        create_file "config/private.yml", YAML.dump(config_private)
+        create_file "config/final.yml", YAML.dump(config_final)
       end
       
       def git_init
@@ -74,6 +96,20 @@ module Bosh::Gen
       
       def name
         File.basename(self.destination_root)
+      end
+      
+      def blobstore_type
+        return :s3 if s3?
+        return :atmos if atmos?
+        return :local
+      end
+      
+      def s3?
+        flags[:aws]
+      end
+      
+      def atmos?
+        flags[:atmos]
       end
 
       # Run a command in git.

@@ -6,10 +6,13 @@ module Bosh
       include Thor::Actions
     
       desc "new NAME", "Creates a new BOSH release"
-      method_options :name => :default
+      method_option :s3, :alias => ["--aws"], :type => :boolean, :desc => "Use AWS S3 bucket for blobstore"
+      method_option :atmos, :type => :boolean, :desc => "Use EMC ATMOS for blobstore"
       def new(name)
+        flags = { :aws => options["s3"], :atmos => options["atmos"] }
+        
         require 'bosh/gen/generators/new_release_generator'
-        Bosh::Gen::Generators::NewReleaseGenerator.start([name])
+        Bosh::Gen::Generators::NewReleaseGenerator.start([name, flags])
       end
 
       no_tasks do
