@@ -7,6 +7,8 @@ module Bosh::Gen
       include Thor::Actions
 
       argument :name
+      argument :dependencies, :type => :array
+      argument :files, :type => :array
       
       def self.source_root
         File.join(File.dirname(__FILE__), "package_generator", "templates")
@@ -41,14 +43,21 @@ module Bosh::Gen
       end
 
       def package_specification
-        dependencies = []
-        files = []
-        config = { "name" => name, "dependencies" => dependencies, "files" => files }
+        config = { "name" => name, "dependencies" => dependencies, "files" => filenames }
         create_file package_dir("spec"), YAML.dump(config)
       end
       
+      def copy_src_files
+        files.each do |f|
+          copy_file f, File.join("src", File.basename(f))
+        end
+      end
       
       private
+      def filenames
+        files.map {|f| File.basename(f) }
+      end
+      
       def package_dir(path)
         File.join(name, path)
       end

@@ -22,9 +22,13 @@ module Bosh
       end
       
       desc "package NAME", "Create a new package"
+      method_option :dependencies, :aliases => ['-d'], :type => :array, :desc => "List of package dependencies"
+      method_option :files,        :aliases => ['-f', '--src'], :type => :array, :desc => "List of file paths to include"
       def package(name)
+        dependencies = options[:dependencies] || []
+        files        = options[:files] || []
         require 'bosh/gen/generators/package_generator'
-        Bosh::Gen::Generators::PackageGenerator.start([name])
+        Bosh::Gen::Generators::PackageGenerator.start([name, dependencies, files])
       end
 
       no_tasks do
