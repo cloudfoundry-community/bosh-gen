@@ -1,3 +1,4 @@
+require 'yaml'
 require 'thor/group'
 
 module Bosh::Gen
