@@ -24,6 +24,15 @@ module Bosh::Gen
         raise Thor::Error.new("'#{name}' is not a vaild BOSH id") unless name.bosh_valid_id?
       end
       
+      def warn_missing_dependencies
+        dependencies.each do |d|
+          raise Thor::Error.new("dependency '#{d}' is not a vaild BOSH id") unless d.bosh_valid_id?
+          unless File.exist?("../#{d}")
+            say_status "warning", "missing dependency '#{d}'", :yellow
+          end
+        end
+      end
+      
       def packaging
         create_file package_dir("packaging") do
           <<-SHELL.gsub(/^\s{10}/, '')
