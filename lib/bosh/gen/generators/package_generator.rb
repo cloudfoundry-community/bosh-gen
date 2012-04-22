@@ -51,28 +51,25 @@ module Bosh::Gen
         end
       end
 
-      def package_specification
-        config = { "name" => name, "dependencies" => dependencies, "files" => filenames }
-        create_file package_dir("spec"), YAML.dump(config)
-      end
-      
       def copy_src_files
         files.each do |f|
           copy_file File.expand_path(f), src_dir(File.basename(f))
         end
       end
       
-      private
-      def filenames
-        files.map {|f| File.basename(f) }
+      def package_specification
+        src_files = files.map {|f| "src/#{name}/#{File.basename(f)}"}
+        config = { "name" => name, "dependencies" => dependencies, "files" => src_files }
+        create_file package_dir("spec"), YAML.dump(config)
       end
       
+      private
       def package_dir(path)
-        File.join("packages", name, path)
+        "packages/#{name}/#{path}"
       end
 
       def src_dir(path)
-        File.join("src", name, path)
+        "src/#{name}/#{path}"
       end
       
       # Run a command in git.
