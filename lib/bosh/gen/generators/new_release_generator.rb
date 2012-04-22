@@ -24,8 +24,25 @@ module Bosh::Gen
       end
       
       def blobs_yaml
-        blobs = {}
-        create_file "blob_index.yml", YAML.dump(blobs)
+        create_file "blob_index.yml", YAML.dump({})
+      end
+      
+      # TODO - support other blobstores
+      def local_blobstore
+        config = { "dev_name" => name, "latest_release_filename" => "" }
+        create_file "config/dev.yml", YAML.dump(config)
+
+        say_status "warning", "config/final.yml defaulting to local blobstore /tmp/blobstore", :yellow
+        config = { "blobstore" => {
+            "provider" => "local",
+            "options" => { "blobstore_path" => '/tmp/blobstore' }
+          }
+        }
+        create_file "config/final.yml", YAML.dump(config)
+
+        # config = { "blobstore_secret" => blobstore_secret }
+        config = {}
+        create_file "config/private.yml", YAML.dump(config)
       end
       
       def git_init
@@ -54,6 +71,10 @@ module Bosh::Gen
       end
       
       private
+      
+      def name
+        File.basename(self.destination_root)
+      end
 
       # Run a command in git.
       #
