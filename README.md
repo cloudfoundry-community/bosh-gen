@@ -1,6 +1,6 @@
-# Bosh::Gen
+# BOSH Generators
 
-TODO: Write a gem description
+Generators for creating BOSH releases.
 
 ## Installation
 
@@ -18,7 +18,14 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+    $ bosh-gen release my-new-project
+    $ cd my-new-project
+    $ bosh-gen job somejob
+    $ bosh-gen package somepackage -u somejob
+    $ bosh-gen package anotherpackage
+    $ bosh-gen job anotherjob -u somepackage anotherpackage
+
+This will create two jobs and two package scaffolds. Both packages will be used by `somejob`, and `anotherpackage` is used by both jobs.
 
 ## Contributing
 
