@@ -16,6 +16,11 @@ module Bosh::Gen
           directory dir, File.join(name, dir)
         end
       end
+      
+      def blobs_yaml
+        blobs = {}
+        create_file File.join(name, "blob_index.yml"), YAML.dump(blobs)
+      end
     end
   end
 end
