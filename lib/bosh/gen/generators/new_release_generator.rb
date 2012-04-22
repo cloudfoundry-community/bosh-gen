@@ -46,7 +46,7 @@ module Bosh::Gen
               "options" => {
                 "bucket_name" => "BOSH",
                 "access_key_id" => "AWS_ACCESS_KEY",
-                "encryption_key" => "AWS_ENCRYPTION_KEY",
+                "encryption_key" => "PERSONAL_RANDOM_KEY",
               }
             }
           }
