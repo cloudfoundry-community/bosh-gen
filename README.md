@@ -19,8 +19,17 @@ Or install it yourself as:
 ## Usage
 
 ```
-$ bosh-gen new my-new-project
+$ bosh-gen new my-new-project --s3
+$ bosh-gen new my-new-project --atmos
+$ bosh-gen new my-new-project # local blobstore with a warning
+
 $ cd my-new-project
+$ bosh create release
+```
+
+TODO:
+
+```
 $ bosh-gen job somejob
 $ bosh-gen package somepackage -u somejob
 $ bosh-gen package anotherpackage
