@@ -30,6 +30,16 @@ module Bosh
         require 'bosh/gen/generators/package_generator'
         Bosh::Gen::Generators::PackageGenerator.start([name, dependencies, files])
       end
+      
+      desc "job NAME", "Create a new job"
+      method_option :dependencies, :aliases => ['-d'], :type => :array, :desc => "List of package dependencies"
+      method_option :templates, :aliases => ['-t'], :type => :array, :desc => "List of templates to use"
+      def job(name)
+        dependencies   = options[:dependencies] || []
+        template_files = options[:template_files] || []
+        require 'bosh/gen/generators/job_generator'
+        Bosh::Gen::Generators::JobGenerator.start([name, dependencies, template_files])
+      end
 
       no_tasks do
         def cyan; "\033[36m" end
