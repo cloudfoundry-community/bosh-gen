@@ -20,14 +20,14 @@ module Bosh::Gen
         end
       end
       
-      def check_job_name
+      def check_name
         raise Thor::Error.new("'#{name}' is not a vaild BOSH id") unless name.bosh_valid_id?
       end
       
       def warn_missing_dependencies
         dependencies.each do |d|
           raise Thor::Error.new("dependency '#{d}' is not a vaild BOSH id") unless d.bosh_valid_id?
-          unless File.exist?("../#{d}")
+          unless File.exist?(File.join("packages", d))
             say_status "warning", "missing dependency '#{d}'", :yellow
           end
         end
@@ -58,7 +58,7 @@ module Bosh::Gen
       
       def copy_src_files
         files.each do |f|
-          copy_file File.expand_path(f), File.join("src", File.basename(f))
+          copy_file File.expand_path(f), src_dir(File.basename(f))
         end
       end
       
@@ -68,7 +68,11 @@ module Bosh::Gen
       end
       
       def package_dir(path)
-        File.join(name, path)
+        File.join("packages", name, path)
+      end
+
+      def src_dir(path)
+        File.join("src", name, path)
       end
       
       # Run a command in git.
