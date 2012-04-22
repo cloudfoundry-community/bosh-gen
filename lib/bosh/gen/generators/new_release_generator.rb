@@ -31,6 +31,9 @@ module Bosh::Gen
       
       # TODO - support other blobstores
       def local_blobstore
+        config_dev = { "dev_name" => name }
+        create_file "config/dev.yml", YAML.dump(config_dev)
+
         case blobstore_type
         when :local
           say_status "warning", "config/final.yml defaulting to local blobstore /tmp/blobstore", :yellow
