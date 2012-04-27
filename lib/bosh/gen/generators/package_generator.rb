@@ -51,9 +51,17 @@ module Bosh::Gen
         end
       end
 
+      # Copy the local source files into src/NAME/filename, unless filename
+      # already exists as a blob in blobs/NAME/filename.
       def copy_src_files
-        files.each do |f|
-          copy_file File.expand_path(f), src_dir(File.basename(f))
+        files.each do |file_path|
+          file_name = File.basename(file_path)
+          src_file = src_dir(file_name)
+          if File.exist? blob_dir(file_name)
+            say "Blob '#{file_name}' exists as a blob, skipping..."
+          else
+            copy_file File.expand_path(f), src_file
+          end
         end
       end
       
@@ -70,6 +78,10 @@ module Bosh::Gen
 
       def src_dir(path)
         "src/#{name}/#{path}"
+      end
+      
+      def blob_dir(path)
+        "blobs/#{name}/#{path}"
       end
       
       # Run a command in git.
