@@ -24,6 +24,11 @@ $ bosh-gen new my-new-project --atmos
 $ bosh-gen new my-new-project # local blobstore with a warning
 
 $ cd my-new-project
+```
+
+**NEXT:** Edit `config/final.yml` with your S3 or ATMOS credentials
+
+```
 $ bosh create release
 
 $ wget -P /tmp http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p194.tar.gz 
@@ -36,6 +41,18 @@ $ git commit -m "added a job + 3 packages"
 
 $ bosh create release
 ```
+
+It is not ideal to include large source files, such as the 10Mb ruby tarball, in your git repository. Rather, use the blobstore for those:
+
+```
+$ rm -rf src/ruby/ruby-1.9.3-p194.tar.gz
+$ bosh add blob /tmp/ruby-1.9.3-p194.tar.gz ruby
+$ bosh upload blobs
+
+$ bosh create release
+```
+
+
 
 
 ## Contributing
