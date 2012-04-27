@@ -25,18 +25,18 @@ $ bosh-gen new my-new-project # local blobstore with a warning
 
 $ cd my-new-project
 $ bosh create release
+
+$ wget -P /tmp http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p194.tar.gz 
+$ bosh-gen package ruby -f /tmp/ruby-1.9.3-p194.tar.gz
+
+$ bosh-gen package some-package -d ruby
+$ bosh-gen package some-other-package -d ruby
+
+$ bosh-gen job some-ruby-job -d some-package some-other-package
 ```
 
-TODO:
 
-```
-$ bosh-gen job somejob
-$ bosh-gen package somepackage -u somejob
-$ bosh-gen package anotherpackage
-$ bosh-gen job anotherjob -u somepackage anotherpackage
-```
-
-This will create two jobs and two package scaffolds. Both packages will be used by `somejob`, and `anotherpackage` is used by both jobs.
+This will create one job, which depends on three packages (`some-package`, `some-other-package` and ultimately also `ruby`).
 
 ## Contributing
 
