@@ -34,28 +34,30 @@ module Bosh::Gen
         config_dev = { "dev_name" => name }
         create_file "config/dev.yml", YAML.dump(config_dev)
 
+        config_private = { "blobstore_secret" => 'BLOBSTORE_SECRET' }
+        create_file "config/private.yml", YAML.dump(config_private)
+
         case blobstore_type
         when :local
           say_status "warning", "config/final.yml defaulting to local blobstore /tmp/blobstore", :yellow
-          config_private = {}
           config_final = { "blobstore" => {
               "provider" => "local",
               "options" => { "blobstore_path" => '/tmp/blobstore' }
             }
           }
         when :s3
-          config_private = { "blobstore_secret" => 'AWS_SECRET_KEY' }
+          config_private = { "blobstore_secret" => 'BLOBSTORE_SECRET' }
           config_final = { "blobstore" => {
               "provider" => "s3",
               "options" => {
                 "bucket_name" => "BOSH",
                 "access_key_id" => "AWS_ACCESS_KEY",
+                "secret_access_key" => "AWS_SECRET_ACCESS_KEY",
                 "encryption_key" => "PERSONAL_RANDOM_KEY",
               }
             }
           }
         when :atmos
-          config_private = { "blobstore_secret" => 'ATMOS_SECRET_KEY' }
           config_final = { "blobstore" => {
               "provider" => "atmos",
               "options" => {
@@ -67,7 +69,6 @@ module Bosh::Gen
           }
         end
         
-        create_file "config/private.yml", YAML.dump(config_private)
         create_file "config/final.yml", YAML.dump(config_final)
       end
       
