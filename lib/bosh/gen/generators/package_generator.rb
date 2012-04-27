@@ -66,7 +66,7 @@ module Bosh::Gen
       end
       
       def package_specification
-        src_files = files.map {|f| "src/#{name}/#{File.basename(f)}"}
+        src_files = files.map {|f| "#{name}/#{File.basename(f)}"}
         config = { "name" => name, "dependencies" => dependencies, "files" => src_files }
         create_file package_dir("spec"), YAML.dump(config)
       end
