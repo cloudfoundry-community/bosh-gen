@@ -19,6 +19,10 @@ module Bosh::Gen
         FileUtils.cd(destination_root) unless options[:pretend]
       end
       
+      def readme
+        template "README.md.tt", "README.md"
+      end
+      
       def directories
         %w[jobs packages src blobs].each do |dir|
           directory dir

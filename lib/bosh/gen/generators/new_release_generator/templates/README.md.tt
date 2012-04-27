@@ -1,0 +1,4 @@
+# <%= name %> - BOSH Release
+
+This project is a BOSH release for `<%= name %>`.
+
