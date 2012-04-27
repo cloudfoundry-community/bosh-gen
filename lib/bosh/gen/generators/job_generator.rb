@@ -33,7 +33,7 @@ module Bosh::Gen
       end
       
       def templates
-        empty_directory job_dir("template")
+        empty_directory job_dir("templates")
       end
       
       def monit
