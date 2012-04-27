@@ -25,7 +25,7 @@ module Bosh::Gen
       end
 
       def touch_template_erb
-        create_file job_dir(template_name)
+        create_file job_template_dir(template_name)
       end
       
       def add_template_to_spec
@@ -46,6 +46,10 @@ module Bosh::Gen
       
       def job_dir(path)
         File.join("jobs", job_name, path)
+      end
+
+      def job_template_dir(path)
+        File.join("jobs", job_name, "templates", path)
       end
     end
   end
