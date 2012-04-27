@@ -26,7 +26,7 @@ module Bosh::Gen
       end
       
       def blobs_yaml
-        create_file "blob_index.yml", YAML.dump({})
+        create_file "config/blobs.yml", YAML.dump({})
       end
       
       # TODO - support other blobstores
