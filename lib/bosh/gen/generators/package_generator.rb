@@ -60,7 +60,7 @@ module Bosh::Gen
           if File.exist? blob_dir(file_name)
             say "Blob '#{file_name}' exists as a blob, skipping..."
           else
-            copy_file File.expand_path(f), src_file
+            copy_file File.expand_path(file_path), src_file
           end
         end
       end
