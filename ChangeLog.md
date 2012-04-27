@@ -1,6 +1,6 @@
 # Change Log
 
-## v0.2.pre
+## v0.2
 
 Added:
 
