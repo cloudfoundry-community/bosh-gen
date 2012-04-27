@@ -29,14 +29,14 @@ $ bosh create release
 $ wget -P /tmp http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p194.tar.gz 
 $ bosh-gen package ruby -f /tmp/ruby-1.9.3-p194.tar.gz
 
-$ bosh-gen package some-package -d ruby
-$ bosh-gen package some-other-package -d ruby
+$ bosh-gen job some-ruby-job -d ruby
 
-$ bosh-gen job some-ruby-job -d some-package some-other-package
+$ git add .
+$ git commit -m "added a job + 3 packages"
+
+$ bosh create release
 ```
 
-
-This will create one job, which depends on three packages (`some-package`, `some-other-package` and ultimately also `ruby`).
 
 ## Contributing
 
