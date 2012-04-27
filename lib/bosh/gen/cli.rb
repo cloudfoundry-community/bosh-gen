@@ -38,6 +38,12 @@ module Bosh
         require 'bosh/gen/generators/job_generator'
         Bosh::Gen::Generators::JobGenerator.start([name, dependencies])
       end
+      
+      desc "template JOB FILE_PATH", "Add a Job template (example FILE_PATH: config/httpd.conf)"
+      def template(job_name, file_path)
+        require 'bosh/gen/generators/job_template_generator'
+        Bosh::Gen::Generators::JobTemplateGenerator.start([job_name, file_path])
+      end
 
       no_tasks do
         def cyan; "\033[36m" end
