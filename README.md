@@ -56,8 +56,8 @@ Your job may need additional configuration files or executables installed.
 
 ```
 $ bosh-gen template some-ruby-job config/some-config.ini
-  create  jobs/some-ruby-job/templates/some-config.ini.erb
-  force  jobs/some-ruby-job/spec
+    create  jobs/some-ruby-job/templates/some-config.ini.erb
+     force  jobs/some-ruby-job/spec
 ```
 
 
