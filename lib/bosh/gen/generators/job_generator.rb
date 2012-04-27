@@ -8,7 +8,6 @@ module Bosh::Gen
 
       argument :name
       argument :dependencies, :type => :array
-      argument :template_files, :type => :array
       
       def self.source_root
         File.join(File.dirname(__FILE__), "job_generator", "templates")
@@ -42,7 +41,7 @@ module Bosh::Gen
       end
       
       def job_specification
-        config = { "name" => name, "packages" => dependencies, "templates" => template_files }
+        config = { "name" => name, "packages" => dependencies, "templates" => {} }
         create_file job_dir("spec"), YAML.dump(config)
       end
       

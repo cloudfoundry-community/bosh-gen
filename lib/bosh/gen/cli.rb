@@ -23,7 +23,7 @@ module Bosh
       
       desc "package NAME", "Create a new package"
       method_option :dependencies, :aliases => ['-d'], :type => :array, :desc => "List of package dependencies"
-      method_option :files,        :aliases => ['-f', '--src'], :type => :array, :desc => "List of file paths to include"
+      method_option :files,        :aliases => ['-f', '--src'], :type => :array, :desc => "List of files copy into release"
       def package(name)
         dependencies = options[:dependencies] || []
         files        = options[:files] || []
@@ -33,12 +33,10 @@ module Bosh
       
       desc "job NAME", "Create a new job"
       method_option :dependencies, :aliases => ['-d'], :type => :array, :desc => "List of package dependencies"
-      method_option :templates, :aliases => ['-t'], :type => :array, :desc => "List of templates to use"
       def job(name)
         dependencies   = options[:dependencies] || []
-        template_files = options[:template_files] || []
         require 'bosh/gen/generators/job_generator'
-        Bosh::Gen::Generators::JobGenerator.start([name, dependencies, template_files])
+        Bosh::Gen::Generators::JobGenerator.start([name, dependencies])
       end
 
       no_tasks do
