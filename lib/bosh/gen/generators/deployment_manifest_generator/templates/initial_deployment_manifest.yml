@@ -1,0 +1,78 @@
+---
+name: NAME
+director_uuid: DIRECTOR_UUID
+
+release:
+  name: RELEASE_NAME
+  version: RELEASE_LATEST_VERSION
+
+compilation:
+  workers: 10 # only the required number are provisioned
+  network: default
+  cloud_properties:
+
+# this section describes how updates are handled
+update:
+  canaries: 1
+  canary_watch_time: 30000
+  update_watch_time: 30000
+  max_in_flight: 4
+  max_errors: 1
+
+networks:
+  - name: default
+    type: dynamic
+    cloud_properties:
+      security_groups:
+      - default
+  - name: nginx_network
+    type: vip
+    cloud_properties:
+      security_groups:
+      - default
+  - name: wordpress_network
+    type: vip
+    cloud_properties:
+      security_groups:
+      - default
+  - name: mysql_network
+    type: vip
+    cloud_properties:
+      security_groups:
+      - default
+
+resource_pools:
+  - name: common
+    network: default
+    size: 3
+    stemcell:
+      name: bosh-stemcell
+      version: 0.5.1
+    cloud_properties:
+      instance_type: m1.small
+      availability_zone:
+      key_name:
+
+jobs:
+
+  - name: wordpress
+    template: wordpress
+    instances: 1
+    resource_pool: common
+    networks:
+    - name: wordpress_network
+      default: [dns, gateway]
+      static_ips:
+      - 23.21.64.192
+  - name: mysql
+    template: mysql
+    instances: 1
+    resource_pool: common
+    persistent_disk: 16384
+    networks:
+    - name: mysql_network
+      default: [dns, gateway]
+      static_ips:
+      - 23.21.64.193
+
+properties: {}
