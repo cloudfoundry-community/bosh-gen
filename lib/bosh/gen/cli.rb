@@ -31,6 +31,20 @@ module Bosh
         Bosh::Gen::Generators::PackageGenerator.start([name, dependencies, files])
       end
       
+      desc "source NAME", "Downloads a source item into the named project"
+      def source(name, uri)
+        dir = Dir.mktmpdir
+        files = []
+        say "Downloading #{uri}..."
+        FileUtils.chdir(dir) do
+          `wget '#{uri}'`
+          files = Dir['*'].map {|f| File.expand_path(f)}
+        end
+
+        require 'bosh/gen/generators/package_source_generator'
+        Bosh::Gen::Generators::PackageSourceGenerator.start([name, files])
+      end
+      
       desc "job NAME", "Create a new job"
       method_option :dependencies, :aliases => ['-d'], :type => :array, :desc => "List of package dependencies"
       def job(name)
@@ -44,7 +58,7 @@ module Bosh
         require 'bosh/gen/generators/job_template_generator'
         Bosh::Gen::Generators::JobTemplateGenerator.start([job_name, file_path])
       end
-
+      
       no_tasks do
         def cyan; "\033[36m" end
         def clear; "\033[0m" end
