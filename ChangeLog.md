@@ -1,10 +1,11 @@
 # Change Log
 
-## v0.3.pre
+## v0.3
 
 Added:
 
-* `template` - add a job template
+* `template` - add a template/file to a job
+* `source` - download and add a source file/tarball to a package
 
 ## v0.2
 
