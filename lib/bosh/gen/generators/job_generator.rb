@@ -6,7 +6,7 @@ module Bosh::Gen
     class JobGenerator < Thor::Group
       include Thor::Actions
 
-      argument :name
+      argument :job_name
       argument :dependencies, :type => :array
       
       def self.source_root
@@ -20,7 +20,7 @@ module Bosh::Gen
       end
       
       def check_name
-        raise Thor::Error.new("'#{name}' is not a vaild BOSH id") unless name.bosh_valid_id?
+        raise Thor::Error.new("'#{job_name}' is not a vaild BOSH id") unless job_name.bosh_valid_id?
       end
       
       def warn_missing_dependencies
@@ -32,16 +32,13 @@ module Bosh::Gen
         end
       end
       
-      def templates
-        empty_directory job_dir("templates")
-      end
-      
-      def monit
-        create_file job_dir("monit"), ""
+      def template_files
+        directory "jobs/%job_name%"
+        @template_files = { "#{job_name}_ctl" => "#{job_name}_ctl" }
       end
       
       def job_specification
-        config = { "name" => name, "packages" => dependencies, "templates" => {} }
+        config = { "name" => job_name, "packages" => dependencies, "templates" => @template_files }
         create_file job_dir("spec"), YAML.dump(config)
       end
       
@@ -51,7 +48,7 @@ module Bosh::Gen
       end
       
       def job_dir(path)
-        File.join("jobs", name, path)
+        File.join("jobs", job_name, path)
       end
       
       # Run a command in git.
