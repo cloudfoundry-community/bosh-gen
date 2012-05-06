@@ -42,6 +42,10 @@ module Bosh::Gen
         create_file job_dir("spec"), YAML.dump(config)
       end
       
+      def show_todo
+        puts File.read(File.join(destination_root, "jobs", job_name, "TODO"))
+      end
+      
       private
       def filenames
         files.map {|f| File.basename(f) }
