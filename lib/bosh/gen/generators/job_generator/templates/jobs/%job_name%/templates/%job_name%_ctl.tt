@@ -3,6 +3,7 @@
 # Control script to start/stop <%= job_name %> job on a BOSH controlled VM
 #
 # TODO - change "EXECUTABLE_SERVER" to the command to run
+# TODO - ensure executable stores PID in $PIDFILE
 
 RUN_DIR=/var/vcap/sys/run/<%= job_name %>
 LOG_DIR=/var/vcap/sys/log/<%= job_name %>
