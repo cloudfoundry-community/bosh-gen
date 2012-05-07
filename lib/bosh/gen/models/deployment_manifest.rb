@@ -4,7 +4,7 @@ module Bosh::Gen::Models
   class DeploymentManifest
     attr_reader :manifest
     
-    def initialize(name, director_uuid, cloud_properties)
+    def initialize(name, director_uuid, release_properties, cloud_properties)
       @manifest = {}
       @cloud_properties = cloud_properties
       @security_groups = ["default"]
@@ -12,7 +12,7 @@ module Bosh::Gen::Models
       @stemcell = { "name" => "bosh-stemcell", "version" => @stemcell_version }
       manifest["name"] = name
       manifest["director_uuid"] = director_uuid
-      manifest["release"] = { "name" => name, "version" => 1}
+      manifest["release"] = release_properties.dup
       manifest["compilation"] = {
         "workers" => 10,
         "network" => "default",
@@ -50,6 +50,14 @@ module Bosh::Gen::Models
       manifest["properties"] = {}
     end
     
+    # Each item of +jobs+ is a hash. 
+    # The minimum hash is:
+    # { "name" => "jobname" }
+    # This is the equivalent to:
+    # { "name" => "jobname", "template" => "jobname", "instances" => 1}
+    #
+    # A +jobs+ item can also include a +"static_ips" item, which is an array of strings:
+    # { "name" => "jobname", "static_ips" => ['1.2.3.4', '9.8.7.6']}
     def jobs=(jobs)
       total_instances = 0
       manifest["jobs"] = []

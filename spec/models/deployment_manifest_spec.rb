@@ -4,7 +4,9 @@ require "bosh/gen/models"
 
 class DeploymentManifestSpec < MiniTest::Spec
   it "creates 'defaults' manifest document with 2 jobs" do
-    manifest = Bosh::Gen::Models::DeploymentManifest.new("myproj", "UUID", {"instance_type" => "m1.small"})
+    manifest = Bosh::Gen::Models::DeploymentManifest.new("myproj", "UUID", 
+      {"name" => "myrelease", "version" => 2},
+      {"instance_type" => "m1.small"})
     manifest.jobs = [
       { "name" => "job-with-ips",  "static_ips" => ['1.2.3.4']},
       { "name" => "misc"}

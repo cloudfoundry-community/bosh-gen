@@ -2,8 +2,8 @@
 name: myproj
 director_uuid: UUID
 release:
-  name: myproj
-  version: 1
+  name: myrelease
+  version: 2
 compilation:
   workers: 10
   network: default

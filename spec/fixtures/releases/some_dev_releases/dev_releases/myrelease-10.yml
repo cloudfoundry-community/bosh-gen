@@ -1,0 +1,13 @@
+--- 
+packages: 
+- name: redis
+  version: 0.2-dev
+  sha1: 90a1131ebec948be6e4d2d2f25be7fa83b76ea79
+  dependencies: []
+
+jobs: 
+- name: redis
+  version: 0.1-dev
+  sha1: f9b23d1e4585357dc47636d75a63283f629bb1ee
+name: myrelease
+version: 10

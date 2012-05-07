@@ -26,16 +26,16 @@ module Bosh::Gen
       # Create a deployment manifest (initially for AWS only)
       def create_deployment_manifest
         cloud_properties = { "instance_type" => "m1.small" }
-        manifest = Bosh::Gen::Models::DeploymentManifest.new(name, director_uuid, cloud_properties)
+        manifest = Bosh::Gen::Models::DeploymentManifest.new(name, director_uuid, release_properties, cloud_properties)
         manifest.jobs = job_manifests(ip_addresses)
         create_file manifest_file_name, manifest.to_yaml, :force => flags[:force]
       end
 
       private
-      def jobs_dir(path = "")
-        File.join(release_path, "jobs", path)
+      def release_detector
+        @release_detector ||= Bosh::Gen::Models::ReleaseDetection.new(release_path)
       end
-
+      
       # Whether +name+ contains .yml suffix or nor, returns a .yml filename for manifest to be generated
       def manifest_file_name
         basename = name.gsub(/\.yml/, '') + ".yml"
@@ -51,11 +51,15 @@ module Bosh::Gen
         jobs
       end
       
-      # Return list of job names in this release based on the contents of jobs/* folder
+      # Return list of job names
       def detect_jobs
-        Dir[File.join(release_path, "jobs/*")].map {|job_path| File.basename(job_path) }
+        release_detector.latest_dev_release_job_names
       end
-
+      
+      # The "release" aspect of the manifest, which has two keys: name, version
+      def release_properties
+        release_detector.latest_dev_release_properties
+      end
     end
   end
 end
