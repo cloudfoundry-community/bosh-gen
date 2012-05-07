@@ -8,6 +8,7 @@ module Bosh::Gen
 
       argument :name
       argument :release_path
+      argument :director_uuid
       argument :ip_addresses
       argument :flags, :type => :hash
 
@@ -25,7 +26,7 @@ module Bosh::Gen
       # Create a deployment manifest (initially for AWS only)
       def create_deployment_manifest
         cloud_properties = { "instance_type" => "m1.small" }
-        manifest = Bosh::Gen::Models::DeploymentManifest.new(name, "DIRECTOR_UUID", cloud_properties)
+        manifest = Bosh::Gen::Models::DeploymentManifest.new(name, director_uuid, cloud_properties)
         manifest.jobs = job_manifests(ip_addresses)
         create_file manifest_file_name, manifest.to_yaml, :force => flags[:force]
       end

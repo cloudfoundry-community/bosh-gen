@@ -60,15 +60,15 @@ module Bosh
         Bosh::Gen::Generators::JobTemplateGenerator.start([job_name, file_path])
       end
 
-      desc "manifest NAME PATH", "Creates a deployment manifest based on the release located at PATH"
+      desc "manifest NAME PATH UUID", "Creates a deployment manifest based on the release located at PATH"
       method_option :force, :type => :boolean, :desc => "Force override existing target manifest file"
       method_option :addresses, :aliases => ['-a'], :type => :array, :desc => "List of IP addresses available for jobs"
-      def manifest(name, release_path)
+      def manifest(name, release_path, uuid)
         release_path = File.expand_path(release_path)
         ip_addresses = options["addresses"] || []
         flags = { :force => options["force"] || false }
         require 'bosh/gen/generators/deployment_manifest_generator'
-        Bosh::Gen::Generators::DeploymentManifestGenerator.start([name, release_path, ip_addresses, flags])
+        Bosh::Gen::Generators::DeploymentManifestGenerator.start([name, release_path, uuid, ip_addresses, flags])
       end
 
       no_tasks do
