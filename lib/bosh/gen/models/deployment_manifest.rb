@@ -2,18 +2,83 @@ require "yaml"
 
 module Bosh::Gen::Models
   class DeploymentManifest
+    attr_reader :manifest
+    
     def initialize(name, director_uuid, cloud_properties)
-      @name = name
-      @director_uuid = director_uuid
+      @manifest = {}
       @cloud_properties = cloud_properties
+      @security_groups = ["default"]
+      @stemcell_version = "0.5.1"
+      @stemcell = { "name" => "bosh-stemcell", "version" => @stemcell_version }
+      manifest["name"] = name
+      manifest["director_uuid"] = director_uuid
+      manifest["release"] = { "name" => name, "version" => 1}
+      manifest["compilation"] = {
+        "workers" => 10,
+        "network" => "default",
+        "cloud_properties" => cloud_properties.dup
+      }
+      manifest["update"] = {
+        "canaries" => 1,
+        "canary_watch_time" => 30000,
+        "update_watch_time" => 30000,
+        "max_in_flight" => 4,
+        "max_errors" => 1
+      }
+      manifest["networks"] = [
+        {
+          "name" => "default",
+          "type" => "dynamic",
+          "cloud_properties" => { "security_groups" => @security_groups.dup }
+        },
+        {
+          "name" => "vip_network",
+          "type" => "vip",
+          "cloud_properties" => { "security_groups" => @security_groups.dup }
+        }
+      ]
+      manifest["resource_pools"] = [
+        {
+          "name" => "common",
+          "network" => "default",
+          "size" => 0,
+          "stemcell" => @stemcell,
+          "cloud_properties" => cloud_properties.dup
+        }
+      ]
+      manifest["jobs"] = []
+      manifest["properties"] = {}
     end
     
     def jobs=(jobs)
-      
+      total_instances = 0
+      manifest["jobs"] = []
+      jobs.each do |job|
+        manifest_job = {
+          "name" => job["name"],
+          "template" => job["template"] || job["name"],
+          "instances" => job["instances"] || 1,
+          "resource_pool" => "common",
+          "networks" => [
+            {
+              "name" => "default",
+              "default" => %w[dns gateway]
+            }
+          ]
+        }
+        if job["static_ips"]
+          manifest_job["networks"] << {
+            "name" => "vip_network",
+            "static_ips" => job["static_ips"]
+          }
+        end
+        manifest["jobs"] << manifest_job
+      end
+      manifest["resource_pools"].first["size"] = manifest["jobs"].inject(0) {|total, job| total + job["instances"]}
     end
     
     def to_yaml
-      {}.to_yaml
+      manifest.to_yaml
     end
   end
 end
