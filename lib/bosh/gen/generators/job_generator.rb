@@ -34,7 +34,11 @@ module Bosh::Gen
       
       def template_files
         directory "jobs/%job_name%"
-        @template_files = { "#{job_name}_ctl" => "#{job_name}_ctl" }
+        @template_files = { "#{job_name}_ctl" => "bin/#{job_name}_ctl" }
+      end
+      
+      def ctl_executable
+        chmod "jobs/#{job_name}/templates/#{job_name}_ctl", 0755
       end
       
       def job_specification
