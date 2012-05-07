@@ -22,6 +22,10 @@ Fixed:
 * `job` - ctl file has TODO to remind about PID file
 * `job` - use the provided release path to detect jobs
 
+### v0.3.3
+
+* `manifest` - introspect the release project for release + job information
+
 ## v0.2
 
 Added:
