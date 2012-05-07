@@ -52,7 +52,7 @@ module Bosh::Gen
       
       # Return list of job names in this release based on the contents of jobs/* folder
       def detect_jobs
-        Dir["jobs/*"].map {|job_path| File.basename(job_path) }
+        Dir[File.join(release_path, "jobs/*")].map {|job_path| File.basename(job_path) }
       end
 
     end
