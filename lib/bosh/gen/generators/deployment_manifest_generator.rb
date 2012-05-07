@@ -58,6 +58,16 @@ module Bosh::Gen
           }
         }
       end
+      
+      def base_manifest(name, director_uuid)
+        { "name" => name,
+          "director_uuid" => director_uuid,
+          "release" => {
+            "name" => "name",
+            "version" => 1 # FIXME detect if any existing releases; use that version
+          }
+        }
+      end
     end
   end
 end

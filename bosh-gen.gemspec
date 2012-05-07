@@ -15,8 +15,11 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = Bosh::Gen::VERSION
   
-  gem.add_dependency "thor", "~> 0.15.0"
+  gem.add_dependency "thor"
   gem.add_dependency "bosh_cli"
   
   gem.add_development_dependency "rake"
+  gem.add_development_dependency "minitest", "~> 2.12"
+  gem.add_development_dependency "minitest-colorize"
+  gem.add_development_dependency "guard-minitest"
 end

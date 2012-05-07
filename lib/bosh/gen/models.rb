@@ -1,0 +1,1 @@
+require "bosh/gen/models/deployment_manifest"
