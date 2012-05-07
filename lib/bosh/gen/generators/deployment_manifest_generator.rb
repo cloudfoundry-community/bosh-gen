@@ -8,11 +8,8 @@ module Bosh::Gen
 
       argument :name
       argument :release_path
+      argument :ip_addresses
       argument :flags, :type => :hash
-
-      def self.source_root
-        File.join(File.dirname(__FILE__), "deployment_manifest_generator", "templates")
-      end
 
       def check_release_path_is_release
         unless File.exist?(release_path)
@@ -27,13 +24,10 @@ module Bosh::Gen
 
       # Create a deployment manifest (initially for AWS only)
       def create_deployment_manifest
-        initial = YAML.load_file(File.join(self.class.source_root, "initial_deployment_manifest.yml"))
         cloud_properties = { "instance_type" => "m1.small" }
-        spec = initial.merge({
-          "jobs" => [job_manifest('foobar', ['1.2.3.4', '2.3.4.5'])]
-        })
-        spec["compilation"]["cloud_properties"] = cloud_properties
-        create_file manifest_file_name, YAML.dump(spec), :force => flags[:force]
+        manifest = Bosh::Gen::Models::DeploymentManifest.new(name, "DIRECTOR_UUID", cloud_properties)
+        manifest.jobs = job_manifests(ip_addresses)
+        create_file manifest_file_name, manifest.to_yaml, :force => flags[:force]
       end
 
       private
@@ -45,29 +39,20 @@ module Bosh::Gen
       def manifest_file_name
         basename = name.gsub(/\.yml/, '') + ".yml"
       end
-
-      def job_manifest(name, ip_addresses = [])
-        { "name" => name,
-          "template" => name,
-          "instances" => 1,
-          "resource_pool" => "common",
-          "networks" => {
-            "name" => "#{name}_network",
-            "default" => ["dns", "gateway"],
-            "static_ips" => ip_addresses
+      
+      def job_manifests(ip_addresses)
+        detect_jobs.map do |job_name|
+          {
+            "name" => job_name
           }
-        }
+        end
       end
       
-      def base_manifest(name, director_uuid)
-        { "name" => name,
-          "director_uuid" => director_uuid,
-          "release" => {
-            "name" => "name",
-            "version" => 1 # FIXME detect if any existing releases; use that version
-          }
-        }
+      # Return list of job names in this release based on the contents of jobs/* folder
+      def detect_jobs
+        Dir["jobs/*"].map {|job_path| File.basename(job_path) }
       end
+
     end
   end
 end

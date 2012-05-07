@@ -5,6 +5,7 @@ module Bosh; end
 require "cli/config" 
 require "cli/core_ext"
 
+require 'bosh/gen/models'
 
 module Bosh
   module Gen
@@ -61,11 +62,13 @@ module Bosh
 
       desc "manifest NAME PATH", "Creates a deployment manifest based on the release located at PATH"
       method_option :force, :type => :boolean, :desc => "Force override existing target manifest file"
+      method_option :addresses, :type => :array, :desc => "List of IP addresses available for jobs"
       def manifest(name, release_path)
         release_path = File.expand_path(release_path)
+        ip_addresses = options["addresses"] || []
         flags = { :force => options["force"] || false }
         require 'bosh/gen/generators/deployment_manifest_generator'
-        Bosh::Gen::Generators::DeploymentManifestGenerator.start([name, release_path, flags])
+        Bosh::Gen::Generators::DeploymentManifestGenerator.start([name, release_path, ip_addresses, flags])
       end
 
       no_tasks do
