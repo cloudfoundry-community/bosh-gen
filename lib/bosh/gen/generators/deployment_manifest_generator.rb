@@ -41,11 +41,13 @@ module Bosh::Gen
       end
       
       def job_manifests(ip_addresses)
-        detect_jobs.map do |job_name|
+        jobs = detect_jobs.map do |job_name|
           {
             "name" => job_name
           }
         end
+        jobs.first["static_ips"] = ip_addresses if ip_addresses && ip_addresses.size > 0
+        jobs
       end
       
       # Return list of job names in this release based on the contents of jobs/* folder

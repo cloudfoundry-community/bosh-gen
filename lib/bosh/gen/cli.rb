@@ -62,7 +62,7 @@ module Bosh
 
       desc "manifest NAME PATH", "Creates a deployment manifest based on the release located at PATH"
       method_option :force, :type => :boolean, :desc => "Force override existing target manifest file"
-      method_option :addresses, :type => :array, :desc => "List of IP addresses available for jobs"
+      method_option :addresses, :aliases => ['-a'], :type => :array, :desc => "List of IP addresses available for jobs"
       def manifest(name, release_path)
         release_path = File.expand_path(release_path)
         ip_addresses = options["addresses"] || []
