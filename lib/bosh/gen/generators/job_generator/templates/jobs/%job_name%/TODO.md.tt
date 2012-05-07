@@ -1,0 +1,4 @@
+Next step for <%= name %> job:
+
+* Replace "`exec /var/vcap/packages/redis/bin/EXECUTABLE_SERVER`" in jobs/<%= job_name %>/templates/<%= job_name %>_ctl
+

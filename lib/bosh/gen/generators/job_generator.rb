@@ -43,7 +43,7 @@ module Bosh::Gen
       end
       
       def show_todo
-        puts File.read(File.join(destination_root, "jobs", job_name, "TODO"))
+        puts File.read(File.join(destination_root, "jobs", job_name, "TODO.md"))
       end
       
       private
