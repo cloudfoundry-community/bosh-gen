@@ -26,6 +26,10 @@ Fixed:
 
 * `manifest` - introspect the release project for release + job information
 
+### v0.3.4
+
+* `manifest` - Force us-east-1e to ensure all VMs and volumes are always in the same AZ
+
 ## v0.2
 
 Added:
