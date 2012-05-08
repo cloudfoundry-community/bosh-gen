@@ -23,6 +23,10 @@ module Bosh::Gen
         template "README.md.tt", "README.md"
       end
       
+      def rakefile
+        copy_file "Rakefile"
+      end
+      
       def directories
         %w[jobs packages src blobs].each do |dir|
           directory dir
