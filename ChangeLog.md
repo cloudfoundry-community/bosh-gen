@@ -1,5 +1,8 @@
 # Change Log
 
+* `job` - added --ruby flag to include a ruby/rack-specifc ctl script
+* releases include a rake task to document what properties are required
+
 ## v0.3
 
 Added:
