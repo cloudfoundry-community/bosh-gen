@@ -8,6 +8,7 @@ module Bosh::Gen
 
       argument :job_name
       argument :dependencies, :type => :array
+      argument :flags, :type => :hash
       
       def self.source_root
         File.join(File.dirname(__FILE__), "job_generator", "templates")
@@ -33,7 +34,11 @@ module Bosh::Gen
       end
       
       def template_files
-        directory "jobs/%job_name%"
+        if ruby?
+          directory "jobs/%job_name%_rubyrack", "jobs/#{job_name}"
+        else
+          directory "jobs/%job_name%"
+        end
         @template_files = { "#{job_name}_ctl" => "bin/#{job_name}_ctl" }
       end
       
@@ -57,6 +62,10 @@ module Bosh::Gen
       
       def job_dir(path)
         File.join("jobs", job_name, path)
+      end
+      
+      def ruby?
+        flags[:ruby]
       end
       
       # Run a command in git.

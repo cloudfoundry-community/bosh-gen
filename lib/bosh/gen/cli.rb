@@ -48,10 +48,12 @@ module Bosh
       
       desc "job NAME", "Create a new job"
       method_option :dependencies, :aliases => ['-d'], :type => :array, :desc => "List of package dependencies"
+      method_option :ruby, :type => :boolean, :desc => "Use templates for running Ruby/Rack process"
       def job(name)
+        flags = { :ruby => options["ruby"] || false }
         dependencies   = options[:dependencies] || []
         require 'bosh/gen/generators/job_generator'
-        Bosh::Gen::Generators::JobGenerator.start([name, dependencies])
+        Bosh::Gen::Generators::JobGenerator.start([name, dependencies, flags])
       end
       
       desc "template JOB FILE_PATH", "Add a Job template (example FILE_PATH: config/httpd.conf)"
