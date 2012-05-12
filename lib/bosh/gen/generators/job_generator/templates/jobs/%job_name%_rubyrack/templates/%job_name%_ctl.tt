@@ -24,6 +24,7 @@ COMMAND=${COMMAND:-/var/vcap/packages/ruby/bin/bundle exec rackup}
 APP_DIR=${APP_DIR:-/var/vcap/packages/<%= job_name %>/}
 PORT=${PORT:-5000}
 RACK_ENV=${RACK_ENV:-production}
+HOME=${HOME:-/home/vcap}
 
 case $1 in
 

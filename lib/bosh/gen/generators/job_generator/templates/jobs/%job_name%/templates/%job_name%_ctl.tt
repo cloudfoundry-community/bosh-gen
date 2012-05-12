@@ -23,6 +23,7 @@ PIDFILE=$RUN_DIR/<%= job_name %>.pid
 export PATH=/var/vcap/packages/ruby/bin:$PATH
 
 COMMAND=${COMMAND:-/var/vcap/packages/<%= job_name %>/bin/EXECUTABLE_SERVER}
+HOME=${HOME:-/home/vcap}
 
 case $1 in
 
