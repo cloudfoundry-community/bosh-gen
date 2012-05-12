@@ -1,7 +1,12 @@
 # Change Log
 
+## v0.4
+
 * `job` - added --ruby flag to include a ruby/rack-specifc ctl script
 * releases include a rake task to document what properties are required
+* `manifest` - has a --disk/-d flag to assign a persistent disk to all VMs (common pool)
+* `job` - export some variables in ctl scripts so they are available to application
+* `job` - ctl script has logs/tail/clearlogs commands
 
 ## v0.3
 
