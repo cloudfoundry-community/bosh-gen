@@ -10,6 +10,8 @@ module Bosh::Gen::Models
       @security_groups = ["default"]
       @stemcell_version = "0.5.1"
       @stemcell = { "name" => "bosh-stemcell", "version" => @stemcell_version }
+      @persistent_disk = cloud_properties.delete(:persistent_disk)
+      
       manifest["name"] = name
       manifest["director_uuid"] = director_uuid
       manifest["release"] = release_properties.dup
@@ -46,6 +48,7 @@ module Bosh::Gen::Models
           "cloud_properties" => cloud_properties.dup
         }
       ]
+      manifest["resource_pools"].first["persistent_disk"] = @persistent_disk if @persistent_disk
       manifest["jobs"] = []
       manifest["properties"] = {}
     end

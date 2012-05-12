@@ -65,10 +65,11 @@ module Bosh
       desc "manifest NAME PATH UUID", "Creates a deployment manifest based on the release located at PATH"
       method_option :force, :type => :boolean, :desc => "Force override existing target manifest file"
       method_option :addresses, :aliases => ['-a'], :type => :array, :desc => "List of IP addresses available for jobs"
+      method_option :disk, :aliases => ['-d'], :type => :string, :desc => "Attach persistent disks to VMs of specific size, e.g. 8196"
       def manifest(name, release_path, uuid)
         release_path = File.expand_path(release_path)
         ip_addresses = options["addresses"] || []
-        flags = { :force => options["force"] || false }
+        flags = { :force => options["force"] || false, :disk => options[:disk] }
         require 'bosh/gen/generators/deployment_manifest_generator'
         Bosh::Gen::Generators::DeploymentManifestGenerator.start([name, release_path, uuid, ip_addresses, flags])
       end
