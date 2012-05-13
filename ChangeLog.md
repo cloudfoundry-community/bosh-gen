@@ -1,5 +1,9 @@
 # Change Log
 
+Added:
+
+* `extract` - extract a job and its dependent packages to the current release
+
 ## v0.5.0
 
 * `job` - takes a COMMAND argument
