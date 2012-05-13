@@ -1,5 +1,11 @@
 # Change Log
 
+## v0.5.0
+
+* `job` - takes a COMMAND argument
+* `source --blob/-b` - file stored in blobs/ folder instead of src/
+* `source` - packaging script includes standard configure/make/make install if .tar.gz or .tgz
+
 ## v0.4
 
 * `job` - added --ruby flag to include a ruby/rack-specifc ctl script
