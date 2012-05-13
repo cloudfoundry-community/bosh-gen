@@ -68,6 +68,13 @@ module Bosh
         require 'bosh/gen/generators/job_template_generator'
         Bosh::Gen::Generators::JobTemplateGenerator.start([job_name, file_path])
       end
+      
+      desc "extract SOURCE_RELEASE_PATH SOURCE_JOB_NAME [JOB_NAME]", "Extracts a job from another release and all its dependent packages and source"
+      def extract(source_release_path, source_job_name, target_job_name=nil)
+        target_job_name ||= source_job_name
+        require 'bosh/gen/generators/extract_job_generator'
+        Bosh::Gen::Generators::ExtractJobGenerator.start([source_release_path, source_job_name, target_job_name])
+      end
 
       desc "manifest NAME PATH UUID", "Creates a deployment manifest based on the release located at PATH"
       method_option :force, :type => :boolean, :desc => "Force override existing target manifest file"
