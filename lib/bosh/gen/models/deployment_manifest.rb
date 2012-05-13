@@ -83,6 +83,7 @@ module Bosh::Gen::Models
             "static_ips" => job["static_ips"]
           }
         end
+        manifest_job["persistent_disk"] = @persistent_disk if @persistent_disk
         manifest["jobs"] << manifest_job
       end
       manifest["resource_pools"].first["size"] = manifest["jobs"].inject(0) {|total, job| total + job["instances"]}
