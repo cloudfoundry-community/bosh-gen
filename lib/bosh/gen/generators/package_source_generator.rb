@@ -37,6 +37,29 @@ module Bosh::Gen
         end
       end
       
+      # Add a guess about the packaging/compilation of the file
+      def packaging
+        packaging_for_files = ""
+        file_paths.each do |path|
+          filename = File.basename(path)
+          if filename =~ /^(.*)(\.tar\.gz|\.tgz)$/
+            package_dir = $1
+            # assume its a standard installable source package
+            packaging_for_files += <<-BASH.gsub(/^\s{12}/, '')
+            tar xfz #{package_name}/#{filename}
+            (
+              cd #{package_dir}
+              ./configure --prefix=$BOSH_INSTALL_TARGET
+              make
+              make install
+            )
+            
+            BASH
+          end
+        end
+        append_file "packages/#{package_name}/packaging", packaging_for_files
+      end
+      
       def readme
         if flags[:blob]
           say_status "readme", "Upload blobs with 'bosh upload blobs'"
