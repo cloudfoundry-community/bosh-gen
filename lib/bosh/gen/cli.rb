@@ -33,17 +33,23 @@ module Bosh
       end
       
       desc "source NAME", "Downloads a source item into the named project"
+      method_option :blob, :aliases => ['-b'], :type => :boolean, :desc => "Store file in blobstore"
       def source(name, uri)
+        flags = { :blob => options[:blob] || false }
         dir = Dir.mktmpdir
         files = []
-        say "Downloading #{uri}..."
-        FileUtils.chdir(dir) do
-          `wget '#{uri}'`
-          files = Dir['*'].map {|f| File.expand_path(f)}
+        if File.exist?(uri)
+          files = [uri]
+        else
+          say "Downloading #{uri}..."
+          FileUtils.chdir(dir) do
+            `wget '#{uri}'`
+            files = Dir['*'].map {|f| File.expand_path(f)}
+          end
         end
 
         require 'bosh/gen/generators/package_source_generator'
-        Bosh::Gen::Generators::PackageSourceGenerator.start([name, files])
+        Bosh::Gen::Generators::PackageSourceGenerator.start([name, files, flags])
       end
       
       desc "job NAME", "Create a new job"

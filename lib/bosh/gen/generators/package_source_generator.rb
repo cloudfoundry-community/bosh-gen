@@ -8,6 +8,7 @@ module Bosh::Gen
 
       argument :package_name
       argument :file_paths
+      argument :flags, :type => :hash
       
       def check_root_is_release
         unless File.exist?("jobs") && File.exist?("packages")
@@ -36,13 +37,23 @@ module Bosh::Gen
         end
       end
       
+      def readme
+        if flags[:blob]
+          say_status "readme", "Upload blobs with 'bosh upload blobs'"
+        end
+      end
+      
       private
       def package_dir(path)
         File.join("packages", package_name, path)
       end
 
       def source_dir(path)
-        File.join("src", package_name, path)
+        if flags[:blob]
+          File.join("blobs", package_name, path)
+        else
+          File.join("src", package_name, path)
+        end
       end
     end
   end
