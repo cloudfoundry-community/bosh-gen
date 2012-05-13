@@ -33,12 +33,21 @@ module Bosh::Gen
       end
 
       def copy_dependent_sources
+        @blobs = false
         @packages.each do |package|
           directory "src/#{package}" if File.exist?(File.join(source_release_path, "src", package))
-          directory "blobs/#{package}" if File.exist?(File.join(source_release_path, "blobs", package))
+          if File.exist?(File.join(source_release_path, "blobs", package))
+            directory "blobs/#{package}"
+            @blobs = true
+          end
         end
       end
       
+      def readme
+        if @blobs
+          say_status "readme", "Upload blobs with 'bosh upload blobs'"
+        end
+      end
       
       private
       def job_dir(path="")
