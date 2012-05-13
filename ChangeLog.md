@@ -1,5 +1,7 @@
 # Change Log
 
+## v0.6.0
+
 Added:
 
 * `extract` - extract a job and its dependent packages to the current release
