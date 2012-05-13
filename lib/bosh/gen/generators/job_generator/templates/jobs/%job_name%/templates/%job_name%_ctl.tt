@@ -12,9 +12,9 @@
 #
 # Clear logs:
 # jobs/<%= job_name %>/templates/<%= job_name %>_ctl clearlogs
-
+<% if command == "EXECUTABLE_SERVER" %>
 # TODO - change "EXECUTABLE_SERVER" to the command to run
-
+<% end %>
 RUN_DIR=/var/vcap/sys/run/<%= job_name %>
 LOG_DIR=/var/vcap/sys/log/<%= job_name %>
 STORE=/var/vcap/store/<%= job_name %>
@@ -22,7 +22,7 @@ PIDFILE=$RUN_DIR/<%= job_name %>.pid
 
 export PATH=/var/vcap/packages/ruby/bin:$PATH
 
-COMMAND=${COMMAND:-/var/vcap/packages/<%= job_name %>/bin/EXECUTABLE_SERVER}
+COMMAND=${COMMAND:-/var/vcap/packages/<%= job_name %>/bin/<%= command %>}
 HOME=${HOME:-/home/vcap}
 
 case $1 in

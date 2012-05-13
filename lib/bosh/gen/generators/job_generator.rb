@@ -7,6 +7,7 @@ module Bosh::Gen
       include Thor::Actions
 
       argument :job_name
+      argument :command
       argument :dependencies, :type => :array
       argument :flags, :type => :hash
       
