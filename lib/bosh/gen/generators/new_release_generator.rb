@@ -86,7 +86,8 @@ module Bosh::Gen
         config/private.yml
         releases/*.tgz
         dev_releases
-        blobs
+        blobs/*
+        .blobs
         .dev_builds
         .idea
         .DS_Store
