@@ -10,7 +10,7 @@ module Bosh::Gen::Models
       @security_groups = ["default"]
       @stemcell_version = "0.5.1"
       @stemcell = { "name" => "bosh-stemcell", "version" => @stemcell_version }
-      @persistent_disk = cloud_properties.delete(:persistent_disk)
+      @persistent_disk = cloud_properties.delete(:persistent_disk).to_i
       
       manifest["name"] = name
       manifest["director_uuid"] = director_uuid
