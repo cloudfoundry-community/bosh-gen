@@ -1,0 +1,63 @@
+---
+name: myproj
+director_uuid: UUID
+release:
+  name: myrelease
+  version: 2
+compilation:
+  workers: 10
+  network: default
+  cloud_properties:
+    instance_type: m1.small
+update:
+  canaries: 1
+  canary_watch_time: 30000
+  update_watch_time: 30000
+  max_in_flight: 4
+  max_errors: 1
+networks:
+- name: default
+  type: dynamic
+  cloud_properties:
+    security_groups:
+    - default
+- name: vip_network
+  type: vip
+  cloud_properties:
+    security_groups:
+    - default
+resource_pools:
+- name: common
+  network: default
+  size: 2
+  stemcell:
+    name: bosh-stemcell
+    version: 0.5.1
+  cloud_properties:
+    instance_type: m1.small
+  persistent_disk: 8196
+jobs:
+- name: job-with-ips
+  template: job-with-ips
+  instances: 1
+  resource_pool: common
+  networks:
+  - name: default
+    default:
+    - dns
+    - gateway
+  - name: vip_network
+    static_ips:
+    - 1.2.3.4
+  persistent_disk: 8196
+- name: misc
+  template: misc
+  instances: 1
+  resource_pool: common
+  networks:
+  - name: default
+    default:
+    - dns
+    - gateway
+  persistent_disk: 8196
+properties: {}

@@ -1,9 +1,8 @@
-require "minitest/spec"
-require "minitest-colorize"
+require "spec_helper"
 require "bosh/gen/models"
 
 class DeploymentManifestSpec < MiniTest::Spec
-  it "creates 'defaults' manifest document with 2 jobs" do
+  it "creates manifest document with 2 jobs, no disk" do
     manifest = Bosh::Gen::Models::DeploymentManifest.new("myproj", "UUID", 
       {"name" => "myrelease", "version" => 2},
       {"instance_type" => "m1.small"})
@@ -11,7 +10,18 @@ class DeploymentManifestSpec < MiniTest::Spec
       { "name" => "job-with-ips",  "static_ips" => ['1.2.3.4']},
       { "name" => "misc"}
     ]
-    manifest.to_yaml.must_equal fixture_manifest("defaults")
+    manifest.to_yaml.must_equal fixture_manifest("2_jobs_1_ip_no_disk")
+  end
+
+  it "creates manifest document with 2 jobs, with disk" do
+    manifest = Bosh::Gen::Models::DeploymentManifest.new("myproj", "UUID", 
+      {"name" => "myrelease", "version" => 2},
+      {"instance_type" => "m1.small", "persistent_disk" => "8196"})
+    manifest.jobs = [
+      { "name" => "job-with-ips",  "static_ips" => ['1.2.3.4']},
+      { "name" => "misc"}
+    ]
+    manifest.to_yaml.must_equal fixture_manifest("2_jobs_1_ip_8196_disk")
   end
   
   def fixture_manifest(name)

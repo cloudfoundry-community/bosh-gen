@@ -1,5 +1,4 @@
-require "minitest/spec"
-require "minitest-colorize"
+require "spec_helper"
 require "bosh/gen/models"
 
 class ReleaseDetectionSpec < MiniTest::Spec
@@ -20,9 +19,5 @@ class ReleaseDetectionSpec < MiniTest::Spec
   it "returns list of jobs" do
     detector = Bosh::Gen::Models::ReleaseDetection.new(fixture_release_path('some_dev_releases'))
     detector.latest_dev_release_job_names.must_equal %w[redis]
-  end
-  
-  def fixture_release_path(name)
-    File.expand_path("../../fixtures/releases/#{name}/", __FILE__)
   end
 end

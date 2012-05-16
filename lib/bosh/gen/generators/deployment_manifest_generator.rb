@@ -26,7 +26,7 @@ module Bosh::Gen
       # Create a deployment manifest (initially for AWS only)
       def create_deployment_manifest
         cloud_properties = { "instance_type" => "m1.small", "availability_zone" => "us-east-1e" }
-        cloud_properties[:persistent_disk] = flags[:disk] if flags[:disk]
+        cloud_properties["persistent_disk"] = flags[:disk] if flags[:disk]
         manifest = Bosh::Gen::Models::DeploymentManifest.new(name, director_uuid, release_properties, cloud_properties)
         manifest.jobs = job_manifests(ip_addresses)
         create_file manifest_file_name, manifest.to_yaml, :force => flags[:force]

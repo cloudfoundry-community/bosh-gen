@@ -10,7 +10,7 @@ module Bosh::Gen::Models
       @security_groups = ["default"]
       @stemcell_version = "0.5.1"
       @stemcell = { "name" => "bosh-stemcell", "version" => @stemcell_version }
-      @persistent_disk = cloud_properties.delete(:persistent_disk).to_i
+      @persistent_disk = cloud_properties.delete("persistent_disk").to_i
       
       manifest["name"] = name
       manifest["director_uuid"] = director_uuid
@@ -48,7 +48,7 @@ module Bosh::Gen::Models
           "cloud_properties" => cloud_properties.dup
         }
       ]
-      manifest["resource_pools"].first["persistent_disk"] = @persistent_disk if @persistent_disk
+      manifest["resource_pools"].first["persistent_disk"] = @persistent_disk if @persistent_disk > 0
       manifest["jobs"] = []
       manifest["properties"] = {}
     end
@@ -83,7 +83,7 @@ module Bosh::Gen::Models
             "static_ips" => job["static_ips"]
           }
         end
-        manifest_job["persistent_disk"] = @persistent_disk if @persistent_disk
+        manifest_job["persistent_disk"] = @persistent_disk if @persistent_disk > 0
         manifest["jobs"] << manifest_job
       end
       manifest["resource_pools"].first["size"] = manifest["jobs"].inject(0) {|total, job| total + job["instances"]}
