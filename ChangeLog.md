@@ -6,6 +6,11 @@ Added:
 
 * `extract` - extract a job and its dependent packages to the current release
 
+### v0.6.1
+
+* `new` - ignore .blobs folder in releases
+* `manifest` - persistent_disk is an integer; added to common job too
+
 ## v0.5.0
 
 * `job` - takes a COMMAND argument
