@@ -27,8 +27,9 @@ module Bosh::Gen
       def create_deployment_manifest
         cloud_properties = { "instance_type" => "m1.small", "availability_zone" => "us-east-1e" }
         cloud_properties["persistent_disk"] = flags[:disk] if flags[:disk]
+        cloud_properties["static_ips"] = ip_addresses
         manifest = Bosh::Gen::Models::DeploymentManifest.new(name, director_uuid, release_properties, cloud_properties)
-        manifest.jobs = job_manifests(ip_addresses)
+        manifest.jobs = job_manifests
         create_file manifest_file_name, manifest.to_yaml, :force => flags[:force]
       end
 
@@ -42,13 +43,12 @@ module Bosh::Gen
         basename = name.gsub(/\.yml/, '') + ".yml"
       end
       
-      def job_manifests(ip_addresses)
+      def job_manifests
         jobs = detect_jobs.map do |job_name|
           {
             "name" => job_name
           }
         end
-        jobs.first["static_ips"] = ip_addresses if ip_addresses && ip_addresses.size > 0
         jobs
       end
       

@@ -11,6 +11,7 @@ module Bosh::Gen::Models
       @stemcell_version = "0.5.1"
       @stemcell = { "name" => "bosh-stemcell", "version" => @stemcell_version }
       @persistent_disk = cloud_properties.delete("persistent_disk").to_i
+      @static_ips = cloud_properties.delete("static_ips") || []
       
       manifest["name"] = name
       manifest["director_uuid"] = director_uuid
@@ -58,17 +59,16 @@ module Bosh::Gen::Models
     # { "name" => "jobname" }
     # This is the equivalent to:
     # { "name" => "jobname", "template" => "jobname", "instances" => 1}
-    #
-    # A +jobs+ item can also include a +"static_ips" item, which is an array of strings:
-    # { "name" => "jobname", "static_ips" => ['1.2.3.4', '9.8.7.6']}
     def jobs=(jobs)
       total_instances = 0
+      static_ips = @static_ips.dup
       manifest["jobs"] = []
       jobs.each do |job|
+        job_instances = job["instances"] || 1
         manifest_job = {
           "name" => job["name"],
           "template" => job["template"] || job["name"],
-          "instances" => job["instances"] || 1,
+          "instances" => job_instances,
           "resource_pool" => "common",
           "networks" => [
             {
@@ -77,10 +77,11 @@ module Bosh::Gen::Models
             }
           ]
         }
-        if job["static_ips"]
+        if static_ips.length > 0
+          job_ips, static_ips = static_ips[0..job_instances-1], static_ips[job_instances..-1]
           manifest_job["networks"] << {
             "name" => "vip_network",
-            "static_ips" => job["static_ips"]
+            "static_ips" => job_ips
           }
         end
         manifest_job["persistent_disk"] = @persistent_disk if @persistent_disk > 0
