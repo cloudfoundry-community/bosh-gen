@@ -7,8 +7,8 @@ class DeploymentManifestSpec < MiniTest::Spec
       {"name" => "myrelease", "version" => 2},
       {"instance_type" => "m1.small"})
     manifest.jobs = [
-      { "name" => "job-with-ips",  "static_ips" => ['1.2.3.4', '6.7.8.9']},
-      { "name" => "misc"}
+      { "name" => "job-with-ips",  "static_ips" => ['1.2.3.4']},
+      { "name" => "misc",  "static_ips" => ['6.7.8.9']}
     ]
     manifest.to_yaml.must_equal fixture_manifest("2_jobs_2_ips_no_disk")
   end
