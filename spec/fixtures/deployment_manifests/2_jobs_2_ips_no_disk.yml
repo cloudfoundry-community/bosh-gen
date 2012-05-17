@@ -57,4 +57,7 @@ jobs:
     default:
     - dns
     - gateway
+  - name: vip_network
+    static_ips:
+    - 6.7.8.9
 properties: {}
