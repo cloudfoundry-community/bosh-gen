@@ -11,6 +11,11 @@ Added:
 * `new` - ignore .blobs folder in releases
 * `manifest` - persistent_disk is an integer; added to common job too
 
+### v0.6.2
+
+* `manifest` - provided IP addresses are distributed across jobs until it runs out
+* `manifest` - fix to allocation of persistent disk
+
 ## v0.5.0
 
 * `job` - takes a COMMAND argument
