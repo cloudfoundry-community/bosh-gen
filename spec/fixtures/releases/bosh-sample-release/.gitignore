@@ -1,0 +1,9 @@
+config/dev.yml
+releases/*.tgz
+dev_releases
+.dev_builds
+.idea
+.final_builds/jobs/**/*.tgz
+.final_builds/packages/**/*.tgz
+*.swp
+*~

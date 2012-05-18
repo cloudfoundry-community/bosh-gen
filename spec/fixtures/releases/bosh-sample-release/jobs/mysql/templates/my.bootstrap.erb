@@ -1,0 +1,6 @@
+export LD_LIBRARY_PATH=/var/vcap/packages/mysql/lib/mysql
+export PATH=/var/vcap/packages/mysql/bin
+
+password=<%= properties.mysql.password %>
+
+mysqladmin -u root password "${password}" -S /var/vcap/sys/run/mysql/mysqld.sock

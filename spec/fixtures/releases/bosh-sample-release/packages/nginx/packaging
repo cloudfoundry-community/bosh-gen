@@ -1,0 +1,23 @@
+# abort script on any command that exit with a non zero value
+set -e
+
+echo "Extracting pcre..."
+tar xzf nginx/pcre-8.21.tar.gz
+
+echo "Extracting headers-more module..."
+tar xzf nginx/headers-more-v0.15rc1.tgz
+
+echo "Extracting nginx..."
+tar xzf nginx/nginx-1.0.11.tar.gz
+
+echo "Building nginx..."
+(
+  cd nginx-1.0.11
+  ./configure \
+    --prefix=${BOSH_INSTALL_TARGET} \
+    --with-pcre=../pcre-8.21 \
+    --with-http_ssl_module \
+    --add-module=../headers-more-v0.15rc1
+  make
+  make install
+)

@@ -1,0 +1,5 @@
+---
+name: wordpress
+
+files:
+  - wordpress/wordpress-3.3.1.tgz

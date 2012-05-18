@@ -1,0 +1,56 @@
+#!/bin/bash
+
+LOG_DIR=/var/vcap/sys/log/mysql
+RUN_DIR=/var/vcap/sys/run/mysql
+PIDFILE=$RUN_DIR/mysqld.pid
+CONF_DIR=/var/vcap/jobs/mysql/config
+MY_LD_FILE=/etc/ld.so.conf.d/mysql.conf
+
+SERVER=/var/vcap/packages/mysql/libexec/mysql.server
+SOCKET=/var/vcap/sys/run/mysql/mysqld.sock
+
+PATH=/var/vcap/packages/mysql/bin:$PATH
+export PATH
+
+case $1 in
+
+  start)
+    mkdir -p $LOG_DIR
+    mkdir -p $RUN_DIR
+    chown vcap:vcap $RUN_DIR
+
+    # set the system wide LD path for mysql libraries
+    echo "/var/vcap/packages/mysqlclient/lib/mysql" > $MY_LD_FILE
+    echo "/var/vcap/packages/mysql/lib/mysql" >> $MY_LD_FILE
+    /sbin/ldconfig
+
+    $SERVER start /var/vcap/jobs/mysql/config/my.cnf
+
+    <% password = properties.mysql.password %>
+
+    echo "creating database"
+    <% dbname = properties.wordpress.db.name %>
+    mysql -u root --password='<%= password %>' -S $SOCKET \
+      -e "CREATE DATABASE <%= dbname %>;" mysql
+
+    <% dbuser = "'#{properties.wordpress.db.user}'@'%'" %>
+    <% dbpass = properties.wordpress.db.pass %>
+
+    echo "creating user"
+    mysql -u root --password='<%= password %>' -S $SOCKET \
+      -e "CREATE USER <%= dbuser %> IDENTIFIED BY '<%= dbpass %>';" mysql
+
+    echo "granting privileges"
+    mysql -u root --password='<%= password %>' -S $SOCKET \
+      -e "GRANT ALL PRIVILEGES ON <%= dbname %>.* TO <%= dbuser %> WITH GRANT OPTION;" mysql
+  ;;
+
+  stop)
+    $SERVER stop /var/vcap/jobs/mysql/config/my.cnf
+  ;;
+
+  *)
+    echo "Usage: mysql_ctl {start|stop}" ;;
+esac
+
+exit 0

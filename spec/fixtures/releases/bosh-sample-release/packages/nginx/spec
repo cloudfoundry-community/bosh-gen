@@ -1,0 +1,6 @@
+---
+name: nginx
+files:
+- nginx/headers-more-v0.15rc1.tgz
+- nginx/nginx-1.0.11.tar.gz
+- nginx/pcre-8.21.tar.gz

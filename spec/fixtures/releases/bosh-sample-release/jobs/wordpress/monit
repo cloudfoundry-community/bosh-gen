@@ -1,0 +1,5 @@
+check process wordpress
+  with pidfile /var/vcap/sys/run/apache2/httpd.pid
+  start program "/var/vcap/jobs/wordpress/bin/wordpress_ctl start"
+  stop program "/var/vcap/jobs/wordpress/bin/wordpress_ctl stop"
+  group vcap

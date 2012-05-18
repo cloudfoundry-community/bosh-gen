@@ -1,0 +1,12 @@
+---
+name: wordpress
+templates:
+  wordpress_ctl:      bin/wordpress_ctl
+  httpd.conf.erb:     config/httpd.conf
+  wp-config.php.erb:  config/wp-config.php
+  php.ini.erb:        config/php.ini
+packages:
+  - mysqlclient
+  - apache2
+  - php5
+  - wordpress

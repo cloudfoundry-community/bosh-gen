@@ -1,0 +1,12 @@
+---
+name: mysql
+
+templates:
+  my.cnf.erb: config/my.cnf
+  my.bootstrap.erb: bin/my.bootstrap
+  my.shutdown.erb: bin/my.shutdown
+  mysql_ctl.erb: bin/mysql_ctl
+
+packages:
+  - mysqlclient
+  - mysql

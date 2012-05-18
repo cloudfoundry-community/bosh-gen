@@ -1,0 +1,39 @@
+#!/bin/bash
+
+JOB=wordpress
+RUN_DIR=/var/vcap/sys/run/apache2
+LOG_DIR=/var/vcap/sys/log/apache2
+PIDFILE=$RUN_DIR/httpd.pid
+CONF_DIR=/var/vcap/jobs/$JOB/config
+APACHECTL=/var/vcap/packages/apache2/bin/apachectl
+APSTART=/var/vcap/sys/log/apache2/start.log
+
+case $1 in
+
+  start)
+    mkdir -p $RUN_DIR
+    mkdir -p $LOG_DIR
+
+    # link libphp into apache
+    if [ ! -f /var/vcap/packages/apache2/modules/libphp5.so ]; then
+      ln -s /var/vcap/packages/php5/modules/libphp5.so \
+        /var/vcap/packages/apache2/modules/libphp5.so
+    fi
+
+    # link wordpress config file into wordpress package
+    if [ ! -f /var/vcap/packages/wordpress/wp-config.php ]; then
+      ln -s /var/vcap/jobs/wordpress/config/wp-config.php \
+        /var/vcap/packages/wordpress/wp-config.php
+    fi
+
+    $APACHECTL -f $CONF_DIR/httpd.conf -k start >> $APSTART 2>&1
+    ;;
+
+  stop)
+    $APACHECTL -f $CONF_DIR/httpd.conf -k stop  >> $APSTART 2>&1
+    ;;
+
+  *)
+  echo "Usage: ${JOB}_ctl {start|stop}" ;;
+esac
+exit 0
