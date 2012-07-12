@@ -89,6 +89,7 @@ module Bosh::Gen
         blobs/*
         .blobs
         .dev_builds
+        .vagrant
         .idea
         .DS_Store
         .final_builds/jobs/**/*.tgz
