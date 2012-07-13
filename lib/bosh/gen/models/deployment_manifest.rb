@@ -8,7 +8,7 @@ module Bosh::Gen::Models
       @manifest = {}
       @cloud_properties = cloud_properties
       @security_groups = ["default"]
-      @stemcell_version = "0.5.1"
+      @stemcell_version = "0.6.2"
       @stemcell = { "name" => "bosh-stemcell", "version" => @stemcell_version }
       @persistent_disk = cloud_properties.delete("persistent_disk").to_i
       @static_ips = cloud_properties.delete("static_ips") || []
