@@ -12,6 +12,12 @@ module Bosh::Gen
       argument :ip_addresses
       argument :flags, :type => :hash
 
+      def create_root
+        self.destination_root = File.expand_path(name, destination_root)
+        empty_directory '.'
+        FileUtils.cd(destination_root) unless options[:pretend]
+      end
+
       def check_release_path_is_release
         unless File.exist?(release_path)
           raise Thor::Error.new("target path '#{release_path}' doesn't exist")
@@ -33,6 +39,10 @@ module Bosh::Gen
         create_file manifest_file_name, manifest.to_yaml, :force => flags[:force]
       end
 
+      def setup_bosh_deployment_target
+        run "bosh deployment #{manifest_file_name}"
+      end
+
       private
       def release_detector
         @release_detector ||= Bosh::Gen::Models::ReleaseDetection.new(release_path)
@@ -40,7 +50,7 @@ module Bosh::Gen
       
       # Whether +name+ contains .yml suffix or nor, returns a .yml filename for manifest to be generated
       def manifest_file_name
-        basename = name.gsub(/\.yml/, '') + ".yml"
+        basename = "manifest.yml"
       end
       
       def job_manifests
