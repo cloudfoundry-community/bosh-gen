@@ -18,7 +18,7 @@ module Bosh::Gen::Models
     end
 
     def latest_dev_release_version
-      @latest_dev_release["version"].to_i
+      @latest_dev_release["version"]
     end
     
     def latest_dev_release_job_names
