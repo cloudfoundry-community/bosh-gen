@@ -69,11 +69,17 @@ module Bosh
         Bosh::Gen::Generators::JobTemplateGenerator.start([job_name, file_path])
       end
       
-      desc "extract SOURCE_RELEASE_PATH SOURCE_JOB_NAME [JOB_NAME]", "Extracts a job from another release and all its dependent packages and source"
-      def extract(source_release_path, source_job_name, target_job_name=nil)
+      desc "extract-job SOURCE_RELEASE_PATH SOURCE_JOB_NAME [JOB_NAME]", "Extracts a job from another release and all its dependent packages and source"
+      def extract_job(source_release_path, source_job_name, target_job_name=nil)
         target_job_name ||= source_job_name
         require 'bosh/gen/generators/extract_job_generator'
         Bosh::Gen::Generators::ExtractJobGenerator.start([source_release_path, source_job_name, target_job_name])
+      end
+
+      desc "extract-pkg SOURCE_RELEASE_PATH SOURCE_PACKAGE_NAME", "Extracts a package from another release and all its dependent packages and sources"
+      def extract_pkg(source_release_path, source_package_name)
+        require 'bosh/gen/generators/extract_package_generator'
+        Bosh::Gen::Generators::ExtractPackageGenerator.start([source_release_path, source_package_name])
       end
 
       desc "manifest NAME PATH UUID", "Creates a deployment manifest based on the release located at PATH"
