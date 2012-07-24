@@ -1,5 +1,26 @@
 # Change Log
 
+## v0.8.0
+
+Changed:
+
+* `package` - the `packaging` script include default tar/configure/make sequence for all tarballs
+
+For example, `bosh-gen package nginx -f ..../blobs/nginx/`, the resulting `packaging` is:
+
+``` bash
+set -e # exit immediately if a simple command exits with a non-zero status
+set -u # report the usage of uninitialized variables
+
+export HOME=/var/vcap
+
+tar xzf nginx/nginx-1.2.0.tar.gz
+cd nginx-1.2.0
+./configure --prefix=${BOSH_INSTALL_TARGET}
+make
+make install
+```
+
 ## v0.7.0
 
 Added:
