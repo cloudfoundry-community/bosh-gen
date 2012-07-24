@@ -39,8 +39,25 @@ module Bosh::Gen
           set -e # exit immediately if a simple command exits with a non-zero status
           set -u # report the usage of uninitialized variables
           
-          HOME=/var/vcap
+          export HOME=/var/vcap
+          
           SHELL
+
+          dependencies.each do |package|
+            packaging << "PATH=/var/vcap/packages/#{package}/bin:$PATH\n"
+          end
+
+          if primary_package_file
+            packaging << <<-SHELL.gsub(/^\s{12}/, '')
+            
+            # tar xzf #{name}/#{primary_package_file}
+            # cd #{primary_package_file_unpacked_path}
+            # ./configure --prefix=${BOSH_INSTALL_TARGET}
+            # make
+            # make install
+            
+            SHELL
+          end
           packaging
         end
 
@@ -102,6 +119,26 @@ module Bosh::Gen
             run "git #{cmd} #{options}"
           end
         end
+      end
+
+      def first_tarball_in_files
+        files.find { |file| file =~ /.tar.gz/  }
+      end
+
+      # Returns the first .tar.gz in the files list
+      def primary_package_file
+        if file = first_tarball_in_files
+          File.basename(file)
+        end
+      end
+      
+      # If primary_package_file was mysql's client-5.1.62-rel13.3-435-Linux-x86_64.tar.gz
+      # then returns "client-5.1.62-rel13.3-435-Linux-x86_64"
+      #
+      # Assumes that first line of "tar tfz TARBALL" is the unpacking path
+      def primary_package_file_unpacked_path
+        file = `tar tfz #{first_tarball_in_files} | head -n 1`
+        File.basename(file.strip)
       end
     end
   end
