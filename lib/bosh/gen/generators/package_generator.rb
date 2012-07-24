@@ -35,17 +35,19 @@ module Bosh::Gen
       
       def packaging
         create_file package_dir("packaging") do
-          <<-SHELL.gsub(/^\s{10}/, '')
-          # abort script on any command that exit with a non zero value
-          set -e
+          packaging = <<-SHELL.gsub(/^\s{10}/, '')
+          set -e # exit immediately if a simple command exits with a non-zero status
+          set -u # report the usage of uninitialized variables
           
+          HOME=/var/vcap
           SHELL
+          packaging
         end
 
         create_file package_dir("pre_packaging") do
           <<-SHELL.gsub(/^\s{10}/, '')
-          # abort script on any command that exit with a non zero value
-          set -e
+          set -e # exit immediately if a simple command exits with a non-zero status
+          set -u # report the usage of uninitialized variables
           
           SHELL
         end
