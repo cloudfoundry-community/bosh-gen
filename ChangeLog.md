@@ -1,5 +1,17 @@
 # Change Log
 
+## v0.7.0
+
+Added:
+
+* `extract-pkg` - extract a package and its dependencies from a target release
+
+Changed/Renamed:
+
+* `extract` -> `extract-job`
+* `new` -> `.gitignore` includes `.vagrant`, to support `bosh-solo`
+* `manifest` -> update to soon-to-be-released stemcell 0.6.2
+
 ## v0.6.0
 
 Added:
