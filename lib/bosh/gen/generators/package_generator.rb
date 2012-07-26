@@ -87,7 +87,7 @@ module Bosh::Gen
             say "Skipping unknown file #{file_path}", :red
             next
           end
-
+          
           size      = File.size(file_path)
           file_name = File.basename(file_path)
           src_file  = src_dir(file_name)
@@ -141,7 +141,7 @@ module Bosh::Gen
 
       # Returns all .tar.gz in the files list
       def tarballs_in_files
-        files.select { |file| file =~ /.tar.gz/  }
+        files.select { |file| file =~ /.(?:tar.gz|tgz)/  }
       end
 
       # If primary_package_file was mysql's client-5.1.62-rel13.3-435-Linux-x86_64.tar.gz
