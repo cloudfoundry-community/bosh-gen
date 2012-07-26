@@ -9,21 +9,23 @@ module Bosh::Gen
       argument :name
       argument :dependencies, :type => :array
       argument :files, :type => :array
-      
+
+      BLOB_FILE_MIN_SIZE=100_000 # files over 100k are blobs
+
       def self.source_root
         File.join(File.dirname(__FILE__), "package_generator", "templates")
       end
-      
+
       def check_root_is_release
         unless File.exist?("jobs") && File.exist?("packages")
           raise Thor::Error.new("run inside a BOSH release project")
         end
       end
-      
+
       def check_name
         raise Thor::Error.new("'#{name}' is not a vaild BOSH id") unless name.bosh_valid_id?
       end
-      
+
       def warn_missing_dependencies
         dependencies.each do |d|
           raise Thor::Error.new("dependency '#{d}' is not a vaild BOSH id") unless d.bosh_valid_id?
@@ -32,7 +34,7 @@ module Bosh::Gen
           end
         end
       end
-      
+
       def packaging
         create_file package_dir("packaging") do
           packaging = <<-SHELL.gsub(/^\s{10}/, '')
@@ -72,16 +74,30 @@ module Bosh::Gen
         end
       end
 
-      # Copy the local source files into src/NAME/filename, unless filename
-      # already exists as a blob in blobs/NAME/filename.
+      # Copy the local source files into src or blobs
+      # * into src/NAME/filename (if < 100k) or
+      # * into blobs/NAME/filename (if >= 100k)
+      # Skip a file if:
+      # * filename already exists as a blob in blobs/NAME/filename
+      # * file doesn't exist
       def copy_src_files
-        files.each do |file_path|
+        files.each do |file|
+          file_path = File.expand_path(file)
+          unless File.exist?(file_path)
+            say "Skipping unknown file #{file_path}", :red
+            next
+          end
+
+          size      = File.size(file_path)
           file_name = File.basename(file_path)
-          src_file = src_dir(file_name)
-          if File.exist? blob_dir(file_name)
+          src_file  = src_dir(file_name)
+          blob_file = blob_dir(file_name)
+          if File.exist?(blob_file)
             say "Blob '#{file_name}' exists as a blob, skipping..."
           else
-            copy_file File.expand_path(file_path), src_file
+            # if < 100k, put in src/, else blobs/
+            target = size >= BLOB_FILE_MIN_SIZE ? blob_file : src_file
+            copy_file File.expand_path(file_path), target
           end
         end
       end
