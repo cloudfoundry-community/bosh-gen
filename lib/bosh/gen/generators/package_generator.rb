@@ -10,7 +10,7 @@ module Bosh::Gen
       argument :dependencies, :type => :array
       argument :files, :type => :array
 
-      BLOB_FILE_MIN_SIZE=100_000 # files over 100k are blobs
+      BLOB_FILE_MIN_SIZE=20_000 # files over 20k are blobs
 
       def self.source_root
         File.join(File.dirname(__FILE__), "package_generator", "templates")
@@ -75,8 +75,8 @@ module Bosh::Gen
       end
 
       # Copy the local source files into src or blobs
-      # * into src/NAME/filename (if < 100k) or
-      # * into blobs/NAME/filename (if >= 100k)
+      # * into src/NAME/filename (if < 20k) or
+      # * into blobs/NAME/filename (if >= 20k)
       # Skip a file if:
       # * filename already exists as a blob in blobs/NAME/filename
       # * file doesn't exist
@@ -95,7 +95,7 @@ module Bosh::Gen
           if File.exist?(blob_file)
             say "Blob '#{file_name}' exists as a blob, skipping..."
           else
-            # if < 100k, put in src/, else blobs/
+            # if < 20k, put in src/, else blobs/
             target = size >= BLOB_FILE_MIN_SIZE ? blob_file : src_file
             copy_file File.expand_path(file_path), target
           end
