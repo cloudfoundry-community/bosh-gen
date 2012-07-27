@@ -35,7 +35,9 @@ module Bosh::Gen
       def copy_dependent_sources
         @blobs = false
         @packages.each do |package|
-          directory "src/#{package}" if File.exist?(File.join(source_release_path, "src", package))
+          if File.exist?(File.join(source_release_path, "src", package))
+            directory "src/#{package}"
+          end
           if File.exist?(File.join(source_release_path, "blobs", package))
             directory "blobs/#{package}"
             @blobs = true
