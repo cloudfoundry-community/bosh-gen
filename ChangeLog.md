@@ -28,6 +28,12 @@ Changed:
 * `extract-job` & `extract-pkg` - copies files mentioned in specs
 * `package` - large files go into blobs/ folder
 
+### v0.8.2
+
+Bug fixes:
+
+* `extract-pkg` - missing #source_file helper
+
 ## v0.7.0
 
 Added:
