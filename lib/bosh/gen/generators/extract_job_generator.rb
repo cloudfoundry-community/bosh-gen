@@ -31,16 +31,20 @@ module Bosh::Gen
       def copy_dependent_packages
         @packages.each {|package| directory "packages/#{package}"}
       end
-
-      def copy_dependent_sources
+      
+      def copy_package_spec_files
         @blobs = false
         @packages.each do |package|
-          if File.exist?(File.join(source_release_path, "src", package))
-            directory "src/#{package}"
-          end
-          if File.exist?(File.join(source_release_path, "blobs", package))
-            directory "blobs/#{package}"
-            @blobs = true
+          spec = source_file("packages", package, "spec")
+          files = YAML.load_file(spec)["files"]
+          
+          files.each do |relative_file|
+            if File.exist?(source_file("src", relative_file))
+              copy_file "src/#{relative_file}"
+            elsif File.exist?(source_file("blobs", relative_file))
+              copy_file "blobs/#{relative_file}"
+              @blobs = true
+            end
           end
         end
       end
@@ -56,6 +60,9 @@ module Bosh::Gen
         File.join("jobs", job_name, path)
       end
       
+      def source_file(*path)
+        File.join(source_release_path, *path)
+      end
     end
   end
 end

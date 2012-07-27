@@ -30,13 +30,19 @@ module Bosh::Gen
         @packages.each {|package| directory "packages/#{package}"}
       end
 
-      def copy_dependent_sources
+      def copy_package_spec_files
         @blobs = false
         @packages.each do |package|
-          directory "src/#{package}" if File.exist?(File.join(source_release_path, "src", package))
-          if File.exist?(File.join(source_release_path, "blobs", package))
-            directory "blobs/#{package}"
-            @blobs = true
+          spec = source_file("packages", package, "spec")
+          files = YAML.load_file(spec)["files"]
+          
+          files.each do |relative_file|
+            if File.exist?(source_file("src", relative_file))
+              copy_file "src/#{relative_file}"
+            elsif File.exist?(source_file("blobs", relative_file))
+              copy_file "blobs/#{relative_file}"
+              @blobs = true
+            end
           end
         end
       end
