@@ -66,6 +66,9 @@ module Bosh::Gen
         File.join(source_release_path, "packages", source_package_name, path)
       end
       
+      def source_file(*path)
+        File.join(source_release_path, *path)
+      end
     end
   end
 end
