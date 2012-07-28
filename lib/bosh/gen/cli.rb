@@ -13,8 +13,10 @@ module Bosh
       include Thor::Actions
     
       desc "new PATH", "Creates a new BOSH release"
-      method_option :s3, :alias => ["--aws"], :type => :boolean, :desc => "Use AWS S3 bucket for blobstore"
-      method_option :atmos, :type => :boolean, :desc => "Use EMC ATMOS for blobstore"
+      method_option :s3, :alias => ["--aws"], :type => :boolean, 
+        :desc => "Use AWS S3 bucket for blobstore"
+      method_option :atmos, :type => :boolean, 
+        :desc => "Use EMC ATMOS for blobstore"
       def new(path)
         flags = { :aws => options["s3"], :atmos => options["atmos"] }
         
@@ -23,17 +25,21 @@ module Bosh
       end
       
       desc "package NAME", "Create a new package"
-      method_option :dependencies, :aliases => ['-d'], :type => :array, :desc => "List of package dependencies"
-      method_option :files,        :aliases => ['-f', '--src'], :type => :array, :desc => "List of files copy into release"
+      method_option :dependencies, :aliases => ['-d'], :type => :array, 
+        :desc => "List of package dependencies"
+      method_option :files,        :aliases => ['-f', '--src'], :type => :array, 
+        :desc => "List of files copy into release"
       def package(name)
         dependencies = options[:dependencies] || []
         files        = options[:files] || []
         require 'bosh/gen/generators/package_generator'
-        Bosh::Gen::Generators::PackageGenerator.start([name, dependencies, files])
+        Bosh::Gen::Generators::PackageGenerator.start(
+          [name, dependencies, files])
       end
       
       desc "source NAME", "Downloads a source item into the named project"
-      method_option :blob, :aliases => ['-b'], :type => :boolean, :desc => "Store file in blobstore"
+      method_option :blob, :aliases => ['-b'], :type => :boolean, 
+        :desc => "Store file in blobstore"
       def source(name, uri)
         flags = { :blob => options[:blob] || false }
         dir = Dir.mktmpdir
@@ -49,37 +55,49 @@ module Bosh
         end
 
         require 'bosh/gen/generators/package_source_generator'
-        Bosh::Gen::Generators::PackageSourceGenerator.start([name, files, flags])
+        Bosh::Gen::Generators::PackageSourceGenerator.start(
+          [name, files, flags])
       end
       
-      desc "job NAME COMMAND", "Create a new job to run 'COMMAND' to launch the process"
-      method_option :dependencies, :aliases => ['-d'], :type => :array, :desc => "List of package dependencies"
-      method_option :ruby, :type => :boolean, :desc => "Use templates for running Ruby/Rack process"
+      desc "job NAME COMMAND", 
+        "Create a new job to run 'COMMAND' to launch the process"
+      method_option :dependencies, :aliases => ['-d'], :type => :array, 
+        :desc => "List of package dependencies"
+      method_option :ruby, :type => :boolean, 
+        :desc => "Use templates for running Ruby/Rack process"
       def job(name, command=nil)
         command ||= 'EXECUTABLE_SERVER'
         flags = { :ruby => options["ruby"] || false }
         dependencies   = options[:dependencies] || []
         require 'bosh/gen/generators/job_generator'
-        Bosh::Gen::Generators::JobGenerator.start([name, command, dependencies, flags])
+        Bosh::Gen::Generators::JobGenerator.start(
+          [name, command, dependencies, flags])
       end
       
-      desc "template JOB FILE_PATH", "Add a Job template (example FILE_PATH: config/httpd.conf)"
+      desc "template JOB FILE_PATH", 
+        "Add a Job template (example FILE_PATH: config/httpd.conf)"
       def template(job_name, file_path)
         require 'bosh/gen/generators/job_template_generator'
         Bosh::Gen::Generators::JobTemplateGenerator.start([job_name, file_path])
       end
       
-      desc "extract-job SOURCE_RELEASE_PATH SOURCE_JOB_NAME [JOB_NAME]", "Extracts a job from another release and all its dependent packages and source"
+      desc "extract-job SOURCE_RELEASE_PATH SOURCE_JOB_NAME [JOB_NAME]", 
+        "Extracts a job from another release and all its " +
+        "dependent packages and source"
       def extract_job(source_release_path, source_job_name, target_job_name=nil)
         target_job_name ||= source_job_name
         require 'bosh/gen/generators/extract_job_generator'
-        Bosh::Gen::Generators::ExtractJobGenerator.start([source_release_path, source_job_name, target_job_name])
+        Bosh::Gen::Generators::ExtractJobGenerator.start(
+          [source_release_path, source_job_name, target_job_name])
       end
 
-      desc "extract-pkg SOURCE_RELEASE_PATH SOURCE_PACKAGE_NAME", "Extracts a package from another release and all its dependent packages and sources"
+      desc "extract-pkg SOURCE_RELEASE_PATH SOURCE_PACKAGE_NAME", 
+        "Extracts a package from another release and all its " +
+        "dependent packages and sources"
       def extract_pkg(source_release_path, source_package_name)
         require 'bosh/gen/generators/extract_package_generator'
-        Bosh::Gen::Generators::ExtractPackageGenerator.start([source_release_path, source_package_name])
+        Bosh::Gen::Generators::ExtractPackageGenerator.start(
+          [source_release_path, source_package_name])
       end
 
       desc "manifest NAME PATH", 
