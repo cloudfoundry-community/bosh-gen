@@ -1,0 +1,34 @@
+--- 
+target: http://23.23.128.40:25555
+target_name: microbosh-aws-us-east-1
+target_version: 0.5.1 (release:ffd6af9a bosh:8b7af232)
+target_uuid: f734ed1f-6892-4d96-9123-018c830a8543
+aliases: 
+  target: 
+    47ee0fca-68fc-4183-a9ed-863eaa619ff7: http://ec2-23-23-248-166.compute-1.amazonaws.com:25555
+    c897319f-9b4b-41ae-9ed7-7de00b4d770b: http://ec2-23-21-73-121.compute-1.amazonaws.com:25555
+    ad88170e-85ee-4d11-bc80-34e7e15df15d: http://ec2-23-21-73-121.compute-1.amazonaws.com:25555
+    979e4c3f-e74e-4c6d-ae21-45398473b70c: http://23.21.73.121:25555
+    1e753059-a2c8-4363-847f-cc31ca0f67e0: http://ec2-23-21-73-121.compute-1.amazonaws.com:25555
+    f734ed1f-6892-4d96-9123-018c830a8543: http://23.23.128.42:25555
+auth: 
+  http://ec2-23-23-248-166.compute-1.amazonaws.com:25555: 
+    username: admin
+    password: admin
+  http://ec2-23-21-73-121.compute-1.amazonaws.com:25555: 
+    username: admin
+    password: foobar
+  http://50.19.186.130:25555: 
+    username: admin
+    password: admin
+  http://23.21.73.121:25555: 
+    username: admin
+    password: ooooooo
+  http://23.23.128.42:25555: 
+    username: admin
+    password: hahahah
+deployment: 
+  http://ec2-23-23-248-166.compute-1.amazonaws.com:25555: /Users/drnic/.bosh_deployments/wordpress/wordpress-aws.yml
+  http://ec2-23-21-73-121.compute-1.amazonaws.com:25555: /Users/drnic/Sites/boshdeployments/rackapp/manifest.yml
+  http://23.21.73.121:25555: /Users/drnic/Sites/boshdeployments/rackapp/manifest.yml
+  http://23.23.128.40:25555: /Users/drnic/Sites/boshdeployments/riak-cluster/manifest.yml
