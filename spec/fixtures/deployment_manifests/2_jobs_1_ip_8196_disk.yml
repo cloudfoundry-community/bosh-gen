@@ -3,7 +3,7 @@ name: myproj
 director_uuid: UUID
 release:
   name: myrelease
-  version: 2
+  version: latest
 compilation:
   workers: 10
   network: default

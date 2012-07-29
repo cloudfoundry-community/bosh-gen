@@ -12,6 +12,11 @@ module Bosh::Gen::Models
       @stemcell = { "name" => "bosh-stemcell", "version" => @stemcell_version }
       @persistent_disk = cloud_properties.delete("persistent_disk").to_i
       @static_ips = cloud_properties.delete("static_ips") || []
+
+      # Ignore current release version and set to 'latest'
+      # This is much more helpful in early development days
+      # of a release
+      release_properties["version"] = 'latest'
       
       manifest["name"] = name
       manifest["director_uuid"] = director_uuid
