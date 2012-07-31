@@ -1,17 +1,7 @@
 #!/bin/bash
 
-# Control script to start/stop ruby/rack <%= job_name %> job on a BOSH controlled VM
-#
-# In local development, this script can be run manually. Examples below assume you are in the root of this release project.
-#
-# Start process example:
-# APP_DIR=/path/to/<%= job_name %> RACK_ENV=development COMMAND=shotgun PORT=9393 jobs/<%= job_name %>/templates/<%= job_name %>_ctl start
-#
-# View STDOUT/STDERR logs:
-# jobs/<%= job_name %>/templates/<%= job_name %>_ctl logs
-#
-# Clear logs:
-# jobs/<%= job_name %>/templates/<%= job_name %>_ctl clearlogs
+# Control script to start/stop <%= job_name %> job on a BOSH controlled VM
+
 <% if command == "EXECUTABLE_SERVER" %>
 # TODO - change "EXECUTABLE_SERVER" to the command to run
 <% end %>
