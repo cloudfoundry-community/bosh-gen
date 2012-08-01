@@ -25,6 +25,9 @@ class RackRailsGeneratorSpec < MiniTest::Spec
       job_template_exists "mywebapp", "bin/ctl_setup.sh.erb",   "bin/ctl_setup.sh"
       job_template_exists "mywebapp", "bin/ctl_utils.sh",       "bin/ctl_utils.sh"
       job_template_exists "mywebapp", "bin/monit_debugger",     "bin/monit_debugger"
+
+      example = File.join("examples", "mywebapp_simple", "default.yml")
+      File.exist?(example).must_equal(true, "#{example} not created")
     end
   end
 
@@ -51,6 +54,10 @@ class RackRailsGeneratorSpec < MiniTest::Spec
       job_template_exists "mywebapp", "config/mime.types",        "config/mime.types"
       job_template_exists "mywebapp", "config/database.yml.erb",  "config/database.yml"
       job_template_exists "mywebapp", "config/redis.yml.erb",     "config/redis.yml"
+
+      example = File.join("examples", "mywebapp_nginx_rack", "nginx_puma.yml")
+      example = File.join("examples", "mywebapp_nginx_rack", "nginx_rackup.yml")
+      File.exist?(example).must_equal(true, "#{example} not created")
     end
   end
 end

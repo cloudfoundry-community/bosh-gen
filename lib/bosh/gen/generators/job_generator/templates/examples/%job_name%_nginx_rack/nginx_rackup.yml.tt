@@ -1,0 +1,8 @@
+---
+jobs:
+  - <%= job_name %>
+properties:
+  webapp:
+    package: rackapp
+    appstack: rackup
+    use_nginx: 1
