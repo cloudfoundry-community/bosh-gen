@@ -39,6 +39,8 @@ module Bosh::Gen
         end
       end
       
+      # copy the thor template files into the bosh release to be bosh templates
+      # that's right, templates (.tt) can become templates (.erb)
       def template_files
         generator_job_templates_path = File.join(self.class.source_root, "jobs/%job_name%_#{purpose}")
         directory "jobs/%job_name%_#{purpose}", "jobs/#{job_name}"
