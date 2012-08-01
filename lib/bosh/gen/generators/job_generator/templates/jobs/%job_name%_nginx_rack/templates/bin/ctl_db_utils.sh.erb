@@ -1,0 +1,60 @@
+<% if properties.postgres %>
+PG_PACKAGE_DIR=/var/vcap/package/postgres
+function database_ready() {
+  DB_HOST='<%= properties.postgres.host %>'
+  DB_PORT='<%= properties.postgres.port || 5432 %>'
+  DB_USER='<%= properties.postgres.user %>'
+  DB_PASSWORD='<%= properties.postgres.password %>'
+  DB_NAME='<%= properties.postgres.database %>'
+  echo Testing postgresl: psql -d $DB_NAME -p $DB_PORT -U vcap -c "select 1;"
+  LD_LIBRARY_PATH=$PG_PACKAGE_DIR/lib $PG_PACKAGE_DIR/bin/psql -d $DB_NAME -p $DB_PORT -U $DB_USER -c "select 1;"
+}
+<% else %>
+# No database or SQLite database
+function database_ready() {
+  true
+}
+<% end %>
+
+function wait_for_database() {
+  while [[ ! database_ready ]]
+  do
+    echo "Waiting for database availability"
+    sleep 1;
+  done
+}
+
+# Look for known types of config files
+# and if found, symlink into target location
+# in application
+#
+# config/wp-config.php -> wp-config.php
+# config/database.yml  -> config/database.yml
+function link_sql_db_config() {
+  possible_job_config=(config/database.yml config/wp-config.php)
+  target_app_config=(config/database.yml wp-config.php)
+  list_size=${#possible_job_config[@]}
+  found_config='none'
+  for (( i = 0; i < $list_size; i++ )); do
+    job_config=$JOB_DIR/${possible_job_config[i]}
+    app_config=$WEBAPP_DIR/${target_app_config[i]}
+    if [[ -f ${job_config} ]]
+    then
+      found_config=${job_config}
+      echo "Linking ${job_config} -> ${app_config}"
+      mkdir -p $(dirname ${job_config})
+      if [[ -f ${app_config} ]]
+      then
+        mv ${app_config}{,.orig}
+      fi
+      ln -s ${job_config} ${app_config}
+    fi
+  done
+
+  if [[ "${found_config}" = "none" ]]
+  then
+    echo "ERROR: link_sql_db_config - job does not contain a supported db config file"
+    echo "Please add to job $JOB_NAME a template from: ${possible_job_config[@]}"
+    exit 1
+  fi
+}

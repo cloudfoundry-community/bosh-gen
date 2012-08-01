@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+
+# Setup env vars and folders for the ctl script
+# This helps keep the ctl script as readable
+# as possible
+
+set -e # exit immediately if a simple command exits with a non-zero status
+set -u # report the usage of uninitialized variables
+
+export JOB_NAME='<%= name %>'
+export JOB_DIR=/var/vcap/jobs/$JOB_NAME
+chmod 755 $JOB_DIR # to access file via symlink
+
+# the package that contains the application code
+WEBAPP_PACKAGE='<%= properties.webapp && properties.webapp.package %>'
+
+source $JOB_DIR/bin/ctl_utils.sh
+redirect_output $JOB_NAME
+
+if [[ "$WEBAPP_PACKAGE" = '' ]]
+then
+  echo 'ERROR: $WEBAPP_PACKAGE not set before bin/ctl_setup.sh'
+  exit 1
+fi
+
+export HOME=${HOME:-/home/vcap}
+WEBAPP_DIR=/var/vcap/packages/$WEBAPP_PACKAGE
+
+# Add all packages' /bin & /sbin into $PATH
+for package_bin_dir in $(ls -d /var/vcap/packages/*/{,s}bin)
+do
+  export PATH=${package_bin_dir}:$PATH
+done
+
+# Setup log, run and tmp folders
+
+RUN_DIR=/var/vcap/sys/run/$JOB_NAME
+LOG_DIR=/var/vcap/sys/log/$JOB_NAME
+TMPDIR=/var/vcap/sys/tmp/$JOB_NAME
+for dir in $RUN_DIR $LOG_DIR $TMPDIR
+do
+  mkdir -p ${dir}
+  chown vcap:vcap ${dir}
+done
+
+export C_INCLUDE_PATH=/var/vcap/packages/mysqlclient/include/mysql:/var/vcap/packages/sqlite/include:/var/vcap/packages/libpq/include
+export LIBRARY_PATH=/var/vcap/packages/mysqlclient/lib/mysql:/var/vcap/packages/sqlite/lib:/var/vcap/packages/libpq/lib
+
+PIDFILE=$RUN_DIR/$JOB_NAME.pid

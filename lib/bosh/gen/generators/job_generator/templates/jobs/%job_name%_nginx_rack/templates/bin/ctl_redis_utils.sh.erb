@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+REDIS='<%= properties.redis ? 1 : 0 %>'
+
+# Usage: link_redis_config yaml config/redis.yml
+function link_redis_config() {
+  format=$1         # e.g. yaml
+  target_file=$2    # e.g. config/redis.yml
+  if [[ "${format}" != "yaml" ]]
+  then
+    echo "ERROR: 'link_redis_config ${format}' is not supported. Only supported format: yaml"
+    exit 1
+  fi
+  if [[ "$REDIS" = '1' ]]
+  then
+    echo "Linking ${target_file}"
+    mkdir -p $(dirname $WEBAPP_DIR/${target_file})
+    if [[ -f $WEBAPP_DIR/${target_file} ]]
+    then
+      mv $WEBAPP_DIR/${target_file}{,.orig}
+    fi
+    ln -s $JOB_DIR/${target_file} $WEBAPP_DIR/${target_file}
+  fi
+}
