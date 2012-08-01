@@ -4,7 +4,7 @@ set -e # exit immediately if a simple command exits with a non-zero status
 set -u # report the usage of uninitialized variables
 
 # Setup env vars and folders for the webapp_ctl script
-source /var/vcap/jobs/<%%= name %>/bin/ctl_setup.sh
+source /var/vcap/jobs/<%= job_name %>/bin/ctl_setup.sh
 
 export PORT=${PORT:-5000}
 export LANG=en_US.UTF-8
@@ -12,26 +12,15 @@ export LANG=en_US.UTF-8
 case $1 in
 
   start)
-    pid_guard $PIDFILE "<%= job_name %>"
+    pid_guard $PIDFILE $JOB_NAME
 
-    cd $WEBAPP_DIR
+    # TODO: Run some process
+    exec TODO
+         >>$LOG_DIR/$JOB_NAME.stdout.log \
+         2>>$LOG_DIR/$JOB_NAME.stderr.log
 
-    # link database.yml config to application
-    link_sql_db_config
-
-    # if redis enabled, link it to application
-    link_redis_config yaml config/redis.yml
-
-    # Migrations, if requested
-    run_migrations $WEBAPP_DIR
-
-    # TODO what is 'ulimit -c unlimited' for; when not to use it?
-    ulimit -c unlimited
-
-    # Start the rack app using requested appstack
-    source $JOB_DIR/bin/ctl_start.sh
-
-    echo "Running webapp on $PORT"
+    # store pid in $PIDFILE
+    echo $! > $PIDFILE
     ;;
 
   stop)
@@ -39,7 +28,7 @@ case $1 in
 
     ;;
   *)
-    echo "Usage: webapp_ctl {start|stop}"
+    echo "Usage: <%= job_name %>_ctl {start|stop}"
 
     ;;
 

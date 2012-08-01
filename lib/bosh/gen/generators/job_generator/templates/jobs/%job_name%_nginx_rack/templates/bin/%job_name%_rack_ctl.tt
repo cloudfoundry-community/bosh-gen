@@ -24,7 +24,7 @@ source $JOB_DIR/bin/ctl_redis_utils.sh
 case $1 in
 
   start)
-    pid_guard $PIDFILE "<%= job_name %>"
+    pid_guard $PIDFILE $JOB_NAME
 
     cd $WEBAPP_DIR
 
@@ -43,7 +43,7 @@ case $1 in
     # Start the rack app using requested appstack
     source $JOB_DIR/bin/ctl_start.sh
 
-    echo "Running webapp on $PORT"
+    echo "Running $JOB_NAME on $PORT"
     ;;
 
   stop)
@@ -51,7 +51,7 @@ case $1 in
 
     ;;
   *)
-    echo "Usage: webapp_ctl {start|stop}"
+    echo "Usage: <%= job_name %>_rack_ctl {start|stop}"
 
     ;;
 

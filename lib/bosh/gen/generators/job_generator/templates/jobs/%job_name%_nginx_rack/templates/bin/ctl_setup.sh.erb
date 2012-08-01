@@ -13,18 +13,17 @@ chmod 755 $JOB_DIR # to access file via symlink
 
 # the package that contains the application code
 WEBAPP_PACKAGE='<%= properties.webapp && properties.webapp.package %>'
-
-source $JOB_DIR/bin/ctl_utils.sh
-redirect_output $JOB_NAME
-
+WEBAPP_DIR=/var/vcap/packages/$WEBAPP_PACKAGE
 if [[ "$WEBAPP_PACKAGE" = '' ]]
 then
   echo 'ERROR: $WEBAPP_PACKAGE not set before bin/ctl_setup.sh'
   exit 1
 fi
 
+source $JOB_DIR/bin/ctl_utils.sh
+redirect_output $JOB_NAME
+
 export HOME=${HOME:-/home/vcap}
-WEBAPP_DIR=/var/vcap/packages/$WEBAPP_PACKAGE
 
 # Add all packages' /bin & /sbin into $PATH
 for package_bin_dir in $(ls -d /var/vcap/packages/*/{,s}bin)
