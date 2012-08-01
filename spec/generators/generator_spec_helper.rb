@@ -1,7 +1,4 @@
-# Must set before requiring generator libs.
-unless defined?(TMP_ROOT)
-  TMP_ROOT = File.expand_path("../../tmp", __FILE__)
-end
+require "bosh/gen/cli"
 
 module GeneratorSpecHelper
   def setup_universe
@@ -19,8 +16,10 @@ module GeneratorSpecHelper
     @active_project_folder = File.join(@tmp_root, name)
   end
 
-  def generate_job(job, *args)
-
+  def generate_job(job)
+    capture_stdios do
+      Bosh::Gen::Command.start(["job", job])
+    end
   end
 
   def setup_active_project_folder project_name

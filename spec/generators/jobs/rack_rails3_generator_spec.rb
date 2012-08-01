@@ -12,7 +12,6 @@ class RackRailsGeneratorSpec < MiniTest::Spec
   include GeneratorSpecHelper
 
   def setup
-    puts "self.before_suite"
     setup_universe
     setup_project_release("bosh-sample-release")
     in_project_folder do
@@ -22,8 +21,6 @@ class RackRailsGeneratorSpec < MiniTest::Spec
 
   it "creates job spec" do
     in_project_folder do
-      puts `pwd`
-      puts `ls -al`
       File.exist?("jobs/mywebapp/spec").must_equal true
     end
   end
