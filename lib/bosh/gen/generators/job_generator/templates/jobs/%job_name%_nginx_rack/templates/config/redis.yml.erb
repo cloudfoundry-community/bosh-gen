@@ -1,0 +1,6 @@
+---
+host: '<%= (properties.redis && properties.redis.host) || 'localhost' %>'
+port: <%= (properties.redis && properties.redis.port) || 6379 %>
+<%= (properties.webapp && properties.webapp.framework_env) || 'production' %>:
+  host: '<%= (properties.redis && properties.redis.host) || 'localhost' %>'
+  port: <%= (properties.redis && properties.redis.port) || 6379 %>

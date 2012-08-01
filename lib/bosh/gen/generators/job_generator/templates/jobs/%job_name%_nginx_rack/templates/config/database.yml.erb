@@ -1,0 +1,17 @@
+<% if properties.postgres %>
+production:
+  adapter: postgresql
+  encoding: unicode
+  database: '<%= properties.postgres.database %>'
+  host:     '<%= properties.postgres.host %>'
+  port:     '<%= properties.postgres.port || 5432 %>'
+  username: '<%= properties.postgres.user %>'
+  password: '<%= properties.postgres.password %>'
+  pool: 5
+<% else %>
+production:
+  adapter: sqlite3
+  database: db/production.sqlite3
+  pool: 5
+  timeout: 5000
+<% end %>
