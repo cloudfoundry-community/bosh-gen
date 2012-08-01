@@ -40,8 +40,23 @@ module Bosh::Gen
       end
       
       def template_files
+        generator_job_templates_path = File.join(self.class.source_root, "jobs/%job_name%_#{purpose}")
         directory "jobs/%job_name%_#{purpose}", "jobs/#{job_name}"
-        @template_files = { "#{job_name}_ctl" => "bin/#{job_name}_ctl" }
+
+        # build a hash of { 'bin/webapp_ctl.erb' => 'bin/webapp_ctl', ...} used in spec
+        # TODO: do I need to flatten it to { 'webapp_ctl' => 'bin/webapp_ctl' }?
+        @template_files = {}
+        FileUtils.chdir(File.join(generator_job_templates_path, "templates")) do
+          `ls */*`.split("\n").each do |template_file|
+            # clean up thor name convention
+            template_file.gsub!("%job_name%", job_name)
+            template_file.gsub!(".tt", "")
+            # strip erb from target file
+            target_template_file = template_file.gsub(/.erb/, '')
+
+            @template_files[template_file] = target_template_file
+          end
+        end
       end
       
       def job_specification
