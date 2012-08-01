@@ -65,7 +65,6 @@ module Bosh
       method_option :purpose, :aliases => ['-p'], :type => :string,
         :desc => "Specific purpose of job. Choose: nginx_rack"
       def job(name)
-        p ["job", name, options]
         dependencies = options[:dependencies] || []
         purpose = options[:purpose] || 'simple'
         require 'bosh/gen/generators/job_generator'

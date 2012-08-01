@@ -26,10 +26,10 @@ module Bosh::Gen
 
       def check_purpose
         unless valid_purposes.include?(purpose)
-          raise Thor::Error.new("'#{purpose}' is not a valid job purpose #{valid_purposes.inspect}")
+          raise Thor::Error.new("'#{purpose}' is not a valid job purpose of #{valid_purposes.inspect}")
         end
       end
-      
+
       def warn_missing_dependencies
         dependencies.each do |d|
           raise Thor::Error.new("dependency '#{d}' is not a valid BOSH id") unless d.bosh_valid_id?
