@@ -16,9 +16,14 @@ module GeneratorSpecHelper
     @active_project_folder = File.join(@tmp_root, name)
   end
 
-  def generate_job(job)
+  # Runs 'bosh-gen job NAME ...'
+  #
+  # generate_job 'JOBNAME'
+  # generate_job 'JOBNAME', '-d', 'nginx'
+  # generate_job "JOBNAME", "--template", "nginx_rack", '-d', 'nginx', 'ruby', 'myapp'
+  def generate_job(*args)
     capture_stdios do
-      Bosh::Gen::Command.start(["job", job])
+      Bosh::Gen::Command.start(["job", *args])
     end
   end
 
@@ -34,6 +39,24 @@ module GeneratorSpecHelper
     if options && options[:executable]
       File.executable?(path).must_equal(true, "#{path} not executable")
     end
+  end
+
+  # Tests a job template and its spec
+  #   job_template_exists "mywebapp", "mywebapp_ctl.erb", "bin/mywebapp_ctl"
+  #
+  # Spec would contain:
+  #   mywebapp_ctl.erb: bin/mywebapp_ctl
+  def job_template_exists(job, template_name, spec_path)
+    path = File.join("jobs", job, "templates", template_name)
+    File.exist?(path).must_equal(true, "#{path} not created")
+    spec_templates = job_spec(job)["templates"]
+    spec_templates[template_name].must_not_equal(nil, "spec.templates missing #{template_name}")
+    spec_templates[template_name].must_equal(spec_path, "spec.templates must be #{template_name} -> #{spec_path}")
+  end
+
+  def job_spec(job)
+    @specs ||= {}
+    @specs[job] ||= YAML.load_file(File.join("jobs", job, "spec"))
   end
 
   def setup_active_project_folder project_name
