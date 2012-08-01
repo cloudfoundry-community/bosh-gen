@@ -21,7 +21,7 @@ class RackRailsGeneratorSpec < MiniTest::Spec
       generate_job("mywebapp")
       File.exist?("jobs/mywebapp/monit").must_equal(true, "jobs/mywebapp/monit not created")
       File.exist?("jobs/mywebapp/spec").must_equal(true, "jobs/mywebapp/spec not created")
-      job_template_exists "mywebapp", "mywebapp_ctl.erb",     "bin/mywebapp_ctl"
+      job_template_exists "mywebapp", "mywebapp_ctl",     "bin/mywebapp_ctl"
       job_template_exists "mywebapp", "ctl_setup.sh.erb",     "bin/ctl_setup.sh"
       job_template_exists "mywebapp", "ctl_utils.sh",         "bin/ctl_utils.sh"
       job_template_exists "mywebapp", "monit_debugger",       "bin/monit_debugger"
@@ -34,7 +34,7 @@ class RackRailsGeneratorSpec < MiniTest::Spec
       File.exist?("jobs/mywebapp/monit").must_equal(true, "jobs/mywebapp/monit not created")
       File.exist?("jobs/mywebapp/spec").must_equal(true, "jobs/mywebapp/spec not created")
       job_spec("mywebapp")["dependencies"].must_equal(%w[nginx ruby myapp], "spec dependencies incorrect")
-      job_template_exists "mywebapp", "mywebapp_ruby_nginx_ctl.erb", "bin/mywebapp_ctl"
+      job_template_exists "mywebapp", "mywebapp_rack_ctl", "bin/mywebapp_ctl"
       job_template_exists "mywebapp", "ctl_setup.sh.erb",     "bin/ctl_setup.sh"
       job_template_exists "mywebapp", "ctl_utils.sh",         "bin/ctl_utils.sh"
       job_template_exists "mywebapp", "monit_debugger",       "bin/monit_debugger"

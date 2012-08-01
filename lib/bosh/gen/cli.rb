@@ -59,19 +59,17 @@ module Bosh
           [name, files, flags])
       end
       
-      desc "job NAME COMMAND", 
-        "Create a new job to run 'COMMAND' to launch the process"
+      desc "job NAME", "Create a new job"
       method_option :dependencies, :aliases => ['-d'], :type => :array, 
         :desc => "List of package dependencies"
-      method_option :ruby, :type => :boolean, 
-        :desc => "Use templates for running Ruby/Rack process"
-      def job(name, command=nil)
-        command ||= 'EXECUTABLE_SERVER'
-        flags = { :ruby => options["ruby"] || false }
-        dependencies   = options[:dependencies] || []
+      method_option :purpose, :aliases => ['-p'], :type => :string,
+        :desc => "Specific purpose of job. Choose: nginx_rack"
+      def job(name)
+        p ["job", name, options]
+        dependencies = options[:dependencies] || []
+        purpose = options[:purpose] || 'simple'
         require 'bosh/gen/generators/job_generator'
-        Bosh::Gen::Generators::JobGenerator.start(
-          [name, command, dependencies, flags])
+        Bosh::Gen::Generators::JobGenerator.start([name, dependencies, purpose])
       end
       
       desc "template JOB FILE_PATH", 

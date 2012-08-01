@@ -7,9 +7,8 @@ module Bosh::Gen
       include Thor::Actions
 
       argument :job_name
-      argument :command
       argument :dependencies, :type => :array
-      argument :flags, :type => :hash
+      argument :purpose
       
       def self.source_root
         File.join(File.dirname(__FILE__), "job_generator", "templates")
@@ -22,12 +21,18 @@ module Bosh::Gen
       end
       
       def check_name
-        raise Thor::Error.new("'#{job_name}' is not a vaild BOSH id") unless job_name.bosh_valid_id?
+        raise Thor::Error.new("'#{job_name}' is not a valid BOSH id") unless job_name.bosh_valid_id?
+      end
+
+      def check_purpose
+        unless valid_purposes.include?(purpose)
+          raise Thor::Error.new("'#{purpose}' is not a valid job purpose #{valid_purposes.inspect}")
+        end
       end
       
       def warn_missing_dependencies
         dependencies.each do |d|
-          raise Thor::Error.new("dependency '#{d}' is not a vaild BOSH id") unless d.bosh_valid_id?
+          raise Thor::Error.new("dependency '#{d}' is not a valid BOSH id") unless d.bosh_valid_id?
           unless File.exist?(File.join("packages", d))
             say_status "warning", "missing dependency '#{d}'", :yellow
           end
@@ -35,16 +40,8 @@ module Bosh::Gen
       end
       
       def template_files
-        if ruby?
-          directory "jobs/%job_name%_rubyrack", "jobs/#{job_name}"
-        else
-          directory "jobs/%job_name%"
-        end
+        directory "jobs/%job_name%_#{purpose}", "jobs/#{job_name}"
         @template_files = { "#{job_name}_ctl" => "bin/#{job_name}_ctl" }
-      end
-      
-      def ctl_executable
-        chmod "jobs/#{job_name}/templates/#{job_name}_ctl", 0755
       end
       
       def job_specification
@@ -61,8 +58,8 @@ module Bosh::Gen
         File.join("jobs", job_name, path)
       end
       
-      def ruby?
-        flags[:ruby]
+      def valid_purposes
+        %w[simple nginx_rack]
       end
       
       # Run a command in git.

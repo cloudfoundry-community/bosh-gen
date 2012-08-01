@@ -23,12 +23,12 @@ module Bosh::Gen
       end
 
       def check_name
-        raise Thor::Error.new("'#{name}' is not a vaild BOSH id") unless name.bosh_valid_id?
+        raise Thor::Error.new("'#{name}' is not a valid BOSH id") unless name.bosh_valid_id?
       end
 
       def warn_missing_dependencies
         dependencies.each do |d|
-          raise Thor::Error.new("dependency '#{d}' is not a vaild BOSH id") unless d.bosh_valid_id?
+          raise Thor::Error.new("dependency '#{d}' is not a valid BOSH id") unless d.bosh_valid_id?
           unless File.exist?(File.join("packages", d))
             say_status "warning", "missing dependency '#{d}'", :yellow
           end

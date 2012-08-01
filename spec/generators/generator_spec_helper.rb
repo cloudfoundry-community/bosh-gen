@@ -22,9 +22,11 @@ module GeneratorSpecHelper
   # generate_job 'JOBNAME', '-d', 'nginx'
   # generate_job "JOBNAME", "--template", "nginx_rack", '-d', 'nginx', 'ruby', 'myapp'
   def generate_job(*args)
-    capture_stdios do
+    stdout, stderr = capture_stdios do
       Bosh::Gen::Command.start(["job", *args])
     end
+    @stdout = File.expand_path(File.join(@tmp_root, "generate_job.out"))
+    File.open(@stdout, "w") {|f| f << stdout; f << stderr}
   end
 
   # Test that a file exists in job
@@ -50,7 +52,7 @@ module GeneratorSpecHelper
     path = File.join("jobs", job, "templates", template_name)
     File.exist?(path).must_equal(true, "#{path} not created")
     spec_templates = job_spec(job)["templates"]
-    spec_templates[template_name].must_not_equal(nil, "spec.templates missing #{template_name}")
+    spec_templates[template_name].wont_be_nil("spec.templates missing #{template_name}")
     spec_templates[template_name].must_equal(spec_path, "spec.templates must be #{template_name} -> #{spec_path}")
   end
 

@@ -1,0 +1,13 @@
+check process <%= job_name %>
+  with pidfile /var/vcap/sys/run/<%= job_name %>/<%= job_name %>.pid
+  start program "/var/vcap/jobs/<%= job_name %>/bin/monit_debugger <%= job_name %>_ctl '/var/vcap/jobs/<%= job_name %>/bin/<%= job_name %>_rack_ctl start'"
+  stop program "/var/vcap/jobs/<%= job_name %>/bin/monit_debugger <%= job_name %>_ctl '/var/vcap/jobs/<%= job_name %>/bin/<%= job_name %>_rack_ctl stop'"
+  group vcap
+
+<% if properties.<%= job_name %> && properties.<%= job_name %>.use_nginx %>
+check process nginx
+  with pidfile /var/vcap/sys/run/<%= job_name %>/nginx.pid
+  start program "/var/vcap/jobs/<%= job_name %>/bin/monit_debugger nginx_ctl '/var/vcap/jobs/<%= job_name %>/bin/nginx_ctl start'"
+  stop program "/var/vcap/jobs/<%= job_name %>/bin/monit_debugger nginx_ctl '/var/vcap/jobs/<%= job_name %>/bin/nginx_ctl stop'"
+  group vcap
+<% end %>
