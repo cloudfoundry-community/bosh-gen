@@ -11,12 +11,20 @@ require "generators/generator_spec_helper"
 class RackRailsGeneratorSpec < MiniTest::Spec
   include GeneratorSpecHelper
 
-  def self.before_suite
+  def setup
+    puts "self.before_suite"
     setup_universe
-    setup_fixture_release("bosh-sample-release")
+    setup_project_release("bosh-sample-release")
+    in_project_folder do
+      generate_job("mywebapp")
+    end
   end
 
   it "creates job spec" do
-    File.exist?("jobs/mysql/spec")
+    in_project_folder do
+      puts `pwd`
+      puts `ls -al`
+      File.exist?("jobs/mywebapp/spec").must_equal true
+    end
   end
 end

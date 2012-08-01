@@ -13,14 +13,19 @@ module GeneratorSpecHelper
     ENV['HOME'] = @home_path
   end
 
-  def setup_fixture_release(name)
+  def setup_project_release(name)
     release_path = File.join(@fixtures_path, "releases", name)
     FileUtils.cp_r(release_path, @tmp_root)
     @active_project_folder = File.join(@tmp_root, name)
   end
 
-  def generate_job(job)
+  def generate_job(job, *args)
 
+  end
+
+  def setup_active_project_folder project_name
+    @active_project_folder = File.join(@tmp_root, project_name)
+    @project_name = project_name
   end
 
   def in_tmp_folder(&block)
