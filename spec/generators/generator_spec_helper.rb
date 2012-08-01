@@ -22,6 +22,20 @@ module GeneratorSpecHelper
     end
   end
 
+  # Test that a file exists in job
+  #   job_file_exists "mywebapp", "monit"
+  #   job_file_exists "mywebapp", "templates", "mywebapp_ctl", :executable => true
+  def job_file_exists(*args)
+    if args.last.is_a?(Hash)
+      options = args.pop
+    end
+    path = File.join(["jobs"] + args) # jobs/JOBNAME/monit
+    File.exist?(path).must_equal(true, "#{path} not created")
+    if options && options[:executable]
+      File.executable?(path).must_equal(true, "#{path} not executable")
+    end
+  end
+
   def setup_active_project_folder project_name
     @active_project_folder = File.join(@tmp_root, project_name)
     @project_name = project_name
