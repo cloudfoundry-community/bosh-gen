@@ -19,9 +19,12 @@ class RackRailsGeneratorSpec < MiniTest::Spec
     end
   end
 
-  it "creates job spec" do
+  it "creates normal job files" do
     in_project_folder do
+      File.exist?("jobs/mywebapp/monit").must_equal true
       File.exist?("jobs/mywebapp/spec").must_equal true
+      File.exist?("jobs/mywebapp/templates/mywebapp_ctl").must_equal true
+      File.executable?("jobs/mywebapp/templates/mywebapp_ctl").must_equal true
     end
   end
 end
