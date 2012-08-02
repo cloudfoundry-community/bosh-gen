@@ -1,5 +1,5 @@
 check process <%= job_name %>
-  with pidfile /var/vcap/sys/run/<%= job_name %>/webapp.pid
+  with pidfile /var/vcap/sys/run/<%= job_name %>/<%= job_name %>.pid
   start program "/var/vcap/jobs/<%= job_name %>/bin/monit_debugger <%= job_name %>_ctl '/var/vcap/jobs/<%= job_name %>/bin/<%= job_name %>_ctl start'"
-  stop program "/var/vcap/jobs/webapp/bin/monit_debugger <%= job_name %>_ctl '/var/vcap/jobs/<%= job_name %>/bin/<%= job_name %>_ctl stop'"
+  stop program "/var/vcap/jobs/<%= job_name %>/bin/monit_debugger <%= job_name %>_ctl '/var/vcap/jobs/<%= job_name %>/bin/<%= job_name %>_ctl stop'"
   group vcap
