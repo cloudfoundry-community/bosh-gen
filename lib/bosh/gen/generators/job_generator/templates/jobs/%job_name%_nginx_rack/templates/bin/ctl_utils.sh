@@ -1,5 +1,31 @@
 # Helper functions used by ctl scripts
 
+# links a file (probably a config file) into a package
+# Example usage:
+# link_job_file_to_package config/redis.yml [config/redis.yml]
+# link_job_file_to_package config/wp-config.php wp-config.php
+link_job_file_to_package() {
+  job_file=$1
+  target_package_file=${2:-$job_file}
+  full_job_file=$JOB_DIR/${job_file}
+  full_package_file=$WEBAPP_DIR/${target_package_file}
+  echo link_job_file_to_package $full_job_file $full_package_file
+  if [[ ! -f ${full_job_file} ]]
+  then
+    echo "File to link ${full_job_file} does not exist"
+    exit 1
+  fi
+
+  echo "Linking ${job_file} -> ${full_package_file}"
+  mkdir -p $(dirname ${full_package_file})
+  if [[ -f ${full_package_file} ]]
+  then
+    mv ${full_package_file}{,.orig}
+  fi
+  ln -s ${full_job_file} ${full_package_file}
+}
+
+
 # If loaded within monit ctl scripts then pipe output
 # If loaded from 'source ../utils.sh' then normal STDOUT
 redirect_output() {
