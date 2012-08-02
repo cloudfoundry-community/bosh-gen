@@ -22,7 +22,10 @@ link_job_file_to_package() {
   then
     mv ${full_package_file}{,.orig}
   fi
-  ln -s ${full_job_file} ${full_package_file}
+  if [[ ! -h ${full_package_file} ]]
+  then
+    ln -s ${full_job_file} ${full_package_file}
+  fi
 }
 
 
