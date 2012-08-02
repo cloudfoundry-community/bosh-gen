@@ -5,22 +5,23 @@
 # link_job_file_to_package config/redis.yml [config/redis.yml]
 # link_job_file_to_package config/wp-config.php wp-config.php
 link_job_file_to_package() {
-  job_file=$1
-  target_package_file=${2:-$job_file}
+  source_job_file=$1
+  target_package_file=${2:-$source_job_file}
 
-  full_job_file=$JOB_DIR/${job_file}
+  full_job_file=$JOB_DIR/${source_job_file}
   full_package_file=$WEBAPP_DIR/${target_package_file}
   echo link_job_file_to_package $full_job_file $full_package_file
   if [[ ! -f ${full_job_file} ]]
   then
     echo "File to link ${full_job_file} does not exist"
-    exit 1
+  else
+    # Create/recreate the symlink to current job file
+    # If another process is using the file, it won't be
+    # deleted, so don't attempt to create the symlink
+    echo "Linking ${source_job_file} -> ${full_package_file}"
+    mkdir -p $(dirname ${full_package_file})
+    ln -nfs ${full_job_file} ${full_package_file}
   fi
-
-  echo "Linking ${job_file} -> ${full_package_file}"
-  mkdir -p $(dirname ${full_package_file})
-  rm -f ${full_package_file}
-  ln -s ${full_job_file} ${full_package_file}
 }
 
 

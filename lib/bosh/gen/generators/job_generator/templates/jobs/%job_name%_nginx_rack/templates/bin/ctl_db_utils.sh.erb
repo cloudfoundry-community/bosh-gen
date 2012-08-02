@@ -36,18 +36,12 @@ function link_sql_db_config() {
   list_size=${#possible_job_config[@]}
   found_config='none'
   for (( i = 0; i < $list_size; i++ )); do
-    job_config=$JOB_DIR/${possible_job_config[i]}
-    app_config=$WEBAPP_DIR/${target_app_config[i]}
-    if [[ -f ${job_config} ]]
+    job_config=${possible_job_config[i]}
+    app_config=${target_app_config[i]}
+    if [[ -f $JOB_DIR/${job_config} ]]
     then
-      found_config=${job_config}
-      echo "Linking ${job_config} -> ${app_config}"
-      mkdir -p $(dirname ${job_config})
-      if [[ -f ${app_config} ]]
-      then
-        mv ${app_config}{,.orig}
-      fi
-      ln -s ${job_config} ${app_config}
+      link_job_file_to_package ${job_config} ${app_config}
+      found_config=${app_config}
     fi
   done
 
