@@ -61,6 +61,8 @@ module Bosh::Gen
             ./configure --prefix=${BOSH_INSTALL_TARGET}
             make
             make install
+            # Alternatively, to copy archive contents:
+            # cp -a #{unpack_base_path}/* $BOSH_INSTALL_TARGET
             SHELL
           end
           
