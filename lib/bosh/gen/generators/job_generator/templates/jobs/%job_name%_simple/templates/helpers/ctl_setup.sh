@@ -46,7 +46,8 @@ done
 RUN_DIR=/var/vcap/sys/run/$JOB_NAME
 LOG_DIR=/var/vcap/sys/log/$JOB_NAME
 TMPDIR=/var/vcap/sys/tmp/$JOB_NAME
-for dir in $RUN_DIR $LOG_DIR $TMPDIR
+STORE_DIR=/var/vcap/store/$JOB_NAME
+for dir in $RUN_DIR $LOG_DIR $TMP_DIR $STORE_DIR
 do
   mkdir -p ${dir}
   chown vcap:vcap ${dir}
