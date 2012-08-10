@@ -53,19 +53,17 @@ module Bosh::Gen
             packaging << "PATH=/var/vcap/packages/#{package}/bin:$PATH\n"
           end
 
-          tarballs_in_files.each do |tarball_file|
-            package_file = File.basename(tarball_file)
-            unpacked_path = unpacked_path_for_tarball(tarball_file)
-            
+          archives_in_files.each do |archive_type, unpack_command, archive_file, unpack_base_path|
             packaging << <<-SHELL.gsub(/^\s{12}/, '')
             
-            tar xzf #{name}/#{package_file}
-            cd #{unpacked_path}
+            #{unpack_command} #{name}/#{archive_file}
+            cd #{unpack_base_path}
             ./configure --prefix=${BOSH_INSTALL_TARGET}
             make
             make install
             SHELL
           end
+          
           packaging
         end
 
@@ -142,12 +140,40 @@ module Bosh::Gen
           end
         end
       end
+      
+      # Returns tuple for each archive mentioned in spec
+      # [archive_type, unpack_command, archive_file, unpack_base_path]
+      # e.g.
+      # ['tar', 'tar xfv', 'redis-1.2.3.tar.gz', 'redis-1.2.3']
+      # ['zip', 'unzip', 'mx4j-3.0.2.zip', 'redis-1.2.3']
+      def archives_in_files
+        archives = []
+        
+        tarballs_in_files.each do |tarball_file|
+          package_file = File.basename(tarball_file)
+          unpacked_path = unpacked_path_for_tarball(tarball_file)
+          archives << ['tar', 'tar xfv', package_file, unpacked_path]
+        end
+
+        zipfiles_in_files.each do |zipfile|
+          package_file = File.basename(zipfile)
+          unpacked_path = unpacked_path_for_zipfile(zipfile)
+          archives << ['zip', 'unzip', package_file, unpacked_path]
+        end
+        
+        archives
+      end
 
       # Returns all .tar.gz in the files list
       def tarballs_in_files
-        files.select { |file| file =~ /.(?:tar.gz|tgz)/  }
+        files.select { |file| file =~ /\.(?:tar.gz|tgz)/  }
       end
-
+      
+      # Returns all .zip in the files list
+      def zipfiles_in_files
+        files.select { |file| file =~ /\.zip/  }
+      end
+      
       # If primary_package_file was mysql's client-5.1.62-rel13.3-435-Linux-x86_64.tar.gz
       # then returns "client-5.1.62-rel13.3-435-Linux-x86_64"
       #
@@ -156,6 +182,20 @@ module Bosh::Gen
         file = `tar tfz #{tarball_path} | head -n 1`
         File.basename(file.strip)
       end
+
+      # Lists the files within zipfile and determines the base unpacking path
+      # E.g. from the following 'unzip -l' output:
+      #
+      # Archive:  /Users/drnic/Downloads/mx4j-3.0.2.zip
+      #         Length     Date   Time    Name
+      #        --------    ----   ----    ----
+      #               0  10-13-06 01:12   mx4j-3.0.2/
+      #
+      # it determines the base is: mx4j-3.0.2/
+      def unpacked_path_for_zipfile(zipfile)
+        `unzip -l #{zipfile} | head -n 4 | tail -n 1 | awk '{ print $4 }'`.strip
+      end
+
     end
   end
 end
