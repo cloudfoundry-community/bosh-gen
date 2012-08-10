@@ -1,29 +1,37 @@
 # Helper functions used by ctl scripts
 
-# links a file (probably a config file) into a package
+# links a job file (probably a config file) into a package
 # Example usage:
 # link_job_file_to_package config/redis.yml [config/redis.yml]
 # link_job_file_to_package config/wp-config.php wp-config.php
 link_job_file_to_package() {
   source_job_file=$1
   target_package_file=${2:-$source_job_file}
-
-  full_job_file=$JOB_DIR/${source_job_file}
   full_package_file=$WEBAPP_DIR/${target_package_file}
-  echo link_job_file_to_package $full_job_file $full_package_file
+
+  link_job_file ${source_job_file} ${full_package_file}
+}
+
+# links a job file (probably a config file) somewhere
+# Example usage:
+# link_job_file config/bashrc /home/vcap/.bashrc
+link_job_file() {
+  source_job_file=$1
+  target_file=$2
+  full_job_file=$JOB_DIR/${source_job_file}
+
+  echo link_job_file ${full_job_file} ${target_file}
   if [[ ! -f ${full_job_file} ]]
   then
-    echo "File to link ${full_job_file} does not exist"
+    echo "file to link ${full_job_file} does not exist"
   else
     # Create/recreate the symlink to current job file
     # If another process is using the file, it won't be
     # deleted, so don't attempt to create the symlink
-    echo "Linking ${source_job_file} -> ${full_package_file}"
-    mkdir -p $(dirname ${full_package_file})
-    ln -nfs ${full_job_file} ${full_package_file}
+    mkdir -p $(dirname ${target_file})
+    ln -nfs ${full_job_file} ${target_file}
   fi
 }
-
 
 # If loaded within monit ctl scripts then pipe output
 # If loaded from 'source ../utils.sh' then normal STDOUT
