@@ -41,7 +41,11 @@ module Bosh::Gen
           set -e # exit immediately if a simple command exits with a non-zero status
           set -u # report the usage of uninitialized variables
           
+          # Available variables
+          # $BOSH_COMPILE_TARGET - where this package & spec'd source files are available
+          # $BOSH_INSTALL_TARGET - where you copy/install files to be included in package
           export HOME=/var/vcap
+          
           
           SHELL
 
