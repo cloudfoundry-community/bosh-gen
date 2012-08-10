@@ -6,12 +6,26 @@ module Bosh::Gen
     class ExtractPackageGenerator < Thor::Group
       include Thor::Actions
 
-      argument :source_release_path
-      argument :source_package_name
+      argument :source_package_path
       
       def check_root_is_release
         unless File.exist?("jobs") && File.exist?("packages")
           raise Thor::Error.new("run inside a BOSH release project")
+        end
+      end
+      
+      def check_package_path_within_release
+        FileUtils.chdir(source_release_path) do
+          unless File.exist?("jobs") && File.exist?("packages")
+            raise Thor::Error.new("source package path is not within a BOSH release project")
+          end
+        end
+      end
+      
+      def check_package_path_is_a_package
+        parent_dir = File.basename(File.dirname(source_package_path))
+        unless parent_dir == "packages"
+          raise Thor::Error.new("source package path is not a BOSH package")
         end
       end
       
@@ -22,7 +36,7 @@ module Bosh::Gen
       # Extract target package and all its dependencies
       def detect_dependent_packages
         spec = YAML.load_file(source_package_dir("spec"))
-        @packages = [target_package_name]
+        @packages = [source_package_name]
         @packages << spec["packages"] if spec["packages"]
       end
       
@@ -54,8 +68,12 @@ module Bosh::Gen
       end
       
       private
-      def target_package_name
-        source_package_name
+      def source_release_path
+        File.expand_path(File.join(source_package_path, "..", ".."))
+      end
+      
+      def source_package_name
+        File.basename(source_package_path)
       end
       
       def package_dir(path="")

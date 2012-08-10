@@ -91,13 +91,13 @@ module Bosh
           [source_release_path, source_job_name, target_job_name])
       end
 
-      desc "extract-pkg SOURCE_RELEASE_PATH SOURCE_PACKAGE_NAME", 
+      desc "extract-pkg SOURCE_PACKAGE_PATH", 
         "Extracts a package from another release and all its " +
         "dependent packages and sources"
-      def extract_pkg(source_release_path, source_package_name)
+      def extract_pkg(source_package_path)
+        source_package_path = File.expand_path(source_package_path)
         require 'bosh/gen/generators/extract_package_generator'
-        Bosh::Gen::Generators::ExtractPackageGenerator.start(
-          [source_release_path, source_package_name])
+        Bosh::Gen::Generators::ExtractPackageGenerator.start([source_package_path])
       end
 
       desc "manifest NAME PATH", 
