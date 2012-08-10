@@ -43,16 +43,17 @@ done
 
 # Setup log, run and tmp folders
 
-RUN_DIR=/var/vcap/sys/run/$JOB_NAME
-LOG_DIR=/var/vcap/sys/log/$JOB_NAME
-TMPDIR=/var/vcap/sys/tmp/$JOB_NAME
-STORE_DIR=/var/vcap/store/$JOB_NAME
+export RUN_DIR=/var/vcap/sys/run/$JOB_NAME
+export LOG_DIR=/var/vcap/sys/log/$JOB_NAME
+export TMP_DIR=/var/vcap/sys/tmp/$JOB_NAME
+export STORE_DIR=/var/vcap/store/$JOB_NAME
 for dir in $RUN_DIR $LOG_DIR $TMP_DIR $STORE_DIR
 do
   mkdir -p ${dir}
   chown vcap:vcap ${dir}
   chmod 775 ${dir}
 done
+export TMPDIR=$TMP_DIR
 
 export C_INCLUDE_PATH=/var/vcap/packages/mysqlclient/include/mysql:/var/vcap/packages/sqlite/include:/var/vcap/packages/libpq/include
 export LIBRARY_PATH=/var/vcap/packages/mysqlclient/lib/mysql:/var/vcap/packages/sqlite/lib:/var/vcap/packages/libpq/lib
