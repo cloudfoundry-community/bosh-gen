@@ -10,6 +10,8 @@ Other changes:
 
 * `package` - detects .zip files (in addition to .tar.gz) and includes useful default unpacking script in `packaging`; describe available env vars in `packaging` script
 * `manifest` - auto-detects current BOSH UUID
+* `extract-pkg` - now a single argument - the path of the source package folder
+* `extract-job` - now a single argument - the path of the source job folder
 
 ## v0.8.0
 
