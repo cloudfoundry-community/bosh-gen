@@ -6,13 +6,32 @@ module Bosh::Gen
     class ExtractJobGenerator < Thor::Group
       include Thor::Actions
 
-      argument :source_release_path
-      argument :source_job_name
-      argument :job_name
-      
+      argument :source_job_path
+
       def check_root_is_release
         unless File.exist?("jobs") && File.exist?("packages")
           raise Thor::Error.new("run inside a BOSH release project")
+        end
+      end
+      
+      def check_job_path_is_valid
+        unless File.exist?(source_job_path)
+          raise Thor::Error.new("source job path does not exist")
+        end
+      end
+      
+      def check_job_path_is_a_job
+        parent_dir = File.basename(File.dirname(source_job_path))
+        unless parent_dir == "jobs"
+          raise Thor::Error.new("source jobs path is not a BOSH job")
+        end
+      end
+      
+      def check_job_path_within_release
+        FileUtils.chdir(source_release_path) do
+          unless File.exist?("jobs") && File.exist?("packages")
+            raise Thor::Error.new("source job path is not within a BOSH release project")
+          end
         end
       end
       
@@ -21,7 +40,7 @@ module Bosh::Gen
       end
 
       def copy_job_dir
-        directory "jobs/#{source_job_name}", "jobs/#{job_name}"
+        directory "jobs/#{source_job_name}", "jobs/#{target_job_name}"
       end
       
       def detect_dependent_packages
@@ -56,8 +75,20 @@ module Bosh::Gen
       end
       
       private
+      def source_release_path
+        File.expand_path(File.join(source_job_path, "..", ".."))
+      end
+      
+      def source_job_name
+        File.basename(source_job_path)
+      end
+      
+      def target_job_name
+        source_job_name
+      end
+
       def job_dir(path="")
-        File.join("jobs", job_name, path)
+        File.join("jobs", target_job_name, path)
       end
       
       def source_file(*path)
