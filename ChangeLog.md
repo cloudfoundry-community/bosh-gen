@@ -1,5 +1,16 @@
 # Change Log
 
+## v0.9.0
+
+Major news
+
+* `job` - more powerful initial scripts; templates nested in folders; scripts are much cleaner to read; scripts in bin/ & helpers/ do not have ERb; only data/properties.sh.erb & config/ are for ERb.
+
+Other changes:
+
+* `package` - detects .zip files (in addition to .tar.gz) and includes useful default unpacking script in `packaging`; describe available env vars in `packaging` script
+* `manifest` - auto-detects current BOSH UUID
+
 ## v0.8.0
 
 Changed:
