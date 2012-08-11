@@ -80,7 +80,7 @@ module Bosh::Gen
       end
       
       def valid_purposes
-        %w[simple nginx_rack]
+        %w[simple]
       end
       
       # Run a command in git.

@@ -62,13 +62,10 @@ module Bosh
       desc "job NAME", "Create a new job"
       method_option :dependencies, :aliases => ['-d'], :type => :array, 
         :desc => "List of package dependencies"
-      method_option :purpose, :aliases => ['-p'], :type => :string,
-        :desc => "Specific purpose of job. Choose: nginx_rack"
       def job(name)
         dependencies = options[:dependencies] || []
-        purpose = options[:purpose] || 'simple'
         require 'bosh/gen/generators/job_generator'
-        Bosh::Gen::Generators::JobGenerator.start([name, dependencies, purpose])
+        Bosh::Gen::Generators::JobGenerator.start([name, dependencies, 'simple'])
       end
       
       desc "template JOB FILE_PATH", 
