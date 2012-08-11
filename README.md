@@ -60,7 +60,77 @@ $ bosh-gen template some-ruby-job config/some-config.ini
      force  jobs/some-ruby-job/spec
 ```
 
+## Tutorial
 
+To see how the various commands work together, let's create a new bosh release for [Cassandra](http://cassandra.apache.org/ "The Apache Cassandra Project").
+
+```
+$ bosh-gen new cassandra --s3
+$ cd cassandra
+$ bosh-gen extract-pkg ../cf-release/packages/dea_jvm7
+      create  packages/dea_jvm7
+      create  packages/dea_jvm7/packaging
+      create  packages/dea_jvm7/spec
+      create  blobs/java/jre-7u4-linux-i586.tar.gz
+      create  blobs/java/jre-7u4-linux-x64.tar.gz
+      readme  Upload blobs with 'bosh upload blobs'
+$ mv packages/dea_jvm7 packages/java7
+```
+
+In `packages/java7/spec`, rename it to `java7`.
+
+```
+$ bosh-gen package cassandra -d java7 -f ~/Downloads/apache-cassandra-1.0.11-bin.tar.gz
+      create  packages/cassandra/packaging
+      create  packages/cassandra/pre_packaging
+      create  blobs/cassandra/apache-cassandra-1.0.11-bin.tar.gz
+      create  packages/cassandra/spec
+```
+
+Change `packages/cassandra/packaging` to:
+
+```
+tar xfv cassandra/apache-cassandra-1.0.11-bin.tar.gz
+cp -a apache-cassandra-1.0.11/* $BOSH_INSTALL_TARGET
+```
+
+Now create a stub for running cassandra as a job:
+
+```
+$ bosh-gen job cassandra -d java7 cassandra
+      create  jobs/cassandra
+      create  jobs/cassandra/monit
+      create  jobs/cassandra/templates/bin/cassandra_ctl
+      create  jobs/cassandra/templates/bin/monit_debugger
+      create  jobs/cassandra/templates/data/properties.sh.erb
+      create  jobs/cassandra/templates/helpers/ctl_setup.sh
+      create  jobs/cassandra/templates/helpers/ctl_utils.sh
+      create  jobs/cassandra/spec
+      create  examples/cassandra_simple
+      create  examples/cassandra_simple/default.yml
+```
+
+Look at all that goodness!
+
+A quick summary of these files:
+
+* The `monit` script uses `bin/monit_debugger` to help you debug any glitches in starting/stopping processes.
+* `ctl_setup.sh` setups up lots of common folders and env vars.
+* `ctl_utils.sh` comes from cf-release's common/utils.sh with some extra helper functions
+* `data/properties.sh.erb` is where you extract any `<%= properties.cassandra... %>` values from the deployment manifest.
+* `bin/cassandra_ctl` no longer needs to be an unreadable ERb template! Use the env variables you create in `data/properties.sh.erb` and normal bash if statements instead of ERb `<% if ... %>` templates.
+* `examples/...` is a folder for documenting example, valid deployment manifest properties for the release.
+
+In `bin/cassandra_ctl` you now change "TODO" to `cassandra` and the rest of the tutorial is left to you, dear cassandra lover.
+
+Your release is now ready to build, test and deploy:
+
+```
+bosh create release --force
+bosh upload release
+```
+
+When you create a final release, you will first need to setup your AWS credentials in `config/final.yml`
 
 ## Contributing
 
