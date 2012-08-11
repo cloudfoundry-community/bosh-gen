@@ -81,14 +81,13 @@ module Bosh
         Bosh::Gen::Generators::JobTemplateGenerator.start([job_name, file_path])
       end
       
-      desc "extract-job SOURCE_RELEASE_PATH SOURCE_JOB_NAME [JOB_NAME]", 
+      desc "extract-job SOURCE_PACKAGE_PATH", 
         "Extracts a job from another release and all its " +
         "dependent packages and source"
-      def extract_job(source_release_path, source_job_name, target_job_name=nil)
-        target_job_name ||= source_job_name
+      def extract_job(source_package_path)
+        source_package_path = File.expand_path(source_package_path)
         require 'bosh/gen/generators/extract_job_generator'
-        Bosh::Gen::Generators::ExtractJobGenerator.start(
-          [source_release_path, source_job_name, target_job_name])
+        Bosh::Gen::Generators::ExtractJobGenerator.start([source_package_path])
       end
 
       desc "extract-pkg SOURCE_PACKAGE_PATH", 
