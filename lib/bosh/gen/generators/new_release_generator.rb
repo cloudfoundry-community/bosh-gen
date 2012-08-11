@@ -42,7 +42,34 @@ module Bosh::Gen
         config_dev = { "dev_name" => name }
         create_file "config/dev.yml", YAML.dump(config_dev)
 
-        config_private = { "blobstore_secret" => 'BLOBSTORE_SECRET' }
+        case blobstore_type
+        when :local
+          config_private = { 
+            "blobstore" => {
+              "simple" => {
+                "user" => "USER",
+                "password" => "PASSWORD"
+              }
+            }
+          }
+        when :s3
+          config_private = { 
+            "blobstore" => {
+              "s3" => {
+                "access_key_id" => "READWRITE_AWS_ACCESS_KEY",
+                "secret_access_key" => "READWRITE_AWS_SECRET_ACCESS_KEY"
+              }
+            }
+          }
+        when :atmos
+          config_private = { 
+            "blobstore" => {
+              "atmos" => {
+                "secret" => "SECRET"
+              }
+            }
+          }
+        end
         create_file "config/private.yml", YAML.dump(config_private)
 
         case blobstore_type
@@ -54,13 +81,12 @@ module Bosh::Gen
             }
           }
         when :s3
-          config_private = { "blobstore_secret" => 'BLOBSTORE_SECRET' }
           config_final = { "blobstore" => {
               "provider" => "s3",
               "options" => {
                 "bucket_name" => "BOSH",
-                "access_key_id" => "AWS_ACCESS_KEY",
-                "secret_access_key" => "AWS_SECRET_ACCESS_KEY",
+                "access_key_id" => "READONLY_AWS_ACCESS_KEY",
+                "secret_access_key" => "READONLY_AWS_SECRET_ACCESS_KEY",
                 "encryption_key" => "PERSONAL_RANDOM_KEY",
               }
             }
