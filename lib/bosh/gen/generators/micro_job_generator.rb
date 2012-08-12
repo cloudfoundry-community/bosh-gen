@@ -18,6 +18,7 @@ module Bosh::Gen
       
       def create_job
         directory "jobs/micro"
+        chmod "jobs/micro/prepare", 0755
       end
       
       def gitignore
