@@ -7,7 +7,7 @@ require 'erb'
 TEMPLATES = "templates"
 OVERRIDE = "override"
 
-MICRO="micro"
+MICRO_JOB_NAME="micro"
 
 def job_dir(job)
   File.expand_path("../../#{job}", __FILE__)
@@ -19,7 +19,7 @@ PREPARE_SPEC = YAML.load_file(File.expand_path("../prepare_spec", __FILE__))
 jobs = PREPARE_SPEC["jobs"]
 
 spec = {
-  "name" => MICRO,
+  "name" => MICRO_JOB_NAME,
   "templates" => {
     "post_install" => "bin/post_install"
   },
@@ -46,16 +46,27 @@ jobs.each do |job|
     monit << "\n"
   end
 
-  # copy templates
-  # FIXME nested templates/*/*
-  Dir.glob("#{job_dir(job)}/templates/**").each do |file|
-    name = File.basename(file)
-    override = File.join(OVERRIDE, job, name)
-    dest = File.join(TEMPLATES, job)
+  # copy templates from:
+  # * templates/<template_name>
+  # * templates/<template_dir>/<template_name>
+  Dir.glob("#{job_dir(job)}/templates/**/*").each do |file|
+    next if File.directory?(file)
+    
+    template_name = File.basename(file)
+    template_dir = File.basename(File.dirname(file))
+    # check if template file is in a nested dir
+    # if 'templates' then its not
+    if template_dir == "templates"
+      override = File.join(OVERRIDE, job, template_name)
+      dest = File.join(TEMPLATES, job)
+    else
+      override = File.join(OVERRIDE, job, template_dir, template_name)
+      dest = File.join(TEMPLATES, job, template_dir)
+    end
     FileUtils.mkdir_p(dest) unless File.directory?(dest)
-
-    if File.exist?(File.join(dest, name))
-      puts "File conflict for job #{job}: #{name}"
+  
+    if File.exist?(File.join(dest, template_name))
+      puts "File conflict for job #{job}: #{template_name}"
       exit 1
     elsif File.exist?(override)
       FileUtils.cp(override, dest)
@@ -84,6 +95,8 @@ File.open("spec", "w") do |file|
   file.puts spec.to_yaml
 end
 
+
+
 # generate post_install file with all jobs
 # it creates links from
 # jobs/micro/<job>/bin/foo to jobs/<job>/bin/foo
@@ -94,12 +107,18 @@ post_install = <<POST_INSTALL
 for DIR in /var/vcap/jobs /var/vcap/data/jobs; do
   cd $DIR
   for JOB in <%= jobs.join(" ") %>; do
-    mkdir -p ${JOB}/bin ${JOB}/config
-    for FILE in <%= MICRO %>/$JOB/bin/*; do
+    mkdir -p ${JOB}/bin ${JOB}/config ${JOB}/data ${JOB}/helpers
+    for FILE in <%= MICRO_JOB_NAME %>/$JOB/bin/*; do
       ln -nsf ../../$FILE $JOB/bin
     done
-    for FILE in <%= MICRO %>/$JOB/config/*; do
+    for FILE in <%= MICRO_JOB_NAME %>/$JOB/config/*; do
       ln -nsf ../../$FILE $JOB/config
+    done
+    for FILE in <%= MICRO_JOB_NAME %>/$JOB/data/*; do
+      ln -nsf ../../$FILE $JOB/data
+    done
+    for FILE in <%= MICRO_JOB_NAME %>/$JOB/helpers/*; do
+      ln -nsf ../../$FILE $JOB/helpers
     done
   done
 done
