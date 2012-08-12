@@ -28,6 +28,16 @@ module Bosh::Gen
         IGNORE
       end
       
+      def readme
+        say ""
+        say "Edit "; say "jobs/micro/prepare_spec ", :yellow
+          say "with ordered list of jobs to include"
+        say "in micro job. The order of jobs implicitly specifies the order in"
+        say "which they are started."
+        say ""
+        say ""
+      end
+      
     end
   end
 end
