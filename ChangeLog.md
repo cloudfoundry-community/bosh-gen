@@ -1,5 +1,15 @@
 # Change Log
 
+## v0.10.0 - UNRELEASED - CURRENT MASTER
+
+Added:
+
+* `micro` - create a "micro" job that packages all/some jobs into a single VM
+
+Improved:
+
+* `new` - more useful default README
+
 ## v0.9.0
 
 Major news
