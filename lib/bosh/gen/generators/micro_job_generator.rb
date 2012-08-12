@@ -21,6 +21,12 @@ module Bosh::Gen
         chmod "jobs/micro/prepare", 0755
       end
       
+      def prepare_spec_defaults_all_jobs
+        jobs = Dir[File.expand_path("jobs/*")].map {|job| File.basename(job) } - ['micro']
+        spec = { "jobs" => jobs }
+        create_file "jobs/micro/prepare_spec", YAML.dump(spec)
+      end
+      
       def gitignore
         append_file ".gitignore", <<-IGNORE.gsub(/^\s{8}/, '')
         jobs/micro*/monit
