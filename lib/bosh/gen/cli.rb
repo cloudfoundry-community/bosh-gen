@@ -67,7 +67,13 @@ module Bosh
         require 'bosh/gen/generators/job_generator'
         Bosh::Gen::Generators::JobGenerator.start([name, dependencies, 'simple'])
       end
-      
+
+      desc "micro", "Create a micro job - a collection of all jobs and packages"
+      def micro
+        require 'bosh/gen/generators/micro_job_generator'
+        Bosh::Gen::Generators::MicroJobGenerator.start([])
+      end
+
       desc "template JOB FILE_PATH", 
         "Add a Job template (example FILE_PATH: config/httpd.conf)"
       def template(job_name, file_path)
