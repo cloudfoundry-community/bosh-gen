@@ -60,6 +60,41 @@ $ bosh-gen template some-ruby-job config/some-config.ini
      force  jobs/some-ruby-job/spec
 ```
 
+### Micro jobs - all-in-one VM
+
+If your release includes two or more jobs you might want to offer a "micro" job that includes all/some jobs into a single VM.
+
+To achieve this, there is a special `micro` generator.
+
+```
+$ bosh-gen micro
+      create  jobs/micro
+      create  jobs/micro/prepare
+       chmod  jobs/micro/prepare
+      create  jobs/micro/prepare_spec
+      append  .gitignore
+
+Edit jobs/micro/prepare_spec with ordered list of jobs to include
+in micro job. The order of jobs implicitly specifies the order in
+which they are started.
+```
+
+As above, now edit `prepare_spec` to order/restrict the list of jobs to be included in the micro VM.
+
+Now create a new bosh release and a "micro/0.1-dev" job will be included:
+
+```
+$ bosh create release --force
+...
+Jobs
++----------+---------+-------+------------------------------------------+
+| Name     | Version | Notes | Fingerprint                              |
++----------+---------+-------+------------------------------------------+
+...
+| micro    | 0.1-dev |       | 6eb2f98644ef7f61a0399c015cbe062987dfd498 |
++----------+---------+-------+------------------------------------------+
+```
+
 ## Tutorial
 
 To see how the various commands work together, let's create a new bosh release for [Cassandra](http://cassandra.apache.org/ "The Apache Cassandra Project").
