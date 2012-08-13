@@ -109,16 +109,16 @@ for DIR in /var/vcap/jobs /var/vcap/data/jobs; do
   for JOB in <%= jobs.join(" ") %>; do
     mkdir -p ${JOB}/bin ${JOB}/config ${JOB}/data ${JOB}/helpers
     for FILE in <%= MICRO_JOB_NAME %>/$JOB/bin/*; do
-      ln -nsf ../../$FILE $JOB/bin
+      ln -nsf /var/vcap/jobs/$FILE $JOB/bin
     done
     for FILE in <%= MICRO_JOB_NAME %>/$JOB/config/*; do
-      ln -nsf ../../$FILE $JOB/config
+      ln -nsf /var/vcap/jobs/$FILE $JOB/config
     done
     for FILE in <%= MICRO_JOB_NAME %>/$JOB/data/*; do
-      ln -nsf ../../$FILE $JOB/data
+      ln -nsf /var/vcap/jobs/$FILE $JOB/data
     done
     for FILE in <%= MICRO_JOB_NAME %>/$JOB/helpers/*; do
-      ln -nsf ../../$FILE $JOB/helpers
+      ln -nsf /var/vcap/jobs/$FILE $JOB/helpers
     done
   done
 done
