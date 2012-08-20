@@ -1,6 +1,6 @@
 # Change Log
 
-## v0.10.0 - UNRELEASED - CURRENT MASTER
+## v0.10.0
 
 Added:
 
@@ -8,7 +8,7 @@ Added:
 
 Improved:
 
-* `new` - more useful default README
+* `new` - read/write credentials now in private.yml; more useful default README
 
 ## v0.9.0
 
