@@ -17,8 +17,11 @@ module Bosh
         :desc => "Use AWS S3 bucket for blobstore"
       method_option :atmos, :type => :boolean, 
         :desc => "Use EMC ATMOS for blobstore"
+      method_option :swift, :type => :boolean,
+        :desc => "Use OpenStack Swift for blobstore"
       def new(path)
-        flags = { :aws => options["s3"], :atmos => options["atmos"] }
+        flags = { :aws => options["s3"], :atmos => options["atmos"],
+                  :swift => options["swift"]}
         
         require 'bosh/gen/generators/new_release_generator'
         Bosh::Gen::Generators::NewReleaseGenerator.start([path, flags])

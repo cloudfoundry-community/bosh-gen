@@ -21,12 +21,13 @@ Or install it yourself as:
 ```
 $ bosh-gen new my-new-project --s3
 $ bosh-gen new my-new-project --atmos
+$ bosh-gen new my-new-project --swift
 $ bosh-gen new my-new-project # local blobstore with a warning
 
 $ cd my-new-project
 ```
 
-**NEXT:** Edit `config/final.yml` with your S3 or ATMOS credentials
+**NEXT:** Edit `config/final.yml` with your S3, ATMOS or Swift credentials
 
 ```
 $ bosh create release
