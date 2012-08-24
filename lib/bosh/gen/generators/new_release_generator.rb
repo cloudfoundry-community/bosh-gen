@@ -69,6 +69,22 @@ module Bosh::Gen
               }
             }
           }
+        when :swift
+          config_private = {
+            "blobstore" => {
+              "swift" => {
+                "rackspace" => {
+                  "rackspace_username" => "USERNAME",
+                  "rackspace_api_key" => "API_KEY"
+                },
+                "hp" => {
+                  "hp_account_id" => "ACCESS_KEY_ID",
+                  "hp_secret_key" => "SECRET_KEY",
+                  "hp_tenant_id" => "TENANT_ID"
+                },
+              }
+            }
+          }
         end
         create_file "config/private.yml", YAML.dump(config_private)
 
@@ -98,6 +114,15 @@ module Bosh::Gen
                 "tag" => "BOSH",
                 "url" => "https://blob.cfblob.com",
                 "uid" => "ATMOS_UID"
+              }
+            }
+          }
+        when :swift
+          config_final = { "blobstore" => {
+              "provider" => "swift",
+              "options" => {
+                "container_name" => "BOSH",
+                "swift_provider" => "SWIFT_PROVIDER"
               }
             }
           }
@@ -142,6 +167,7 @@ module Bosh::Gen
       def blobstore_type
         return :s3 if s3?
         return :atmos if atmos?
+        return :swift if swift?
         return :local
       end
       
@@ -151,6 +177,10 @@ module Bosh::Gen
       
       def atmos?
         flags[:atmos]
+      end
+
+      def swift?
+        flags[:swift]
       end
 
       # Run a command in git.
