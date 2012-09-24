@@ -67,7 +67,7 @@ module Bosh::Gen
       end
       
       def example
-        directory "examples/%job_name%_#{purpose}"
+        template "examples/%job_name%.yml.tt", "examples/%job_name%.yml"
       end
 
       private
