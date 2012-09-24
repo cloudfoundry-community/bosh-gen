@@ -29,7 +29,7 @@ class WebappGeneratorSpec < MiniTest::Spec
       job_template_exists "mywebapp", "helpers/ctl_setup.sh",   "helpers/ctl_setup.sh"
       job_template_exists "mywebapp", "helpers/ctl_utils.sh",   "helpers/ctl_utils.sh"
 
-      example = File.join("examples", "mywebapp_simple", "default.yml")
+      example = File.join("examples", "mywebapp.yml")
       File.exist?(example).must_equal(true, "#{example} not created")
     end
   end
