@@ -16,12 +16,18 @@ class DeploymentManifestGeneratorSpec < MiniTest::Spec
     setup_project_release("bosh-sample-release")
   end
 
-  it "creates deployment manifest" do
+  it "creates deployment manifest with properties" do
     release_folder = File.expand_path("../../fixtures/releases/bosh-sample-release", __FILE__)
     in_home_folder do
       generate_manifest("wordpress", release_folder)
       
       File.exist?("wordpress.yml").must_equal(true, "manifest wordpress.yml not created")
+      
+      manifest = YAML.load_file("wordpress.yml")
+      properties = manifest["properties"]
+      properties.wont_be_nil "manifest properties must be set"
+      properties["mysql"].wont_be_nil
+      properties["mysql"]["password"].must_equal 'mysqlpassword'
     end
   end
 end

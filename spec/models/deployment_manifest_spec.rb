@@ -5,7 +5,7 @@ class DeploymentManifestSpec < MiniTest::Spec
   it "creates manifest document with 2 jobs, no disk" do
     manifest = Bosh::Gen::Models::DeploymentManifest.new("myproj", "UUID", 
       {"name" => "myrelease", "version" => 2},
-      {"instance_type" => "m1.small", "static_ips" => ['1.2.3.4', '6.7.8.9']})
+      {"instance_type" => "m1.small", "static_ips" => ['1.2.3.4', '6.7.8.9']}, {})
     manifest.jobs = [
       { "name" => "job-with-ips"},
       { "name" => "misc"}
@@ -16,7 +16,7 @@ class DeploymentManifestSpec < MiniTest::Spec
   it "creates manifest document with 2 jobs, with disk" do
     manifest = Bosh::Gen::Models::DeploymentManifest.new("myproj", "UUID", 
       {"name" => "myrelease", "version" => 2},
-      {"instance_type" => "m1.small", "persistent_disk" => "8196",  "static_ips" => ['1.2.3.4']})
+      {"instance_type" => "m1.small", "persistent_disk" => "8196",  "static_ips" => ['1.2.3.4']}, {})
     manifest.jobs = [
       { "name" => "job-with-ips"},
       { "name" => "misc"}

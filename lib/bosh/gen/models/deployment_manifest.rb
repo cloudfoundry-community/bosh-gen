@@ -4,9 +4,10 @@ module Bosh::Gen::Models
   class DeploymentManifest
     attr_reader :manifest
     
-    def initialize(name, director_uuid, release_properties, cloud_properties)
+    def initialize(name, director_uuid, release_properties, cloud_properties, properties)
       @manifest = {}
       @cloud_properties = cloud_properties
+      @properties = properties
       @security_groups = ["default"]
       @stemcell_version = "0.6.2"
       @stemcell = { "name" => "bosh-stemcell", "version" => @stemcell_version }
@@ -56,7 +57,7 @@ module Bosh::Gen::Models
       ]
       manifest["resource_pools"].first["persistent_disk"] = @persistent_disk if @persistent_disk > 0
       manifest["jobs"] = []
-      manifest["properties"] = {}
+      manifest["properties"] = @properties
     end
     
     # Each item of +jobs+ is a hash. 

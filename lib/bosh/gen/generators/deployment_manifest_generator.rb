@@ -1,10 +1,12 @@
 require 'yaml'
 require 'thor/group'
+require 'common/properties/property_helper' # bosh_common
 
 module Bosh::Gen
   module Generators
     class DeploymentManifestGenerator < Thor::Group
       include Thor::Actions
+      include Bosh::Common::PropertyHelper
 
       argument :name
       argument :release_path
@@ -32,7 +34,8 @@ module Bosh::Gen
         cloud_properties["static_ips"] = ip_addresses
         director_uuid = Bosh::Gen::Models::BoshConfig.new.target_uuid
         manifest = Bosh::Gen::Models::DeploymentManifest.new(
-          name, director_uuid, release_properties, cloud_properties)
+          name, director_uuid,
+          release_properties, cloud_properties, default_properties)
         manifest.jobs = job_manifests
         create_file manifest_file_name, manifest.to_yaml, :force => flags[:force]
       end
@@ -68,6 +71,25 @@ module Bosh::Gen
       # The "release" aspect of the manifest, which has two keys: name, version
       def release_properties
         release_detector.latest_dev_release_properties
+      end
+
+      # Default properties for manifest, based on each job's spec's properties hash, if present
+      # For example, a job's spec may include something like:
+      #   properties:
+      #     mysql.password:
+      #       default: mypassword
+      #       description: Password for mysql server
+      def default_properties
+        properties = {}
+        detect_jobs.each do |job_name|
+          spec = YAML.load_file(File.join(release_path, "jobs", job_name, "spec"))
+          if spec_properties = spec["properties"]
+            spec_properties.each_pair do |name, definition|
+              copy_property(properties, spec_properties, name, definition["default"])
+            end
+          end
+        end
+        properties
       end
     end
   end
