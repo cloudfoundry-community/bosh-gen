@@ -2,12 +2,14 @@ require "bosh/gen/cli"
 
 module GeneratorSpecHelper
   def setup_universe
+    @@local_developer_bosh_config ||= File.expand_path("~/.bosh_config") # ENV['HOME'] messed with later
     @tmp_root      = File.expand_path("../../tmp", __FILE__)
     @home_path     = File.join(@tmp_root, "home")
     @fixtures_path = File.expand_path('../../fixtures', __FILE__)
     FileUtils.rm_rf   @tmp_root
     FileUtils.mkdir_p @home_path
     ENV['HOME'] = @home_path
+    FileUtils.cp_r(@@local_developer_bosh_config, @home_path)
   end
 
   def setup_project_release(name)
@@ -26,6 +28,16 @@ module GeneratorSpecHelper
       Bosh::Gen::Command.start(["job", *args])
     end
     @stdout = File.expand_path(File.join(@tmp_root, "generate_job.out"))
+    File.open(@stdout, "w") {|f| f << stdout; f << stderr}
+  end
+
+  # Runs 'bosh-gen manifest path/to/release'
+  # generate_manifest "path/to/release"
+  def generate_manifest(*args)
+    stdout, stderr = capture_stdios do
+      Bosh::Gen::Command.start(["manifest", *args])
+    end
+    @stdout = File.expand_path(File.join(@tmp_root, "generate_manifest.out"))
     File.open(@stdout, "w") {|f| f << stdout; f << stderr}
   end
 

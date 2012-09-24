@@ -10,3 +10,8 @@ templates:
 packages:
   - mysqlclient
   - mysql
+
+properties:
+  mysql.password:
+    default: mysqlpassword
+  
