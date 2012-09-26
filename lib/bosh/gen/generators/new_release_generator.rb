@@ -39,7 +39,7 @@ module Bosh::Gen
       
       # TODO - support other blobstores
       def local_blobstore
-        config_dev = { "dev_name" => name }
+        config_dev = { "dev_name" => project_name }
         create_file "config/dev.yml", YAML.dump(config_dev)
 
         case blobstore_type
@@ -160,10 +160,14 @@ module Bosh::Gen
       
       private
       
-      def name
-        File.basename(self.destination_root)
+      def project_name
+        @project_name ||= repository_name.gsub(/-(?:boshrelease|release)$/, '')
       end
-      
+
+      def repository_name
+        @repository_name ||= File.basename(app_path)
+      end
+
       def blobstore_type
         return :s3 if s3?
         return :atmos if atmos?

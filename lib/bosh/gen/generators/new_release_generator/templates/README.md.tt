@@ -1,4 +1,4 @@
-# BOSH Release for <%= name %>
+# BOSH Release for <%= project_name %>
 
 ## Release to your BOSH
 
@@ -6,8 +6,8 @@ To create and upload this release to your BOSH:
 
 ```
 bosh target BOSH_URL
-git clone git@github.com:<%= `whoami`.strip %>/<%= name %>.git
-cd <%= name %>
+git clone git@github.com:<%= `whoami`.strip %>/<%= repository_name %>.git
+cd <%= repository_name %>
 bosh create release
 # blobs are automatically downloaded
 # name it 'cassandra-dev' or something unique to your bosh
