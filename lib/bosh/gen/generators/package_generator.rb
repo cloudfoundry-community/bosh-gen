@@ -68,14 +68,6 @@ module Bosh::Gen
           
           packaging
         end
-
-        create_file package_dir("pre_packaging") do
-          <<-SHELL.gsub(/^\s{10}/, '')
-          set -e # exit immediately if a simple command exits with a non-zero status
-          set -u # report the usage of uninitialized variables
-          
-          SHELL
-        end
       end
 
       # Copy the local source files into src or blobs

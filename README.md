@@ -118,7 +118,6 @@ In `packages/java7/spec`, rename it to `java7`.
 ```
 $ bosh-gen package cassandra -d java7 -f ~/Downloads/apache-cassandra-1.0.11-bin.tar.gz
       create  packages/cassandra/packaging
-      create  packages/cassandra/pre_packaging
       create  blobs/cassandra/apache-cassandra-1.0.11-bin.tar.gz
       create  packages/cassandra/spec
 ```
