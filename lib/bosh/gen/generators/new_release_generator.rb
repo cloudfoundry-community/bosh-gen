@@ -56,8 +56,8 @@ module Bosh::Gen
           config_private = { 
             "blobstore" => {
               "s3" => {
-                "access_key_id" => "READWRITE_AWS_ACCESS_KEY",
-                "secret_access_key" => "READWRITE_AWS_SECRET_ACCESS_KEY"
+                "access_key_id" => readwrite_aws_access_key,
+                "secret_access_key" => readwrite_aws_secret_access_key
               }
             }
           }
@@ -101,8 +101,8 @@ module Bosh::Gen
               "provider" => "s3",
               "options" => {
                 "bucket_name" => "BOSH",
-                "access_key_id" => "READONLY_AWS_ACCESS_KEY",
-                "secret_access_key" => "READONLY_AWS_SECRET_ACCESS_KEY",
+                "access_key_id" => readonly_aws_access_key,
+                "secret_access_key" => readonly_aws_secret_access_key,
                 "encryption_key" => "PERSONAL_RANDOM_KEY",
               }
             }
@@ -203,6 +203,34 @@ module Bosh::Gen
             run "git #{cmd} #{options}"
           end
         end
+      end
+
+      def readonly_aws_access_key
+        s3_credentials "readonly_access_key", "READONLY_AWS_ACCESS_KEY"
+      end
+
+      def readonly_aws_secret_access_key
+        s3_credentials "readonly_secret_access_key", "READONLY_AWS_SECRET_ACCESS_KEY"
+      end
+
+      def readwrite_aws_access_key
+        s3_credentials "readwrite_access_key", "READWRITE_AWS_ACCESS_KEY"
+      end
+
+      def readwrite_aws_secret_access_key
+        s3_credentials "readwrite_secret_access_key", "READWRITE_AWS_SECRET_ACCESS_KEY"
+      end
+
+      def s3_credentials(key, default)
+        @s3_credentials ||= begin
+          creds = File.expand_path("~/.bosh_s3_credentials")
+          if File.exist?(creds)
+            YAML.load_file(creds)
+          else
+            {}
+          end
+        end
+        @s3_credentials[key] || default
       end
     end
   end
