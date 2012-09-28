@@ -39,7 +39,7 @@ module Bosh::Gen
       
       # TODO - support other blobstores
       def local_blobstore
-        config_dev = { "dev_name" => project_name }
+        config_dev = { "dev_name" => "#{project_name}-dev" }
         create_file "config/dev.yml", YAML.dump(config_dev)
 
         case blobstore_type
