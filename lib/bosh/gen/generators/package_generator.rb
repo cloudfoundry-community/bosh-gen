@@ -9,6 +9,7 @@ module Bosh::Gen
       argument :name
       argument :dependencies, :type => :array
       argument :files, :type => :array
+      argument :existing_sources, :type => :array
 
       BLOB_FILE_MIN_SIZE=20_000 # files over 20k are blobs
 
@@ -99,7 +100,9 @@ module Bosh::Gen
       end
       
       def package_specification
-        src_files = files.map {|f| "#{name}/#{File.basename(f)}"}
+        src_files = 
+          files.map {|f| "#{name}/#{File.basename(f)}"} + # new blobs
+          existing_sources                                # existing files/sources, like 'myapp/**/*'
         config = { "name" => name, "dependencies" => dependencies, "files" => src_files }
         create_file package_dir("spec"), YAML.dump(config)
       end

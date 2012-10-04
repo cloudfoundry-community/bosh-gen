@@ -30,14 +30,18 @@ module Bosh
       desc "package NAME", "Create a new package"
       method_option :dependencies, :aliases => ['-d'], :type => :array, 
         :desc => "List of package dependencies"
-      method_option :files,        :aliases => ['-f', '--src'], :type => :array, 
+      method_option :files,        :aliases => ['-f'], :type => :array, 
         :desc => "List of files copy into release"
+      method_option :src,        :aliases => ['-s'], :type => :array,
+        :desc => "List of existing sources to use, e.g. --src 'myapp/**/*'"
       def package(name)
         dependencies = options[:dependencies] || []
         files        = options[:files] || []
+        sources      = options[:src] || []
+        p [name, dependencies, files, sources]
         require 'bosh/gen/generators/package_generator'
         Bosh::Gen::Generators::PackageGenerator.start(
-          [name, dependencies, files])
+          [name, dependencies, files, sources])
       end
       
       desc "source NAME", "Downloads a source item into the named project"
