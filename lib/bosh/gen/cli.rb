@@ -38,7 +38,6 @@ module Bosh
         dependencies = options[:dependencies] || []
         files        = options[:files] || []
         sources      = options[:src] || []
-        p [name, dependencies, files, sources]
         require 'bosh/gen/generators/package_generator'
         Bosh::Gen::Generators::PackageGenerator.start(
           [name, dependencies, files, sources])
