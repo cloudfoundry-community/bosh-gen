@@ -16,7 +16,7 @@ Gem::Specification.new do |gem|
   gem.version       = Bosh::Gen::VERSION
   
   gem.add_dependency "thor"
-  gem.add_dependency "bosh_cli"
+  gem.add_dependency "bosh_cli", "~> 1.0.rc1"
   gem.add_dependency "bosh_common", "~> 0.5.1"
   
   gem.add_development_dependency "rake"
