@@ -1,5 +1,36 @@
 # Change Log
 
+## v0.11.0
+
+Added:
+
+* New blobstore provider: OpenStack Swift [thanks Ferran!]
+* `package` --src/-s specifies already internal sources/blobs; example: --src 'myapp/**/*'
+* `job` includes an empty `templates/config` to suggest where config templates should go
+
+Improved:
+
+* `new` - --s3 flag looks for `~/.bosh_s3_credentials` file for default AWS S3 credentials
+
+For common defaults on s3 blobstore credentials, create an
+`~/.bosh_s3_credentials` file that looks like:
+
+``` yaml
+readonly_access_key: XXX
+readonly_secret_access_key: XXX
+readwrite_access_key: XXX
+readwrite_secret_access_key: XXX
+```
+
+Other changes:
+
+* Using 1.0 release candidate for bosh_cli
+* `micro` - fix accidental gitignore of prepare/prepare_spec
+* `new` - `bosh-gen new project-boshrelease`; name is "project", initial dev name is "project-dev"
+* `manifest` - default stemcell is bosh-stemcell-0.6.4
+* `manifest` - creates `#{name}.yml` instead of `#{name}/manifest.yml`
+* `job` - example file not in a subfolder anymore
+
 ## v0.10.0
 
 Added:
