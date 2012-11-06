@@ -113,13 +113,16 @@ module Bosh
         :desc => "List of IP addresses available for jobs"
       method_option :disk, :aliases => ['-d'], :type => :string, 
         :desc => "Attach persistent disks to VMs of specific size, e.g. 8196"
+      method_option :jobs, :type => :array,
+        :desc => "Specific jobs to include in manifest [default: all]"
       def manifest(name, release_path)
         release_path = File.expand_path(release_path)
         ip_addresses = options["addresses"] || []
+        job_names = options["jobs"] || []
         flags = { :force => options["force"] || false, :disk => options[:disk] }
         require 'bosh/gen/generators/deployment_manifest_generator'
         Bosh::Gen::Generators::DeploymentManifestGenerator.start(
-          [name, release_path, ip_addresses, flags])
+          [name, release_path, ip_addresses, job_names, flags])
       end
 
       no_tasks do
