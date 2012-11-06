@@ -35,7 +35,6 @@ module Bosh::Gen
       def create_deployment_manifest
         cloud_properties = { 
           "instance_type" => "m1.small", 
-          "availability_zone" => "us-east-1e"
         }
         cloud_properties["persistent_disk"] = flags[:disk] if flags[:disk]
         cloud_properties["static_ips"] = ip_addresses
