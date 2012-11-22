@@ -25,6 +25,7 @@ module Bosh::Gen::Models
       manifest["compilation"] = {
         "workers" => 10,
         "network" => "default",
+        "reuse_compilation_vms" => true,
         "cloud_properties" => cloud_properties.dup
       }
       manifest["update"] = {
