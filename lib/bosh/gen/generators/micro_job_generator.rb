@@ -7,6 +7,7 @@ module Bosh::Gen
       include Thor::Actions
 
       argument :job_name
+      argument :specific_jobs, :type => :array
 
       def self.source_root
         File.join(File.dirname(__FILE__), "micro_job_generator", "templates")
@@ -24,7 +25,11 @@ module Bosh::Gen
       end
       
       def prepare_spec_defaults_all_jobs
-        jobs = Dir[File.expand_path("jobs/*")].map {|job| File.basename(job) } - [job_name]
+        jobs = if specific_jobs.size > 0
+          specific_jobs
+        else
+          Dir[File.expand_path("jobs/*")].map {|job| File.basename(job) } - [job_name]
+        end
         spec = { "jobs" => jobs }
         create_file "jobs/#{job_name}/prepare_spec", YAML.dump(spec)
       end
