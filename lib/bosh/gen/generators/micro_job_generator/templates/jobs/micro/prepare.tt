@@ -7,7 +7,7 @@ require 'erb'
 TEMPLATES = "templates"
 OVERRIDE = "override"
 
-MICRO_JOB_NAME="micro"
+MICRO_JOB_NAME="<%= job_name %>"
 
 def job_dir(job)
   File.expand_path("../../#{job}", __FILE__)
@@ -106,18 +106,18 @@ post_install = <<POST_INSTALL
 
 for DIR in /var/vcap/jobs /var/vcap/data/jobs; do
   cd $DIR
-  for JOB in <%= jobs.join(" ") %>; do
+  for JOB in <%%= jobs.join(" ") %>; do
     mkdir -p ${JOB}/bin ${JOB}/config ${JOB}/data ${JOB}/helpers
-    for FILE in <%= MICRO_JOB_NAME %>/$JOB/bin/*; do
+    for FILE in <%%= MICRO_JOB_NAME %>/$JOB/bin/*; do
       ln -nsf /var/vcap/jobs/$FILE $JOB/bin
     done
-    for FILE in <%= MICRO_JOB_NAME %>/$JOB/config/*; do
+    for FILE in <%%= MICRO_JOB_NAME %>/$JOB/config/*; do
       ln -nsf /var/vcap/jobs/$FILE $JOB/config
     done
-    for FILE in <%= MICRO_JOB_NAME %>/$JOB/data/*; do
+    for FILE in <%%= MICRO_JOB_NAME %>/$JOB/data/*; do
       ln -nsf /var/vcap/jobs/$FILE $JOB/data
     done
-    for FILE in <%= MICRO_JOB_NAME %>/$JOB/helpers/*; do
+    for FILE in <%%= MICRO_JOB_NAME %>/$JOB/helpers/*; do
       ln -nsf /var/vcap/jobs/$FILE $JOB/helpers
     done
   done
