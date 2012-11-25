@@ -74,10 +74,10 @@ module Bosh
         Bosh::Gen::Generators::JobGenerator.start([name, dependencies, 'simple'])
       end
 
-      desc "micro", "Create a micro job - a collection of all jobs and packages"
-      def micro
+      desc "micro [JOB]", "Create a micro job - a collection of all jobs and packages"
+      def micro(job_name = "micro")
         require 'bosh/gen/generators/micro_job_generator'
-        Bosh::Gen::Generators::MicroJobGenerator.start([])
+        Bosh::Gen::Generators::MicroJobGenerator.start([job_name])
       end
 
       desc "template JOB FILE_PATH", 

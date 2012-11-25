@@ -6,6 +6,8 @@ module Bosh::Gen
     class MicroJobGenerator < Thor::Group
       include Thor::Actions
 
+      argument :job_name
+
       def self.source_root
         File.join(File.dirname(__FILE__), "micro_job_generator", "templates")
       end
@@ -43,12 +45,6 @@ module Bosh::Gen
         say "which they are started."
         say ""
         say ""
-      end
-      
-    private
-      # May be an argument for the generator in future
-      def job_name
-        "micro"
       end
     end
   end
