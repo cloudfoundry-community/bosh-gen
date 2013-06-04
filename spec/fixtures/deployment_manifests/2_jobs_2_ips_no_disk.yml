@@ -7,6 +7,7 @@ release:
 compilation:
   workers: 10
   network: default
+  reuse_compilation_vms: true
   cloud_properties:
     instance_type: m1.small
 update:
