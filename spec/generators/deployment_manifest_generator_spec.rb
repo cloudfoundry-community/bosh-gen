@@ -16,7 +16,7 @@ class DeploymentManifestGeneratorSpec < MiniTest::Spec
     setup_project_release("bosh-sample-release")
   end
 
-  it "creates deployment manifest with properties" do
+  pending "creates deployment manifest with properties" do
     release_folder = File.expand_path("../../fixtures/releases/bosh-sample-release", __FILE__)
     in_home_folder do
       generate_manifest("wordpress", release_folder)
