@@ -4,17 +4,9 @@ Generators for creating BOSH releases.
 
 ## Installation
 
-Add this line to your application's Gemfile:
+This application requires Ruby 1.9 or 2.0 and is installed via RubyGems:
 
-    gem 'bosh-gen'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install bosh-gen
+$ gem install bosh-gen
 
 ## Usage
 
