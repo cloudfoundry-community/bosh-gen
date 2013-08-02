@@ -1,5 +1,11 @@
 # Change Log
 
+## v0.12.0
+
+* Supports bosh_cli 1.5.0.pre gems
+* dev.yml uses same release name as final.yml for blob reuse
+* sets reuse_compilation_vms: true now
+
 ## v0.11.0
 
 Added:
