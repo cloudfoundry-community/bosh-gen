@@ -100,7 +100,7 @@ module Bosh::Gen
           config_final = { "blobstore" => {
               "provider" => "s3",
               "options" => {
-                "bucket_name" => "BOSH",
+                "bucket_name" => repository_name,
                 "access_key_id" => readonly_aws_access_key,
                 "secret_access_key" => readonly_aws_secret_access_key,
                 "encryption_key" => "PERSONAL_RANDOM_KEY",
@@ -111,7 +111,7 @@ module Bosh::Gen
           config_final = { "blobstore" => {
               "provider" => "atmos",
               "options" => {
-                "tag" => "BOSH",
+                "tag" => repository_name,
                 "url" => "https://blob.cfblob.com",
                 "uid" => "ATMOS_UID"
               }
@@ -121,7 +121,7 @@ module Bosh::Gen
           config_final = { "blobstore" => {
               "provider" => "swift",
               "options" => {
-                "container_name" => "BOSH",
+                "container_name" => repository_name,
                 "swift_provider" => "SWIFT_PROVIDER"
               }
             }
