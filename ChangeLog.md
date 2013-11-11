@@ -5,6 +5,8 @@
 * Supports bosh_cli 1.5.0.pre gems
 * dev.yml uses same release name as final.yml for blob reuse
 * sets reuse_compilation_vms: true now
+* generated project README focuses on final releases [v0.12.1]
+* Default bucket name is project folder name [v0.12.1]
 
 ## v0.11.0
 
