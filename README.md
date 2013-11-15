@@ -133,8 +133,6 @@ $ bosh-gen job cassandra -d java7 cassandra
       create  jobs/cassandra/templates/helpers/ctl_setup.sh
       create  jobs/cassandra/templates/helpers/ctl_utils.sh
       create  jobs/cassandra/spec
-      create  examples/cassandra_simple
-      create  examples/cassandra_simple/default.yml
 ```
 
 Look at all that goodness!

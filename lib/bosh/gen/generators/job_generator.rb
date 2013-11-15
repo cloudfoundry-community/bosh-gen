@@ -66,10 +66,6 @@ module Bosh::Gen
         create_file job_dir("spec"), YAML.dump(config)
       end
       
-      def example
-        template "examples/%job_name%.yml.tt", "examples/%job_name%.yml"
-      end
-
       private
       def filenames
         files.map {|f| File.basename(f) }

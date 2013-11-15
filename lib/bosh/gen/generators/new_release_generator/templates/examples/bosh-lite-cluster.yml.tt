@@ -1,0 +1,67 @@
+---
+name: <%= project_name %>-cluster
+director_uuid: DIRECTOR_UUID
+releases:
+- name: <%= project_name %>
+  version: latest
+compilation:
+  workers: 3
+  network: <%= project_name %>-network
+  reuse_compilation_vms: true
+  cloud_properties:
+    name: random
+update:
+  canaries: 1
+  max_in_flight: 4
+  canary_watch_time: 10000-30000
+  update_watch_time: 10000-30000
+resource_pools:
+- name: common
+  network: <%= project_name %>-network
+  size: 3
+  stemcell:
+    name: bosh-stemcell
+    version: latest
+  cloud_properties:
+    name: random
+networks:
+- name: <%= project_name %>-network
+  subnets:
+<%% (0..28).each_with_index do |i| %>
+  - range: 10.244.0.<%%= i*4 %>/30
+    reserved:
+      - 10.244.0.<%%= i*4 + 1 %>
+    static:
+      - 10.244.0.<%%= i*4 + 2 %>
+    cloud_properties:
+      name: random
+<%% end %>
+<%% (29..61).each_with_index do |i| %>
+  - range: 10.244.0.<%%= i*4 %>/30
+    reserved:
+      - 10.244.0.<%%= i*4 + 1 %>
+    cloud_properties:
+      name: random
+<%% end %>
+<%% (62..63).each_with_index do |i| %>
+  - range: 10.244.0.<%%= i*4 %>/30
+    reserved:
+      - 10.244.0.<%%= i*4 + 1 %>
+    static:
+      - 10.244.0.<%%= i*4 + 2 %>
+    cloud_properties:
+      name: random
+<%% end %>
+jobs:
+- name: <%= project_name %>
+  template: <%= project_name %>
+  instances: 3
+  resource_pool: common
+  networks:
+  - name: <%= project_name %>-network
+    static_ips:
+    - 10.244.0.6
+    - 10.244.0.10
+    - 10.244.0.14
+properties:
+  <%= project_name %>: {}
