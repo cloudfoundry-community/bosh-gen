@@ -6,7 +6,7 @@ module Bosh::Gen
     class NewReleaseGenerator < Thor::Group
       include Thor::Actions
 
-      argument :app_path
+      argument :proposed_app_path
       argument :flags, :type => :hash
       
       def self.source_root
@@ -14,7 +14,7 @@ module Bosh::Gen
       end
       
       def create_root
-        self.destination_root = File.expand_path(app_path, destination_root)
+        self.destination_root = File.expand_path(repository_path, destination_root)
         empty_directory '.'
         FileUtils.cd(destination_root) unless options[:pretend]
       end
@@ -157,15 +157,26 @@ module Bosh::Gen
         git :add => "."
         git :commit => "-m 'Initial scaffold'"
       end
-      
-      private
-      
-      def project_name
-        @project_name ||= repository_name.gsub(/-(?:boshrelease|release)$/, '')
+
+      def show_location
+        say ""
+        say "Next, change to BOSH release location:"
+        say "cd #{repository_path}", :yellow
       end
 
+      private
+
+      # converts the base name into having -boshrelease suffix
       def repository_name
-        @repository_name ||= File.basename(app_path)
+        @repository_name ||= "#{project_name}-boshrelease"
+      end
+
+      def repository_path
+        File.join(File.dirname(proposed_app_path), repository_name)
+      end
+
+      def project_name
+        @project_name ||= File.basename(proposed_app_path).gsub(/-(?:boshrelease|release)$/, '')
       end
 
       def blobstore_type
