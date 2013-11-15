@@ -28,7 +28,7 @@ module Bosh::Gen
       end
       
       def directories
-        %w[jobs packages src blobs].each do |dir|
+        %w[jobs packages src blobs examples].each do |dir|
           directory dir
         end
       end
