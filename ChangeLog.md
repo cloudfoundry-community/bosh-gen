@@ -1,5 +1,9 @@
 # Change Log
 
+## v0.13.0
+
+* bosh-lite example manifests generated for new releases
+
 ## v0.12.0
 
 * Supports bosh_cli 1.5.0.pre gems
