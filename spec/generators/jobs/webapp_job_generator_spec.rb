@@ -28,9 +28,6 @@ class WebappGeneratorSpec < MiniTest::Spec
       job_template_exists "mywebapp", "data/properties.sh.erb", "data/properties.sh"
       job_template_exists "mywebapp", "helpers/ctl_setup.sh",   "helpers/ctl_setup.sh"
       job_template_exists "mywebapp", "helpers/ctl_utils.sh",   "helpers/ctl_utils.sh"
-
-      example = File.join("examples", "mywebapp.yml")
-      File.exist?(example).must_equal(true, "#{example} not created")
     end
   end
 
@@ -59,10 +56,6 @@ class WebappGeneratorSpec < MiniTest::Spec
       job_template_exists "mywebapp", "config/mime.types",        "config/mime.types"
       job_template_exists "mywebapp", "config/database.yml.erb",  "config/database.yml"
       job_template_exists "mywebapp", "config/redis.yml.erb",     "config/redis.yml"
-
-      example = File.join("examples", "mywebapp_nginx_rack", "nginx_puma.yml")
-      example = File.join("examples", "mywebapp_nginx_rack", "nginx_rackup.yml")
-      File.exist?(example).must_equal(true, "#{example} not created")
     end
   end
 end
