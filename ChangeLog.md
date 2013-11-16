@@ -4,6 +4,7 @@
 
 * bosh-lite example manifests generated for new releases
 * created folder always has -boshrelease suffix [v0.13.1]
+* use public https in generated readme [v0.13.2]
 
 ## v0.12.0
 
