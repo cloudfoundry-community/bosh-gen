@@ -6,7 +6,7 @@ To use this bosh release, first upload it to your bosh:
 
 ```
 bosh target BOSH_HOST
-git clone git@github.com:cloudfoundry-community/<%= repository_name %>.git
+git clone https://github.com/cloudfoundry-community/<%= repository_name %>.git
 cd <%= repository_name %>
 bosh upload release releases/<%= project_name %>-1.yml
 ```
