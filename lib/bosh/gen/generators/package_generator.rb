@@ -42,6 +42,9 @@ module Bosh::Gen
           set -e # exit immediately if a simple command exits with a non-zero status
           set -u # report the usage of uninitialized variables
           
+          # Detect # of CPUs so make jobs can be parallelized
+          CPUS=`grep -c ^processor /proc/cpuinfo`
+
           # Available variables
           # $BOSH_COMPILE_TARGET - where this package & spec'd source files are available
           # $BOSH_INSTALL_TARGET - where you copy/install files to be included in package
@@ -60,8 +63,7 @@ module Bosh::Gen
             #{unpack_command} #{name}/#{archive_file}
             cd #{unpack_base_path}
             ./configure --prefix=${BOSH_INSTALL_TARGET}
-            make
-            make install
+            make -j${CPUS} && make install
             # Alternatively, to copy archive contents:
             # cp -a #{unpack_base_path}/* $BOSH_INSTALL_TARGET
             SHELL
