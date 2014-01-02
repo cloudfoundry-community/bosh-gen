@@ -50,8 +50,7 @@ module Bosh::Gen
             (
               cd #{package_dir}
               ./configure --prefix=$BOSH_INSTALL_TARGET
-              make
-              make install
+              make -j${CPUS} && make install
             )
             
             BASH
