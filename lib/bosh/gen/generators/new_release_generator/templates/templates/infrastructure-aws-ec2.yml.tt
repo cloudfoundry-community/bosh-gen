@@ -6,7 +6,7 @@ meta:
 
   stemcell:
     name: bosh-aws-xen-ubuntu
-    version: 1722
+    version: latest
 
 jobs:
   - name: <%= project_name_underscored %>_leader_z1

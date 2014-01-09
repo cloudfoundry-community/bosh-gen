@@ -4,7 +4,7 @@ meta:
 
   stemcell:
     name: bosh-warden-boshlite-ubuntu
-    version: 24
+    version: latest
 
 update:
   canaries: 1
