@@ -1,5 +1,10 @@
 # Change Log
 
+## v0.14.0
+
+* templates/make_manifest & example spiff templates generated
+* no more static example bosh-lite.yml templates
+
 ## v0.13.0
 
 * bosh-lite example manifests generated for new releases
