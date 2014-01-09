@@ -28,11 +28,15 @@ module Bosh::Gen
       end
       
       def directories
-        %w[jobs packages src blobs examples].each do |dir|
+        %w[jobs packages src blobs templates].each do |dir|
           directory dir
         end
       end
-      
+
+      def executables
+        chmod "templates/make_manifest", 0755
+      end
+
       def blobs_yaml
         create_file "config/blobs.yml", YAML.dump({})
       end
@@ -149,6 +153,8 @@ module Bosh::Gen
         *~
         *#
         #*
+        tmp
+        my*.yml
         IGNORE
       end
       
@@ -177,6 +183,14 @@ module Bosh::Gen
 
       def project_name
         @project_name ||= File.basename(proposed_app_path).gsub(/-(?:boshrelease|release)$/, '')
+      end
+
+      def project_name_hyphenated
+        project_name.gsub(/[^A-Za-z]+/, '-')
+      end
+
+      def project_name_underscored
+        project_name.gsub(/[^A-Za-z]+/, '_')
       end
 
       def blobstore_type

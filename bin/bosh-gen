@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
-$:.push File.dirname(__FILE__) + '/../lib'
 
+$:.push File.dirname(__FILE__) + '/../lib'
 require "rubygems"
 require "bosh/gen/cli"
 
