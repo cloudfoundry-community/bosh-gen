@@ -22,7 +22,6 @@ module Bosh
       def new(path)
         flags = { :aws => options["s3"], :atmos => options["atmos"],
                   :swift => options["swift"]}
-        
         require 'bosh/gen/generators/new_release_generator'
         Bosh::Gen::Generators::NewReleaseGenerator.start([path, flags])
       end

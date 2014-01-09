@@ -1,0 +1,27 @@
+meta:
+  environment: ~
+
+update:
+  canaries: 1
+  max_in_flight: 50
+  canary_watch_time: 1000-30000
+  update_watch_time: 1000-30000
+
+jobs:
+  - name: <%= project_name_underscored %>_leader_z1
+    template: <%= project_name_underscored %>
+    instances: 0
+    resource_pool: small_z1
+    networks: (( merge ))
+  - name: <%= project_name_underscored %>_z1
+    template: <%= project_name_underscored %>
+    instances: 0
+    resource_pool: small_z1
+    networks: (( merge ))
+    update:
+      canaries: 10
+    properties:
+      <%= project_name_underscored %>:
+        master: (( merge ))
+
+networks: (( merge ))
