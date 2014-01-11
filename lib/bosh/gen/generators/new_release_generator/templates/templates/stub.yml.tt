@@ -9,5 +9,5 @@ meta:
 director_uuid: PLACEHOLDER-DIRECTOR-UUID
 
 releases:
-  - name: <%= project_name_underscored %>
+  - name: <%= project_name %>
     version: latest
