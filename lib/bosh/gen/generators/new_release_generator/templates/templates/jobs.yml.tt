@@ -25,3 +25,5 @@ jobs:
         master: (( merge ))
 
 networks: (( merge ))
+
+properties: {}

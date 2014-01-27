@@ -54,7 +54,6 @@ perl -pi -e "s/NAME/$NAME/g" $tmpdir/stub-with-uuid.yml
 spiff merge \
   $templates/deployment.yml \
   $templates/jobs.yml \
-  $templates/properties.yml \
   $templates/infrastructure-${infrastructure}.yml \
   $tmpdir/stub-with-uuid.yml \
   $* > $tmpdir/$NAME-manifest.yml

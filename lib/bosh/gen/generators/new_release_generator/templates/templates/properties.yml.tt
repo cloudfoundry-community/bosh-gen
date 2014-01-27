@@ -1,5 +1,0 @@
-properties:
-  networks:
-    apps: <%= project_name_underscored %>1
-
-  <%= project_name_underscored %>: {}
