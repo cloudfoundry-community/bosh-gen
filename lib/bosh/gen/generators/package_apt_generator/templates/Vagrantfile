@@ -4,6 +4,7 @@ Vagrant.configure('2') do |config|
 
   config.vm.hostname='boshrelease-builder'
   config.vm.box = "lucid64"
+  config.vm.box_url = "http://files.vagrantup.com/lucid64.box"
 
   # Need NFS enabled, and hence a private network for virtualbox
   # as discussed in this project's patch
