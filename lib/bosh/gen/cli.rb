@@ -27,6 +27,8 @@ module Bosh
       end
       
       desc "package NAME", "Create a new package"
+      method_option :apt, :type => :boolean, 
+        :desc => "Create package using debian/ubuntu apt .debs"
       method_option :dependencies, :aliases => ['-d'], :type => :array, 
         :desc => "List of package dependencies"
       method_option :files,        :aliases => ['-f'], :type => :array, 
@@ -35,11 +37,16 @@ module Bosh
         :desc => "List of existing sources to use, e.g. --src 'myapp/**/*'"
       def package(name)
         dependencies = options[:dependencies] || []
-        files        = options[:files] || []
-        sources      = options[:src] || []
-        require 'bosh/gen/generators/package_generator'
-        Bosh::Gen::Generators::PackageGenerator.start(
-          [name, dependencies, files, sources])
+        if options[:apt]
+          require 'bosh/gen/generators/package_apt_generator'
+          Bosh::Gen::Generators::PackageAptGenerator.start([name, dependencies])
+        else
+          files        = options[:files] || []
+          sources      = options[:src] || []
+          require 'bosh/gen/generators/package_generator'
+          Bosh::Gen::Generators::PackageGenerator.start(
+            [name, dependencies, files, sources])
+        end
       end
       
       desc "source NAME", "Downloads a source item into the named project"
