@@ -98,6 +98,8 @@ $ vagrant ssh -c '/vagrant/src/apt/fetch_debs.sh apache2'
 $ vagrant destroy
 ```
 
+You can add/change the Debian packages to install by editing `src/apt/apache2/aptfile` and re-running the `fetch_debs.sh` command above. You might want to delete `blobs/apt/apache2` first to ensure that only the fetched `.deb` files are subsequently included during package compilation.
+
 It is possible now to download one or more `.deb` files into the `blobs/apt/` folder, and have them installed during package compilation time.
 
 The installed .deb packages will be available at `/var/vcap/packages/apache2/apt`; rather than within the root folder system.
