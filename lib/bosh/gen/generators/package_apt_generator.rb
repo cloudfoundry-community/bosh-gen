@@ -75,8 +75,13 @@ module Bosh::Gen
           1. Edit src/apt/#{name}/aptfile to specify list of debian packages to install
           2. Provision vagrant and run script to fetch debian packages:
 
-          vagrant up
-          vagrant ssh -c '/vagrant/src/apt/fetch_debs.sh #{name}'
+            vagrant up
+            vagrant ssh -c '/vagrant/src/apt/fetch_debs.sh #{name}'
+            vagrant destroy
+
+          You can search for aptitude debian packages using apt-cache:
+
+            vagrant ssh -c "apt-cache search apache | sort"
         README
       end
 
