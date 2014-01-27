@@ -53,6 +53,63 @@ $ bosh-gen template some-ruby-job config/some-config.ini
      force  jobs/some-ruby-job/spec
 ```
 
+## Quickly creating packages
+
+There is a slow way to create a package, and there are three faster ways. Slow vs fast is not a debated about best vs worse. But sometimes you're in a hurry.
+
+### Slow way
+
+```
+$ bosh-gen package apache2
+```
+
+The slowest way to create a package is to run the command above, then get the source, read the "install from source" instructions, and create a package.
+
+### Slightly faster way
+
+```
+$ bosh-gen package redis -f ~/Downloads/redis-2.8.3.tar.gz
+```
+
+If you download the source files first, and reference them with the `bosh-gen package` generator, then it will attempt to guess how to install the package. The generated `packaging` script will include some starting commands that might work.
+
+The command above will also copy the target file into the `blobs/redis/` folder. One less thing for you to do.
+
+### Fastest way - reuse existing packages
+
+```
+$ bosh-gen extract-pkg ../cf-release/packages/postgres
+```
+
+The fastest way is to reuse an existing, working package from another BOSH release that you have on your local machine.
+
+This command will copy across the `packages/postgres/spec` & `packages/postgres/packaging` files, as well as any blobs or src files that are referenced in the original BOSH release.
+
+This is a great command to use. There are a growing number of BOSH releases on GitHub from which to steal, err, extract packages into your own BOSH releases.
+
+Remember, first run `bosh sync blobs` in the target BOSH release project. Otherwise it will not be able to copy over the blobs.
+
+### Fast way - reuse Aptitude/Debian packages
+
+```
+$ bosh-gen package apache2 --apt
+$ vagrant up
+$ vagrant ssh -c '/vagrant/src/apt/fetch_debs.sh apache2'
+$ vagrant destroy
+```
+
+It is possible now to download one or more `.deb` files into the `blobs/apt/` folder, and have them installed during package compilation time.
+
+The installed .deb packages will be available at `/var/vcap/packages/apache2/apt`; rather than within the root folder system.
+
+Your job monit control scripts can source a provided `profile.sh` to setup environment variables:
+
+```
+source /var/vcap/packages/apache2/profile.sh
+```
+
+This is the last option, and it is not the best option. Many Debian packages will also start processes that have default configuration that is not correct for your use case. It may be fast to get the Debian packages; but additional work may be required by your jobs to stop and unhook the processes that are automatically started upon installation.
+
 ## Tutorial
 
 To see how the various commands work together, let's create a new bosh release for [Cassandra](http://cassandra.apache.org/ "The Apache Cassandra Project").
