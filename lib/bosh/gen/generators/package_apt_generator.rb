@@ -81,7 +81,7 @@ module Bosh::Gen
 
           You can search for aptitude debian packages using apt-cache:
 
-            vagrant ssh -c "apt-cache search apache | sort"
+            vagrant ssh -c 'apt-cache search #{name} | sort'
         README
       end
 
