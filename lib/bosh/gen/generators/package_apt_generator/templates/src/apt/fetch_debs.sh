@@ -68,15 +68,3 @@ done
 
 topic "Copying .debs to blobs"
 cp -a $APT_CACHE_DIR/archives/*.deb $BLOBS_DIR/
-
-topic "Writing profile script"
-
-PACKAGE_DIR=/var/vcap/packages/$PACKAGE_NAME/apt
-
-cat <<EOF >$PACKAGE_SRC_DIR/profile.sh
-export PATH="$PACKAGE_DIR/usr/bin:$PATH"
-export LD_LIBRARY_PATH="$PACKAGE_DIR/usr/lib:\$LD_LIBRARY_PATH"
-export INCLUDE_PATH="$PACKAGE_DIR/usr/include:\$INCLUDE_PATH"
-export CPATH="\$INCLUDE_PATH"
-export CPPPATH="\$INCLUDE_PATH"
-EOF
