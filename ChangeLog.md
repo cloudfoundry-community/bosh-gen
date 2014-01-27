@@ -1,5 +1,11 @@
 # Change Log
 
+## v0.15.0
+
+* Create packages from existing Aptitude .deb packages with `package --apt`
+* Assume project & job names have hyphens in templates
+* Templates default to latest stemcell [Aristoteles Neto]
+
 ## v0.14.0
 
 * templates/make_manifest & example spiff templates generated
