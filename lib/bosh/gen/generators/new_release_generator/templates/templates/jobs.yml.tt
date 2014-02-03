@@ -22,7 +22,7 @@ jobs:
       canaries: 10
     properties:
       <%= project_name_underscored %>:
-        master: (( merge ))
+        leader_address: (( merge ))
 
 networks: (( merge ))
 

@@ -18,7 +18,7 @@ jobs:
     networks:
       - name: (( meta.network_name ))
     properties:
-      etcd:
+      <%= project_name_underscored %>:
         leader_address: (( "0.<%= project_name_hyphenated %>-leader-z1.<%= project_name_hyphenated %>1." meta.environment "." meta.dns_root ))
 
 compilation:
