@@ -6,6 +6,7 @@ update:
   max_in_flight: 50
   canary_watch_time: 1000-30000
   update_watch_time: 1000-30000
+  serial: false
 
 jobs:
   - name: <%= project_name_underscored %>_leader_z1
