@@ -43,7 +43,7 @@ module Bosh::Gen
           set -u # report the usage of uninitialized variables
           
           # Detect # of CPUs so make jobs can be parallelized
-          CPUS=`grep -c ^processor /proc/cpuinfo`
+          CPUS=$(grep -c ^processor /proc/cpuinfo)
 
           # Available variables
           # $BOSH_COMPILE_TARGET - where this package & spec'd source files are available
