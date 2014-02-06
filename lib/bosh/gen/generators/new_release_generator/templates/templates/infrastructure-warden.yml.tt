@@ -25,7 +25,7 @@ jobs:
         static_ips: ~
     properties:
       <%= project_name_underscored %>:
-        master: (( jobs.<%= project_name_underscored %>_leader_z1.networks.<%= project_name_underscored %>1.static_ips.[0] ))
+        leader_address: (( jobs.<%= project_name_underscored %>_leader_z1.networks.<%= project_name_underscored %>1.static_ips.[0] ))
 
 compilation:
   cloud_properties:
