@@ -1,5 +1,11 @@
 # Change Log
 
+## v0.16.0
+
+* `new` creates an initial job of the same name.
+
+The initial job is configured to have the xyz.leader_address property, and an example conf file that shows how to use it.
+
 ## v0.15.0
 
 * Create packages from existing Aptitude .deb packages with `package --apt`
