@@ -185,6 +185,10 @@ module Bosh::Gen
         @project_name ||= File.basename(proposed_app_path).gsub(/-(?:boshrelease|release)$/, '')
       end
 
+      def job_name
+        project_name_underscored
+      end
+
       def project_name_hyphenated
         project_name.gsub(/[^A-Za-z]+/, '-')
       end

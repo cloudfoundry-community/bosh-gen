@@ -1,0 +1,36 @@
+#!/bin/bash
+
+set -e # exit immediately if a simple command exits with a non-zero status
+set -u # report the usage of uninitialized variables
+
+# Setup env vars and folders for the webapp_ctl script
+source /var/vcap/jobs/<%= job_name %>/helpers/ctl_setup.sh '<%= job_name %>'
+
+export PORT=${PORT:-5000}
+export LANG=en_US.UTF-8
+
+case $1 in
+
+  start)
+    pid_guard $PIDFILE $JOB_NAME
+
+    # TODO: Run some process
+    exec TODO \
+         >>$LOG_DIR/$JOB_NAME.stdout.log \
+         2>>$LOG_DIR/$JOB_NAME.stderr.log
+
+    # store pid in $PIDFILE
+    echo $! > $PIDFILE
+    ;;
+
+  stop)
+    kill_and_wait $PIDFILE
+
+    ;;
+  *)
+    echo "Usage: <%= job_name %>_ctl {start|stop}"
+
+    ;;
+
+esac
+exit 0
