@@ -15,7 +15,7 @@ case $1 in
     pid_guard $PIDFILE $JOB_NAME
 
     # TODO: Run some process
-    exec TODO \
+    exec chpst -u vcap:vcap TODO \
          >>$LOG_DIR/$JOB_NAME.stdout.log \
          2>>$LOG_DIR/$JOB_NAME.stderr.log
 
