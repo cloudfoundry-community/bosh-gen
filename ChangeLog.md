@@ -3,6 +3,8 @@
 ## v0.16.0
 
 * `new` creates an initial job of the same name.
+* default to running job process as vcap:vcap [v0.16.1]
+* Default $INCLUDE_PATH & $LD_LIBRARY_PATH to '' if not set [v0.16.1]
 
 The initial job is configured to have the xyz.leader_address property, and an example conf file that shows how to use it.
 
