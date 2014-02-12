@@ -5,10 +5,9 @@ set -e
 infrastructure=$1
 template_prefix="<%= project_name %>"
 
-if [ "$infrastructure" != "openstack-nova" ] && \
-    [ "$infrastructure" != "aws-ec2" ] && \
+if [ "$infrastructure" != "aws-ec2" ] && \
     [ "$infrastructure" != "warden" ] ; then
-  echo "usage: ./make_manifest <openstack-nova|warden>"
+  echo "usage: ./make_manifest <aws-ec2|warden>"
   exit 1
 fi
 
@@ -27,16 +26,9 @@ if [[ $DIRECTOR_NAME = "warden" ]]; then
   fi
 fi
 
-if [[ $DIRECTOR_CPI = "aws" ]]; then
-  if [[ $infrastructure = "aws-ec2" ]]; then
+if [[ $infrastructure = "aws-ec2" ]]; then
+  if [[ $DIRECTOR_CPI != "aws" ]]; then
     echo "Not targeting an AWS BOSH. Please use 'bosh target' before running this script."
-    exit 1
-  fi
-fi
-
-if [[ $DIRECTOR_CPI != "openstack" ]]; then
-  if [[ $infrastructure = "openstack-nova" ]]; then
-    echo "Not targeting an OpenStack BOSH. Please use 'bosh target' before running this script."
     exit 1
   fi
 fi
