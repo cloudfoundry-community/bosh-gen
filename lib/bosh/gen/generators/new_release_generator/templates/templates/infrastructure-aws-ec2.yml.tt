@@ -13,7 +13,7 @@ jobs:
     instances: 1
     networks:
       - name: (( meta.network_name ))
-  - name: <%= project_name %>_z1
+  - name: <%= project_name_underscored %>_z1
     instances: 2
     networks:
       - name: (( meta.network_name ))
