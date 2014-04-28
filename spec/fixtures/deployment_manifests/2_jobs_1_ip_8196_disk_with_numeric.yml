@@ -1,0 +1,64 @@
+---
+name: s3test
+director_uuid: UUID
+release:
+  name: myrelease
+  version: latest
+compilation:
+  workers: 10
+  network: default
+  reuse_compilation_vms: true
+  cloud_properties:
+    instance_type: m1.small
+update:
+  canaries: 1
+  canary_watch_time: 30000
+  update_watch_time: 30000
+  max_in_flight: 4
+  max_errors: 1
+networks:
+- name: default
+  type: dynamic
+  cloud_properties:
+    security_groups:
+    - default
+- name: vip_network
+  type: vip
+  cloud_properties:
+    security_groups:
+    - default
+resource_pools:
+- name: common
+  network: default
+  size: 2
+  stemcell:
+    name: bosh-stemcell
+    version: 0.6.4
+  cloud_properties:
+    instance_type: m1.small
+  persistent_disk: 8196
+jobs:
+- name: job-with-ips
+  template: job-with-ips
+  instances: 1
+  resource_pool: common
+  networks:
+  - name: default
+    default:
+    - dns
+    - gateway
+  - name: vip_network
+    static_ips:
+    - 4.3.2.1
+  persistent_disk: 8196
+- name: misc
+  template: misc
+  instances: 1
+  resource_pool: common
+  networks:
+  - name: default
+    default:
+    - dns
+    - gateway
+  persistent_disk: 8196
+properties: {}

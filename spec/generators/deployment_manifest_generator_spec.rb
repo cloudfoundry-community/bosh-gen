@@ -20,7 +20,6 @@ class DeploymentManifestGeneratorSpec < MiniTest::Spec
     release_folder = File.expand_path("../../fixtures/releases/bosh-sample-release", __FILE__)
     in_home_folder do
       generate_manifest("wordpress", release_folder)
-      
       File.exist?("wordpress.yml").must_equal(true, "manifest wordpress.yml not created")
       
       manifest = YAML.load_file("wordpress.yml")
@@ -29,5 +28,20 @@ class DeploymentManifestGeneratorSpec < MiniTest::Spec
       properties["mysql"].wont_be_nil
       properties["mysql"]["password"].must_equal 'mysqlpassword'
     end
+  end
+
+  it "checks for numerics in filenames/properties" do
+    release_folder = File.expand_path("../../tmp", __FILE__)
+    puts "Home folder = #{@active_project_folder}"
+    setup_project_release("s3test-boshrelease")
+    File.exist?(File.join(@active_project_folder, "jobs/s3test/spec"))
+           .must_equal(true, "jobs/s3test/spec not created")
+
+    dev = YAML.load_file(File.join(@active_project_folder, "config/dev.yml"))
+    dev.wont_be_nil "dev.yml is nil"
+    dev["dev_name"].must_equal("s3test")
+
+    deployment = YAML.load_file(File.join(@active_project_folder, "templates/deployment.yml"))
+    deployment["compilation"]["network"].must_equal("s3test1")
   end
 end
