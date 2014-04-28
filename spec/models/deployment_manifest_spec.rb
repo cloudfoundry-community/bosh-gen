@@ -23,7 +23,17 @@ class DeploymentManifestSpec < MiniTest::Spec
     ]
     manifest.to_yaml.must_equal fixture_manifest("2_jobs_1_ip_8196_disk")
   end
-  
+  it "creates manifest document with 2 jobs, with disk, numeric in manifest name" do
+    manifest = Bosh::Gen::Models::DeploymentManifest.new("s3test", "UUID",
+      {"name" => "myrelease", "version" => 2},
+      {"instance_type" => "m1.small", "persistent_disk" => "8196",  "static_ips" => ['4.3.2.1']}, {})
+    manifest.jobs = [
+      { "name" => "job-with-ips"},
+      { "name" => "misc"}
+    ]
+    manifest.to_yaml.must_equal fixture_manifest("2_jobs_1_ip_8196_disk_with_numeric")
+  end
+
   def fixture_manifest(name)
     File.read(File.expand_path("../../fixtures/deployment_manifests/#{name}.yml", __FILE__))
   end

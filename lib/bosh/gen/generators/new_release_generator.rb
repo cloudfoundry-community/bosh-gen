@@ -190,11 +190,11 @@ module Bosh::Gen
       end
 
       def project_name_hyphenated
-        project_name.gsub(/[^A-Za-z]+/, '-')
+        project_name.gsub(/[^A-Za-z0-9]+/, '-')
       end
 
       def project_name_underscored
-        project_name.gsub(/[^A-Za-z]+/, '_')
+        project_name.gsub(/[^A-Za-z0-9]+/, '_')
       end
 
       def blobstore_type
