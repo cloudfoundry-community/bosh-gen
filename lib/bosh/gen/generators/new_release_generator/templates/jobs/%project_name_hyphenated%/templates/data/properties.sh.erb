@@ -8,3 +8,9 @@ export NAME='<%= name %>'
 export JOB_INDEX=<%= index %>
 # full job name, like redis/0 or webapp/3
 export JOB_FULL="$NAME/$JOB_INDEX"
+
+export DEPLOYMENT_NAME=<%= spec.deployment %>
+export DNS_ROOT=<%= spec.dns_domain_name %>
+
+# $BIND_ADDR is the IP of the first network
+export BIND_ADDR=<%= spec.networks.send(spec.networks.methods(false).first).ip %>
