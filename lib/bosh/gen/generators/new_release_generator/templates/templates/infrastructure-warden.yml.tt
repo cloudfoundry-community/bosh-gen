@@ -1,6 +1,5 @@
 meta:
   environment: <%= project_name_hyphenated %>-warden
-  network_name: (( merge ))
 
   stemcell:
     name: bosh-warden-boshlite-ubuntu
@@ -16,12 +15,12 @@ jobs:
   - name: <%= project_name_underscored %>_leader_z1
     instances: 1
     networks:
-      - name: (( meta.network_name ))
+      - name: <%= project_name_underscored %>1
         static_ips: (( static_ips(0) ))
   - name: <%= project_name_underscored %>_z1
     instances: 2
     networks:
-      - name: (( meta.network_name ))
+      - name: <%= project_name_underscored %>1
         static_ips: ~
     properties:
       <%= project_name_underscored %>:
@@ -37,7 +36,7 @@ resource_pools:
       name: random
 
 networks:
-- name: (( meta.network_name ))
+- name: <%= project_name_underscored %>1
   # Assumes up to 5 VMs, including 1 static and 4 dynamic.
   # Plus 5 (double the size) unused IPs, due to BOSH bug/quirk.
   subnets:

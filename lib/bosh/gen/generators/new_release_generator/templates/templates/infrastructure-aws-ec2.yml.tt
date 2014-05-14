@@ -2,7 +2,6 @@ meta:
   environment: (( merge ))
   dns_root: (( merge ))
   security_groups: (( merge ))
-  network_name: (( merge ))
 
   stemcell:
     name: bosh-aws-xen-ubuntu
@@ -12,11 +11,11 @@ jobs:
   - name: <%= project_name_underscored %>_leader_z1
     instances: 1
     networks:
-      - name: (( meta.network_name ))
+      - name: <%= project_name_underscored %>1
   - name: <%= project_name_underscored %>_z1
     instances: 2
     networks:
-      - name: (( meta.network_name ))
+      - name: <%= project_name_underscored %>1
     properties:
       <%= project_name_underscored %>:
         leader_address: (( "0.<%= project_name_hyphenated %>-leader-z1.<%= project_name_hyphenated %>1." meta.environment "." meta.dns_root ))
@@ -34,7 +33,7 @@ networks:
   - name: floating
     type: vip
     cloud_properties: {}
-  - name: (( meta.network_name ))
+  - name: <%= project_name_underscored %>1
     type: dynamic
     cloud_properties:
       security_groups: (( meta.security_groups ))
