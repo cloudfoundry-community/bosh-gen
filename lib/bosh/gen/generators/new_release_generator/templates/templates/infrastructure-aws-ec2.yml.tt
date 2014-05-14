@@ -2,6 +2,7 @@ meta:
   environment: (( merge ))
   dns_root: (( merge ))
   security_groups: (( merge ))
+  persistent_disk: 4096
 
   stemcell:
     name: bosh-aws-xen-ubuntu
@@ -12,10 +13,12 @@ jobs:
     instances: 1
     networks:
       - name: <%= project_name_underscored %>1
+    persistent_disk: (( meta.persistent_disk ))
   - name: <%= project_name_underscored %>_z1
     instances: 2
     networks:
       - name: <%= project_name_underscored %>1
+    persistent_disk: (( meta.persistent_disk ))
     properties:
       <%= project_name_underscored %>:
         leader_address: (( "0.<%= project_name_hyphenated %>-leader-z1.<%= project_name_hyphenated %>1." meta.environment "." meta.dns_root ))

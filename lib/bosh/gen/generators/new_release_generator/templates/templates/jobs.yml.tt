@@ -14,11 +14,13 @@ jobs:
     instances: 0
     resource_pool: small_z1
     networks: (( merge ))
+    persistent_disk: ~
   - name: <%= project_name_underscored %>_z1
     template: <%= project_name_hyphenated %>
     instances: 0
     resource_pool: small_z1
     networks: (( merge ))
+    persistent_disk: ~
     update:
       canaries: 10
     properties:
