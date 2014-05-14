@@ -14,13 +14,13 @@ case $1 in
   start)
     pid_guard $PIDFILE $JOB_NAME
 
-    # TODO: Run some process
-    exec chpst -u vcap:vcap TODO \
+    # store pid in $PIDFILE
+    echo $$ > $PIDFILE
+
+    exec chpst -u vcap:vcap <%= job_name %> \
          >>$LOG_DIR/$JOB_NAME.stdout.log \
          2>>$LOG_DIR/$JOB_NAME.stderr.log
 
-    # store pid in $PIDFILE
-    echo $! > $PIDFILE
     ;;
 
   stop)
