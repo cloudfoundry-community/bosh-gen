@@ -4,6 +4,8 @@ meta:
   dns_root: microbosh
   security_groups:
     - <%= project_name_underscored %>
+  stemcell:
+    name: STEMCELL
 
 director_uuid: PLACEHOLDER-DIRECTOR-UUID
 
