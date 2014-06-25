@@ -8,25 +8,25 @@ module Bosh::Gen
 
       argument :proposed_app_path
       argument :flags, :type => :hash
-      
+
       def self.source_root
         File.join(File.dirname(__FILE__), "new_release_generator", "templates")
       end
-      
+
       def create_root
         self.destination_root = File.expand_path(repository_path, destination_root)
         empty_directory '.'
         FileUtils.cd(destination_root) unless options[:pretend]
       end
-      
+
       def readme
         template "README.md.tt", "README.md"
       end
-      
+
       def rakefile
         copy_file "Rakefile"
       end
-      
+
       def directories
         %w[jobs packages src blobs templates].each do |dir|
           directory dir
@@ -40,7 +40,7 @@ module Bosh::Gen
       def blobs_yaml
         create_file "config/blobs.yml", YAML.dump({})
       end
-      
+
       # TODO - support other blobstores
       def local_blobstore
         config_dev = { "dev_name" => project_name }
@@ -48,7 +48,7 @@ module Bosh::Gen
 
         case blobstore_type
         when :local
-          config_private = { 
+          config_private = {
             "blobstore" => {
               "simple" => {
                 "user" => "USER",
@@ -57,7 +57,7 @@ module Bosh::Gen
             }
           }
         when :s3
-          config_private = { 
+          config_private = {
             "blobstore" => {
               "s3" => {
                 "access_key_id" => readwrite_aws_access_key,
@@ -66,7 +66,7 @@ module Bosh::Gen
             }
           }
         when :atmos
-          config_private = { 
+          config_private = {
             "blobstore" => {
               "atmos" => {
                 "secret" => "SECRET"
@@ -104,10 +104,7 @@ module Bosh::Gen
           config_final = { "blobstore" => {
               "provider" => "s3",
               "options" => {
-                "bucket_name" => repository_name,
-                "access_key_id" => readonly_aws_access_key,
-                "secret_access_key" => readonly_aws_secret_access_key,
-                "encryption_key" => "PERSONAL_RANDOM_KEY",
+                "bucket_name" => repository_name
               }
             }
           }
@@ -131,10 +128,10 @@ module Bosh::Gen
             }
           }
         end
-        
+
         create_file "config/final.yml", YAML.dump(config_final)
       end
-      
+
       def git_init
         create_file ".gitignore", <<-IGNORE.gsub(/^\s{8}/, '')
         config/dev.yml
@@ -157,7 +154,7 @@ module Bosh::Gen
         my*.yml
         IGNORE
       end
-      
+
       def setup_git
         git :init
         git :add => "."
@@ -203,11 +200,11 @@ module Bosh::Gen
         return :swift if swift?
         return :local
       end
-      
+
       def s3?
         flags[:aws]
       end
-      
+
       def atmos?
         flags[:atmos]
       end
@@ -232,14 +229,6 @@ module Bosh::Gen
             run "git #{cmd} #{options}"
           end
         end
-      end
-
-      def readonly_aws_access_key
-        s3_credentials "readonly_access_key", "READONLY_AWS_ACCESS_KEY"
-      end
-
-      def readonly_aws_secret_access_key
-        s3_credentials "readonly_secret_access_key", "READONLY_AWS_SECRET_ACCESS_KEY"
       end
 
       def readwrite_aws_access_key

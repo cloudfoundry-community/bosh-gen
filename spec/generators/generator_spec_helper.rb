@@ -10,12 +10,32 @@ module GeneratorSpecHelper
     FileUtils.mkdir_p @home_path
     ENV['HOME'] = @home_path
     FileUtils.cp_r(@@local_developer_bosh_config, @home_path)
+    setup_git
   end
 
   def setup_project_release(name)
     release_path = File.join(@fixtures_path, "releases", name)
     FileUtils.cp_r(release_path, @tmp_root)
     @active_project_folder = File.join(@tmp_root, name)
+  end
+
+  def setup_git
+    in_home_folder do
+      git config: "--global user.name 'Dr Nic Williams'"
+      git config: "--global user.email 'drnic@starkandwayne.com'"
+    end
+  end
+
+  # generate_new_release 'redis'
+  # generate_new_release 'redis-boshrelease'
+  # generate_new_release 'redis', '--s3'
+  # generate_new_release 'redis', '--swift'
+  def generate_new_release(*args)
+    stdout, stderr = capture_stdios do
+      Bosh::Gen::Command.start(["new", *args])
+    end
+    @stdout = File.expand_path(File.join(@tmp_root, "generate_release.out"))
+    File.open(@stdout, "w") {|f| f << stdout; f << stderr}
   end
 
   # Runs 'bosh-gen job NAME ...'
@@ -111,4 +131,23 @@ module GeneratorSpecHelper
   def strip_color_codes(text)
     text.gsub(/\e\[\d+m/, '')
   end
+
+  # Run a command in git.
+  #
+  # ==== Examples
+  #
+  #   git :init
+  #   git :add => "this.file that.rb"
+  #   git :add => "onefile.rb", :rm => "badfile.cxx"
+  #
+  def git(commands={})
+    if commands.is_a?(Symbol)
+      `git #{commands}`
+    else
+      commands.each do |cmd, options|
+        `git #{cmd} #{options}`
+      end
+    end
+  end
+
 end

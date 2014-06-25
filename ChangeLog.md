@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+v0.17.0
+-------
+
+- `new --s3` - no more read-only credentials; no more encryption keys
+
 v0.16.0
 -------
 
