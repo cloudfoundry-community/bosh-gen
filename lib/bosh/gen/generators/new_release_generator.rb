@@ -1,6 +1,7 @@
-require 'yaml'
-require 'thor/group'
+require "yaml"
+require "thor/group"
 require "cyoi/cli/provider"
+require "cyoi/cli/blobstore"
 require "bosh/gen/settings"
 
 module Bosh::Gen
@@ -153,11 +154,26 @@ module Bosh::Gen
         say "cd #{repository_path}", :yellow
       end
 
+      def create_blobstore
+        say ""
+        say "Finally..."
+        blobstore = Cyoi::Cli::Blobstore.new([blobstore_name, settings_dir])
+        blobstore.execute!
+        reload_settings!
+        say ""
+      end
+
+
+
       private
 
       # converts the base name into having -boshrelease suffix
       def repository_name
         @repository_name ||= "#{project_name}-boshrelease"
+      end
+
+      def blobstore_name
+        repository_name
       end
 
       def repository_path
