@@ -1,5 +1,5 @@
 language: ruby
-script: bundle exec rake spec:$SUITE
+script: bundle exec rake
 rvm:
   - ruby-1.9.3
   # - rbx-19mode
