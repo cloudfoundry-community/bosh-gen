@@ -1,0 +1,16 @@
+language: ruby
+script: bundle exec rake spec:$SUITE
+rvm:
+  - ruby-1.9.3
+  # - rbx-19mode
+  - ruby-2.0.0
+  - ruby-2.1.0
+notifications:
+  email:
+    recipients:
+      - drnicwilliams@gmail.com
+    on_success: change
+    on_failure: always
+env:
+  global:
+    - secure: ""
