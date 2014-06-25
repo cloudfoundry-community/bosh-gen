@@ -1,6 +1,7 @@
 require 'yaml'
 require 'thor/group'
 require "cyoi/cli/provider"
+require "bosh/gen/settings"
 
 module Bosh::Gen
   module Generators
