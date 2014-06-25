@@ -79,25 +79,7 @@ module Bosh::Gen
           config_private = {
             "blobstore" => {
               "swift" => {
-                "openstack" => settings.provider.credentials.to_hash
-              }
-            }
-          }
-        # https://github.com/cloudfoundry/bosh/tree/master/blobstore_client#rackspace-cloud-files
-        when :rackspace
-          config_private = {
-            "blobstore" => {
-              "swift" => {
-                "rackspace" => settings.provider.credentials.to_hash
-              }
-            }
-          }
-        # https://github.com/cloudfoundry/bosh/tree/master/blobstore_client#hp-object-storage
-        when :hp
-          config_private = {
-            "blobstore" => {
-              "swift" => {
-                "hp" => settings.provider.credentials.to_hash
+                settings.provider.name => settings.provider.credentials.to_hash
               }
             }
           }
