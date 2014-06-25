@@ -11,10 +11,8 @@ class NewReleaseGeneratorSpec < MiniTest::Spec
     setup_universe
   end
 
-  # should load creds from a file OR prompt for creds
-  # use cyoi?
-  # then create the bucket & policy
-
+  # TODO: local settings_dir to generated project? (especially blobstore.name)
+  # TODO: in test, don't try to create blobstore bucket
   it "generates with s3 blobstore" do
     in_home_folder do
       setting "provider.name", "aws"
@@ -42,7 +40,8 @@ class NewReleaseGeneratorSpec < MiniTest::Spec
     end
   end
 
-  it "generates with swift blobstore" do
+  # TODO: Fog::Errors::MockNotImplemented: Contributions welcome!
+  pending "generates with swift blobstore" do
     in_home_folder do
       setting "provider.name", "openstack"
       setting "provider.credentials.openstack_auth_url", "http://10.0.0.2:5000/v2.0/tokens"
