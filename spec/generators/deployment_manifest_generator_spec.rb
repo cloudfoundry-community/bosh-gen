@@ -21,7 +21,7 @@ class DeploymentManifestGeneratorSpec < MiniTest::Spec
     in_home_folder do
       generate_manifest("wordpress", release_folder)
       File.exist?("wordpress.yml").must_equal(true, "manifest wordpress.yml not created")
-      
+
       manifest = YAML.load_file("wordpress.yml")
       properties = manifest["properties"]
       properties.wont_be_nil "manifest properties must be set"
