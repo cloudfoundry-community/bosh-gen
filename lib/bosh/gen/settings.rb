@@ -14,6 +14,7 @@ module Bosh::Gen::Settings
 
   def settings_dir=(settings_dir)
     @settings_dir = File.expand_path(settings_dir)
+    @settings = @settings_path = nil
     reload_settings!
   end
 

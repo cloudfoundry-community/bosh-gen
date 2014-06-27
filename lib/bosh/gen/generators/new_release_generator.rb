@@ -16,12 +16,6 @@ module Bosh::Gen
         File.join(File.dirname(__FILE__), "new_release_generator", "templates")
       end
 
-      def select_provider
-        provider = Cyoi::Cli::Provider.new([settings_dir])
-        provider.execute!
-        reload_settings!
-      end
-
       def create_root
         self.destination_root = File.expand_path(repository_path, destination_root)
         empty_directory '.'
@@ -140,6 +134,13 @@ module Bosh::Gen
         tmp
         my*.yml
         IGNORE
+      end
+
+      def select_provider
+        self.settings_dir = File.expand_path("config")
+        provider = Cyoi::Cli::Provider.new([settings_dir])
+        provider.execute!
+        reload_settings!
       end
 
       def setup_git
