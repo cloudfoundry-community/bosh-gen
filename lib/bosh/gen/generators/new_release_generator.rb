@@ -22,6 +22,13 @@ module Bosh::Gen
         FileUtils.cd(destination_root) unless options[:pretend]
       end
 
+      def select_provider
+        self.settings_dir = File.expand_path("config")
+        provider = Cyoi::Cli::Provider.new([settings_dir])
+        provider.execute!
+        reload_settings!
+      end
+
       def readme
         template "README.md.tt", "README.md"
       end
@@ -134,13 +141,6 @@ module Bosh::Gen
         tmp
         my*.yml
         IGNORE
-      end
-
-      def select_provider
-        self.settings_dir = File.expand_path("config")
-        provider = Cyoi::Cli::Provider.new([settings_dir])
-        provider.execute!
-        reload_settings!
       end
 
       def setup_git
