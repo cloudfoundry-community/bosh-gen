@@ -124,6 +124,7 @@ module Bosh::Gen
         create_file ".gitignore", <<-IGNORE.gsub(/^\s{8}/, '')
         config/dev.yml
         config/private.yml
+        config/settings.yml
         releases/*.tgz
         dev_releases
         blobs/*
