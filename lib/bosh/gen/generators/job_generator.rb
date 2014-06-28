@@ -9,17 +9,17 @@ module Bosh::Gen
       argument :job_name
       argument :dependencies, :type => :array
       argument :purpose
-      
+
       def self.source_root
         File.join(File.dirname(__FILE__), "job_generator", "templates")
       end
-      
+
       def check_root_is_release
         unless File.exist?("jobs") && File.exist?("packages")
           raise Thor::Error.new("run inside a BOSH release project")
         end
       end
-      
+
       def check_name
         raise Thor::Error.new("'#{job_name}' is not a valid BOSH id") unless job_name.bosh_valid_id?
       end
@@ -38,7 +38,7 @@ module Bosh::Gen
           end
         end
       end
-      
+
       # copy the thor template files into the bosh release to be bosh templates
       # that's right, templates (.tt) can become templates (.erb)
       def template_files
@@ -46,7 +46,6 @@ module Bosh::Gen
         directory "jobs/%job_name%_#{purpose}", "jobs/#{job_name}"
 
         # build a hash of { 'bin/webapp_ctl.erb' => 'bin/webapp_ctl', ...} used in spec
-        # TODO: do I need to flatten it to { 'webapp_ctl' => 'bin/webapp_ctl' }?
         @template_files = {}
         FileUtils.chdir(File.join(generator_job_templates_path, "templates")) do
           `ls */*`.split("\n").each do |template_file|
@@ -60,25 +59,25 @@ module Bosh::Gen
           end
         end
       end
-      
+
       def job_specification
         config = { "name" => job_name, "packages" => dependencies, "templates" => @template_files }
         create_file job_dir("spec"), YAML.dump(config)
       end
-      
+
       private
       def filenames
         files.map {|f| File.basename(f) }
       end
-      
+
       def job_dir(path)
         File.join("jobs", job_name, path)
       end
-      
+
       def valid_purposes
         %w[simple]
       end
-      
+
       # Run a command in git.
       #
       # ==== Examples

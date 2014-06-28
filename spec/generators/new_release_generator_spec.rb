@@ -11,10 +11,9 @@ class NewReleaseGeneratorSpec < MiniTest::Spec
     setup_universe
   end
 
-  # TODO: local settings_dir to generated project? (especially blobstore.name)
-  # TODO: in test, don't try to create blobstore bucket
   it "generates with s3 blobstore" do
     in_home_folder do
+      self.settings_dir = "redis-boshrelease/config"
       setting "provider.name", "aws"
       setting "provider.region", "us-west-2"
       setting "provider.credentials.aws_access_key_id", "ACCESS"

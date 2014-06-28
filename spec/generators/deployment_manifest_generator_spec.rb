@@ -32,7 +32,6 @@ class DeploymentManifestGeneratorSpec < MiniTest::Spec
 
   it "checks for numerics in filenames/properties" do
     release_folder = File.expand_path("../../tmp", __FILE__)
-    puts "Home folder = #{@active_project_folder}"
     setup_project_release("s3test-boshrelease")
     File.exist?(File.join(@active_project_folder, "jobs/s3test/spec"))
            .must_equal(true, "jobs/s3test/spec not created")
