@@ -24,7 +24,5 @@ Gem::Specification.new do |gem|
   gem.add_dependency "readwritesettings", "~> 3.0"
 
   gem.add_development_dependency "rake"
-  gem.add_development_dependency "minitest", "~> 2.12"
-  gem.add_development_dependency "minitest-colorize"
-  gem.add_development_dependency "guard-minitest"
+  gem.add_development_dependency "rspec-fire"
 end

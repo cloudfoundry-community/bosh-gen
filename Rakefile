@@ -1,9 +1,13 @@
 #!/usr/bin/env rake
 require "bundler/gem_tasks"
-require 'rake/testtask'
+
+require "rspec/core/rake_task"
 
 
-Rake::TestTask.new do |t|
-  t.libs << "spec"
-  t.pattern = "spec/*_spec.rb"
+desc "Run Tests"
+RSpec::Core::RakeTask.new(:spec) do |t|
+  t.pattern = "spec/unit/**/*_spec.rb"
+  t.rspec_opts = %w(--format progress --color)
 end
+
+task :default => :spec

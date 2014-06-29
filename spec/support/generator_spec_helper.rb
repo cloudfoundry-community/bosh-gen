@@ -69,9 +69,9 @@ module GeneratorSpecHelper
       options = args.pop
     end
     path = File.join(["jobs"] + args) # jobs/JOBNAME/monit
-    File.exist?(path).must_equal(true, "#{path} not created")
+    expect(File.exist?(path)).to eq(true)
     if options && options[:executable]
-      File.executable?(path).must_equal(true, "#{path} not executable")
+      expect(File.executable?(path)).to eq(true)
     end
   end
 
@@ -82,10 +82,10 @@ module GeneratorSpecHelper
   #   mywebapp_ctl.erb: bin/mywebapp_ctl
   def job_template_exists(job, template_name, spec_path)
     path = File.join("jobs", job, "templates", template_name)
-    File.exist?(path).must_equal(true, "#{path} not created")
+    expect(File.exist?(path)).to eq(true)
     spec_templates = job_spec(job)["templates"]
-    spec_templates[template_name].wont_be_nil("spec.templates missing #{template_name}")
-    spec_templates[template_name].must_equal(spec_path, "spec.templates must be #{template_name} -> #{spec_path}")
+    expect(spec_templates[template_name]).to_not be_nil
+    expect(spec_templates[template_name]).to eq(spec_path)
   end
 
   def job_spec(job)

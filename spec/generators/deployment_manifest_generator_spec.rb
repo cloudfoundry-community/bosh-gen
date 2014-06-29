@@ -1,26 +1,19 @@
 require "spec_helper"
-require "generators/generator_spec_helper"
+require "bosh/gen/generators/deployment_manifest_generator"
 
 # in a tmp folder:
 # * run generator
 # * deployment manifest created
 
 # generates dpeloyment manifest for a target release
-class DeploymentManifestGeneratorSpec < MiniTest::Spec
-  include GeneratorSpecHelper
+describe Bosh::Gen::Generators::DeploymentManifestGenerator do
 
-  def self.pending(name, &block); end
-
-  def setup
-    setup_universe
+  xit "creates deployment manifest with properties" do
     setup_project_release("bosh-sample-release")
-  end
-
-  pending "creates deployment manifest with properties" do
     release_folder = File.expand_path("../../fixtures/releases/bosh-sample-release", __FILE__)
     in_home_folder do
       generate_manifest("wordpress", release_folder)
-      File.exist?("wordpress.yml").must_equal(true, "manifest wordpress.yml not created")
+      expect(File.exist?("wordpress.yml")).to eq(true)
 
       manifest = YAML.load_file("wordpress.yml")
       properties = manifest["properties"]
@@ -33,14 +26,13 @@ class DeploymentManifestGeneratorSpec < MiniTest::Spec
   it "checks for numerics in filenames/properties" do
     release_folder = File.expand_path("../../tmp", __FILE__)
     setup_project_release("s3test-boshrelease")
-    File.exist?(File.join(@active_project_folder, "jobs/s3test/spec"))
-           .must_equal(true, "jobs/s3test/spec not created")
+    expect(File.exist?(File.join(@active_project_folder, "jobs/s3test/spec"))).to eq true
 
     dev = YAML.load_file(File.join(@active_project_folder, "config/dev.yml"))
-    dev.wont_be_nil "dev.yml is nil"
-    dev["dev_name"].must_equal("s3test")
+    expect(dev).not_to be_nil
+    expect(dev["dev_name"]).to eq "s3test"
 
     deployment = YAML.load_file(File.join(@active_project_folder, "templates/deployment.yml"))
-    deployment["compilation"]["network"].must_equal("s3test1")
+    expect(deployment["compilation"]["network"]).to eq("s3test1")
   end
 end

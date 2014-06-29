@@ -1,27 +1,27 @@
 require "spec_helper"
 require "bosh/gen/models"
 
-class DeploymentManifestSpec < MiniTest::Spec
+describe Bosh::Gen::Models::DeploymentManifest do
   it "creates manifest document with 2 jobs, no disk" do
-    manifest = Bosh::Gen::Models::DeploymentManifest.new("myproj", "UUID", 
+    manifest = Bosh::Gen::Models::DeploymentManifest.new("myproj", "UUID",
       {"name" => "myrelease", "version" => 2},
       {"instance_type" => "m1.small", "static_ips" => ['1.2.3.4', '6.7.8.9']}, {})
     manifest.jobs = [
       { "name" => "job-with-ips"},
       { "name" => "misc"}
     ]
-    manifest.to_yaml.must_equal fixture_manifest("2_jobs_2_ips_no_disk")
+    expect(manifest.to_yaml).to eq fixture_manifest("2_jobs_2_ips_no_disk")
   end
 
   it "creates manifest document with 2 jobs, with disk" do
-    manifest = Bosh::Gen::Models::DeploymentManifest.new("myproj", "UUID", 
+    manifest = Bosh::Gen::Models::DeploymentManifest.new("myproj", "UUID",
       {"name" => "myrelease", "version" => 2},
       {"instance_type" => "m1.small", "persistent_disk" => "8196",  "static_ips" => ['1.2.3.4']}, {})
     manifest.jobs = [
       { "name" => "job-with-ips"},
       { "name" => "misc"}
     ]
-    manifest.to_yaml.must_equal fixture_manifest("2_jobs_1_ip_8196_disk")
+    expect(manifest.to_yaml).to eq fixture_manifest("2_jobs_1_ip_8196_disk")
   end
   it "creates manifest document with 2 jobs, with disk, numeric in manifest name" do
     manifest = Bosh::Gen::Models::DeploymentManifest.new("s3test", "UUID",
@@ -31,7 +31,7 @@ class DeploymentManifestSpec < MiniTest::Spec
       { "name" => "job-with-ips"},
       { "name" => "misc"}
     ]
-    manifest.to_yaml.must_equal fixture_manifest("2_jobs_1_ip_8196_disk_with_numeric")
+    expect(manifest.to_yaml).to eq fixture_manifest("2_jobs_1_ip_8196_disk_with_numeric")
   end
 
   def fixture_manifest(name)
