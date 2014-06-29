@@ -221,10 +221,10 @@ To share your BOSH release with other BOSH users you need ONLY:
 - Use a public source control repository
 - Optionally, publicly share pre-created final release tarballs via a HTTP URL.
 
-You are welcome to share your BOSH release with the BOSH user community:
+You are welcome to re-use the BOSH user community facilities:
 
-- Use the shared AWS S3 account.
-- Place your release git repository in the [@cloudfoundry-community](https://github.com/cloudfoundry-community) GitHub account.
+- Use the shared AWS S3 account (currently over 30 BOSH release blobstores).
+- Place your release git repository in the [@cloudfoundry-community](https://github.com/cloudfoundry-community) GitHub account (over 50 people have access).
 
 Please email [Dr Nic Williams](mailto:&#x64;&#x72;&#x6E;&#x69;&#x63;&#x77;&#x69;&#x6C;&#x6C;&#x69;&#x61;&#x6D;&#x73;&#x40;&#x67;&#x6D;&#x61;&#x69;&#x6C;&#x2E;&#x63;&#x6F;&#x6D;) and he will set you up with access:
 
