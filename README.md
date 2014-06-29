@@ -221,6 +221,26 @@ To share your BOSH release with other BOSH users you need ONLY:
 - Use a public source control repository
 - Optionally, publicly share pre-created final release tarballs via a HTTP URL.
 
+### Share release tarballs via HTTP
+
+bosh-gen includes a BOSH CLI plugin to upload dev or final tarballs to your blobstore, and get a public URL back (if supported by your blobstore)
+
+```
+$ bosh create release --with-tarball
+$ bosh share release releases/my-project-1.tgz
+https://my-project-boshrelease.s3.amazonaws.com/boshrelease-my-project-1.tgz
+```
+
+The URL is displayed and can be given to other users and uploaded directly to their BOSH:
+
+```
+$ bosh upload release https://my-project-boshrelease.s3.amazonaws.com/boshrelease-my-project-1.tgz
+```
+
+They no longer require your BOSH release repo to access the BOSH release.
+
+### BOSH community facilities
+
 You are welcome to re-use the BOSH user community facilities:
 
 - Use the shared AWS S3 account (currently over 30 BOSH release blobstores).
