@@ -5,17 +5,17 @@ describe Bosh::Gen::Generators::NewReleaseGenerator do
   include Bosh::Gen::Settings
 
   def cyoi_provider
-    cli_provider = instance_double("Cyoi::Cli::Provider")
-    expect(cli_provider).to receive(:execute!)
-    expect(Cyoi::Cli::Provider).to receive(:new).with([settings_dir]).and_return(cli_provider)
-    cli_provider
+    provider = instance_double("Cyoi::Cli::Provider")
+    expect(provider).to receive(:execute!)
+    expect(Cyoi::Cli::Provider).to receive(:new).with([settings_dir]).and_return(provider)
+    provider
   end
 
   def cyoi_blobstore(blobstore_name)
-    cli_provider = instance_double("Cyoi::Cli::Blobstore")
-    expect(cli_provider).to receive(:execute!)
-    expect(Cyoi::Cli::Blobstore).to receive(:new).with([blobstore_name, settings_dir]).and_return(cli_provider)
-    cli_provider
+    blobstore = instance_double("Cyoi::Cli::Blobstore")
+    expect(blobstore).to receive(:execute!)
+    expect(Cyoi::Cli::Blobstore).to receive(:new).with([blobstore_name, settings_dir]).and_return(blobstore)
+    blobstore
   end
 
   before do
