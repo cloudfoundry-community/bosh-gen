@@ -4,9 +4,31 @@ require "bosh/gen/generators/new_release_generator"
 describe Bosh::Gen::Generators::NewReleaseGenerator do
   include Bosh::Gen::Settings
 
-  it "generates with s3 blobstore" do
+  def cyoi_provider
+    cli_provider = instance_double("Cyoi::Cli::Provider")
+    expect(cli_provider).to receive(:execute!)
+    expect(Cyoi::Cli::Provider).to receive(:new).with([settings_dir]).and_return(cli_provider)
+    cli_provider
+  end
+
+  def cyoi_blobstore(blobstore_name)
+    cli_provider = instance_double("Cyoi::Cli::Blobstore")
+    expect(cli_provider).to receive(:execute!)
+    expect(Cyoi::Cli::Blobstore).to receive(:new).with([blobstore_name, settings_dir]).and_return(cli_provider)
+    cli_provider
+  end
+
+  before do
     in_home_folder do
       self.settings_dir = "redis-boshrelease/config"
+      cyoi_provider
+      cyoi_blobstore "redis-boshrelease"
+    end
+  end
+
+  it "generates with s3 blobstore" do
+    in_home_folder do
+
       setting "provider.name", "aws"
       setting "provider.region", "us-west-2"
       setting "provider.credentials.aws_access_key_id", "ACCESS"
