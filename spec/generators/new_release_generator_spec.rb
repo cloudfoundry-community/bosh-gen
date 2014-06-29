@@ -54,8 +54,7 @@ describe Bosh::Gen::Generators::NewReleaseGenerator do
     end
   end
 
-  # TODO: Fog::Errors::MockNotImplemented: Contributions welcome!
-  xit "generates with swift blobstore" do
+  it "generates with swift blobstore" do
     in_home_folder do
       setting "provider.name", "openstack"
       setting "provider.credentials.openstack_auth_url", "http://10.0.0.2:5000/v2.0/tokens"
