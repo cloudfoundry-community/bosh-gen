@@ -9,7 +9,9 @@ module GeneratorSpecHelper
     FileUtils.rm_rf   @tmp_root
     FileUtils.mkdir_p @home_path
     ENV['HOME'] = @home_path
-    FileUtils.cp_r(@@local_developer_bosh_config, @home_path)
+    if File.exists?(@@local_developer_bosh_config)
+      FileUtils.cp_r(@@local_developer_bosh_config, @home_path)
+    end
     setup_git
   end
 
