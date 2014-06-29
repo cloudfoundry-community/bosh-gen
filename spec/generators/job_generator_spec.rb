@@ -1,5 +1,5 @@
 require "spec_helper"
-require "generators/generator_spec_helper"
+require "bosh/gen/generators/job_generator"
 
 # in a tmp folder:
 # * run generator
@@ -8,21 +8,16 @@ require "generators/generator_spec_helper"
 # * it shouldn't fail
 
 # generates job for a webapp application package
-class WebappGeneratorSpec < MiniTest::Spec
-  include GeneratorSpecHelper
-
-  def self.pending(name, &block); end
-
-  def setup
-    setup_universe
+describe Bosh::Gen::Generators::JobGenerator do
+  before do
     setup_project_release("bosh-sample-release")
   end
 
   it "creates common job files" do
     in_project_folder do
       generate_job("mywebapp")
-      File.exist?("jobs/mywebapp/monit").must_equal(true, "jobs/mywebapp/monit not created")
-      File.exist?("jobs/mywebapp/spec").must_equal(true, "jobs/mywebapp/spec not created")
+      expect(File.exist?("jobs/mywebapp/monit")).to eq(true)
+      expect(File.exist?("jobs/mywebapp/spec")).to eq(true)
       job_template_exists "mywebapp", "bin/mywebapp_ctl",       "bin/mywebapp_ctl"
       job_template_exists "mywebapp", "bin/monit_debugger",     "bin/monit_debugger"
       job_template_exists "mywebapp", "data/properties.sh.erb", "data/properties.sh"
@@ -34,10 +29,10 @@ class WebappGeneratorSpec < MiniTest::Spec
   pending "creates job files with rails & nginx templates" do
     in_project_folder do
       generate_job("mywebapp", "--purpose", "nginx_rack", '-d', 'nginx', 'ruby', 'myapp')
-      File.exist?("jobs/mywebapp/monit").must_equal(true, "jobs/mywebapp/monit not created")
-      File.exist?("jobs/mywebapp/spec").must_equal(true, "jobs/mywebapp/spec not created")
+      expect(File.exist?("jobs/mywebapp/monit")).to eq(true)
+      expect(File.exist?("jobs/mywebapp/spec")).to eq(true)
 
-      job_spec("mywebapp")["packages"].must_equal(%w[nginx ruby myapp], "spec dependencies incorrect")
+      expect(job_spec("mywebapp")["packages"]).to eq(%w[nginx ruby myapp])
 
       job_template_exists "mywebapp", "bin/mywebapp_ctl",       "bin/mywebapp_ctl"
       job_template_exists "mywebapp", "bin/monit_debugger",     "bin/monit_debugger"

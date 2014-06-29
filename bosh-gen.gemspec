@@ -14,13 +14,15 @@ Gem::Specification.new do |gem|
   gem.name          = "bosh-gen"
   gem.require_paths = ["lib"]
   gem.version       = Bosh::Gen::VERSION
-  
+
   gem.add_dependency "thor"
   gem.add_dependency "bosh_cli"
   gem.add_dependency "bosh_common"
-  
+
+  gem.add_dependency "cyoi", "~> 0.10.0"
+  gem.add_dependency "fog", "~> 1.11"
+  gem.add_dependency "readwritesettings", "~> 3.0"
+
   gem.add_development_dependency "rake"
-  gem.add_development_dependency "minitest", "~> 2.12"
-  gem.add_development_dependency "minitest-colorize"
-  gem.add_development_dependency "guard-minitest"
+  gem.add_development_dependency "rspec-fire"
 end

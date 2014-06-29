@@ -1,32 +1,42 @@
-require 'yaml'
-require 'thor/group'
+require "yaml"
+require "thor/group"
+require "cyoi/cli/provider"
+require "cyoi/cli/blobstore"
+require "bosh/gen/settings"
 
 module Bosh::Gen
   module Generators
     class NewReleaseGenerator < Thor::Group
       include Thor::Actions
+      include Bosh::Gen::Settings
 
       argument :proposed_app_path
-      argument :flags, :type => :hash
-      
+
       def self.source_root
         File.join(File.dirname(__FILE__), "new_release_generator", "templates")
       end
-      
+
       def create_root
         self.destination_root = File.expand_path(repository_path, destination_root)
         empty_directory '.'
         FileUtils.cd(destination_root) unless options[:pretend]
       end
-      
+
+      def select_provider
+        self.settings_dir = File.expand_path("config")
+        provider = Cyoi::Cli::Provider.new([settings_dir])
+        provider.execute!
+        reload_settings!
+      end
+
       def readme
         template "README.md.tt", "README.md"
       end
-      
+
       def rakefile
         copy_file "Rakefile"
       end
-      
+
       def directories
         %w[jobs packages src blobs templates].each do |dir|
           directory dir
@@ -40,15 +50,16 @@ module Bosh::Gen
       def blobs_yaml
         create_file "config/blobs.yml", YAML.dump({})
       end
-      
-      # TODO - support other blobstores
-      def local_blobstore
+
+      def config_dev_yml
         config_dev = { "dev_name" => project_name }
         create_file "config/dev.yml", YAML.dump(config_dev)
+      end
 
+      def config_private_yml
         case blobstore_type
         when :local
-          config_private = { 
+          config_private = {
             "blobstore" => {
               "simple" => {
                 "user" => "USER",
@@ -57,41 +68,28 @@ module Bosh::Gen
             }
           }
         when :s3
-          config_private = { 
+          config_private = {
             "blobstore" => {
               "s3" => {
-                "access_key_id" => readwrite_aws_access_key,
-                "secret_access_key" => readwrite_aws_secret_access_key
+                "access_key_id" => settings.provider.credentials.aws_access_key_id,
+                "secret_access_key" => settings.provider.credentials.aws_secret_access_key
               }
             }
           }
-        when :atmos
-          config_private = { 
-            "blobstore" => {
-              "atmos" => {
-                "secret" => "SECRET"
-              }
-            }
-          }
+        # https://github.com/cloudfoundry/bosh/tree/master/blobstore_client#openstack-object-storage
         when :swift
           config_private = {
             "blobstore" => {
               "swift" => {
-                "rackspace" => {
-                  "rackspace_username" => "USERNAME",
-                  "rackspace_api_key" => "API_KEY"
-                },
-                "hp" => {
-                  "hp_account_id" => "ACCESS_KEY_ID",
-                  "hp_secret_key" => "SECRET_KEY",
-                  "hp_tenant_id" => "TENANT_ID"
-                },
+                settings.provider.name => settings.provider.credentials.to_hash
               }
             }
           }
         end
         create_file "config/private.yml", YAML.dump(config_private)
+      end
 
+      def config_final_yml
         case blobstore_type
         when :local
           say_status "warning", "config/final.yml defaulting to local blobstore /tmp/blobstore", :yellow
@@ -104,20 +102,7 @@ module Bosh::Gen
           config_final = { "blobstore" => {
               "provider" => "s3",
               "options" => {
-                "bucket_name" => repository_name,
-                "access_key_id" => readonly_aws_access_key,
-                "secret_access_key" => readonly_aws_secret_access_key,
-                "encryption_key" => "PERSONAL_RANDOM_KEY",
-              }
-            }
-          }
-        when :atmos
-          config_final = { "blobstore" => {
-              "provider" => "atmos",
-              "options" => {
-                "tag" => repository_name,
-                "url" => "https://blob.cfblob.com",
-                "uid" => "ATMOS_UID"
+                "bucket_name" => repository_name
               }
             }
           }
@@ -126,19 +111,20 @@ module Bosh::Gen
               "provider" => "swift",
               "options" => {
                 "container_name" => repository_name,
-                "swift_provider" => "SWIFT_PROVIDER"
+                "swift_provider" => swift_provider
               }
             }
           }
         end
-        
+
         create_file "config/final.yml", YAML.dump(config_final)
       end
-      
+
       def git_init
         create_file ".gitignore", <<-IGNORE.gsub(/^\s{8}/, '')
         config/dev.yml
         config/private.yml
+        config/settings.yml
         releases/*.tgz
         dev_releases
         blobs/*
@@ -157,7 +143,7 @@ module Bosh::Gen
         my*.yml
         IGNORE
       end
-      
+
       def setup_git
         git :init
         git :add => "."
@@ -170,11 +156,26 @@ module Bosh::Gen
         say "cd #{repository_path}", :yellow
       end
 
+      def create_blobstore
+        say ""
+        say "Finally..."
+        blobstore = Cyoi::Cli::Blobstore.new([blobstore_name, settings_dir])
+        blobstore.execute!
+        reload_settings!
+        say ""
+      end
+
+
+
       private
 
       # converts the base name into having -boshrelease suffix
       def repository_name
         @repository_name ||= "#{project_name}-boshrelease"
+      end
+
+      def blobstore_name
+        repository_name
       end
 
       def repository_path
@@ -199,21 +200,22 @@ module Bosh::Gen
 
       def blobstore_type
         return :s3 if s3?
-        return :atmos if atmos?
         return :swift if swift?
         return :local
       end
-      
+
       def s3?
-        flags[:aws]
-      end
-      
-      def atmos?
-        flags[:atmos]
+        settings.provider.name == "aws"
       end
 
       def swift?
-        flags[:swift]
+        settings.provider.name == "openstack"
+      end
+
+      # https://github.com/cloudfoundry/bosh/tree/master/blobstore_client#openstack-swift-provider
+      # TODO: supported: hp, openstack and rackspace; How to detect this from fog?
+      def swift_provider
+        "openstack"
       end
 
       # Run a command in git.
@@ -232,14 +234,6 @@ module Bosh::Gen
             run "git #{cmd} #{options}"
           end
         end
-      end
-
-      def readonly_aws_access_key
-        s3_credentials "readonly_access_key", "READONLY_AWS_ACCESS_KEY"
-      end
-
-      def readonly_aws_secret_access_key
-        s3_credentials "readonly_secret_access_key", "READONLY_AWS_SECRET_ACCESS_KEY"
       end
 
       def readwrite_aws_access_key
@@ -261,6 +255,7 @@ module Bosh::Gen
         end
         @s3_credentials[key] || default
       end
+
     end
   end
 end

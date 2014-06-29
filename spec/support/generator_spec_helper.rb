@@ -9,13 +9,35 @@ module GeneratorSpecHelper
     FileUtils.rm_rf   @tmp_root
     FileUtils.mkdir_p @home_path
     ENV['HOME'] = @home_path
-    FileUtils.cp_r(@@local_developer_bosh_config, @home_path)
+    if File.exists?(@@local_developer_bosh_config)
+      FileUtils.cp_r(@@local_developer_bosh_config, @home_path)
+    end
+    setup_git
   end
 
   def setup_project_release(name)
     release_path = File.join(@fixtures_path, "releases", name)
     FileUtils.cp_r(release_path, @tmp_root)
     @active_project_folder = File.join(@tmp_root, name)
+  end
+
+  def setup_git
+    in_home_folder do
+      git config: "--global user.name 'Dr Nic Williams'"
+      git config: "--global user.email 'drnic@starkandwayne.com'"
+    end
+  end
+
+  # generate_new_release 'redis'
+  # generate_new_release 'redis-boshrelease'
+  # generate_new_release 'redis', '--s3'
+  # generate_new_release 'redis', '--swift'
+  def generate_new_release(*args)
+    stdout, stderr = capture_stdios do
+      Bosh::Gen::Command.start(["new", *args])
+    end
+    @stdout = File.expand_path(File.join(@tmp_root, "generate_release.out"))
+    File.open(@stdout, "w") {|f| f << stdout; f << stderr}
   end
 
   # Runs 'bosh-gen job NAME ...'
@@ -49,9 +71,9 @@ module GeneratorSpecHelper
       options = args.pop
     end
     path = File.join(["jobs"] + args) # jobs/JOBNAME/monit
-    File.exist?(path).must_equal(true, "#{path} not created")
+    expect(File.exist?(path)).to eq(true)
     if options && options[:executable]
-      File.executable?(path).must_equal(true, "#{path} not executable")
+      expect(File.executable?(path)).to eq(true)
     end
   end
 
@@ -62,10 +84,10 @@ module GeneratorSpecHelper
   #   mywebapp_ctl.erb: bin/mywebapp_ctl
   def job_template_exists(job, template_name, spec_path)
     path = File.join("jobs", job, "templates", template_name)
-    File.exist?(path).must_equal(true, "#{path} not created")
+    expect(File.exist?(path)).to eq(true)
     spec_templates = job_spec(job)["templates"]
-    spec_templates[template_name].wont_be_nil("spec.templates missing #{template_name}")
-    spec_templates[template_name].must_equal(spec_path, "spec.templates must be #{template_name} -> #{spec_path}")
+    expect(spec_templates[template_name]).to_not be_nil
+    expect(spec_templates[template_name]).to eq(spec_path)
   end
 
   def job_spec(job)
@@ -111,4 +133,23 @@ module GeneratorSpecHelper
   def strip_color_codes(text)
     text.gsub(/\e\[\d+m/, '')
   end
+
+  # Run a command in git.
+  #
+  # ==== Examples
+  #
+  #   git :init
+  #   git :add => "this.file that.rb"
+  #   git :add => "onefile.rb", :rm => "badfile.cxx"
+  #
+  def git(commands={})
+    if commands.is_a?(Symbol)
+      `git #{commands}`
+    else
+      commands.each do |cmd, options|
+        `git #{cmd} #{options}`
+      end
+    end
+  end
+
 end
