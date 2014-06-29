@@ -26,8 +26,6 @@ module Bosh::Cli::Command
       f = ::FileWithProgressBar.open(tarball_path, 'r')
       f.out = Bosh::Cli::Config.output
 
-      # p release
-      # p release.blobstore
       raw_blobstore_client = unwrap_blobstore_client(blobstore)
       bucket_name = raw_blobstore_client.instance_variable_get("@bucket_name")
 
