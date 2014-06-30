@@ -7,6 +7,8 @@ New in 0.17: Creates blobstore/bucket when creating new release. AWS bucket is p
 
 If you would like to share your BOSH release with the world, you can use the [BOSH Community AWS S3 account](#share-bosh-releases).
 
+![example](http://f.cl.ly/items/3v2F43020a3N0Q1g3Z0E/bosh-gen-new.gif)
+
 Installation
 ------------
 
