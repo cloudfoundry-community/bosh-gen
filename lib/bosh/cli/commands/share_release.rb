@@ -30,7 +30,9 @@ module Bosh::Cli::Command
       bucket_name = raw_blobstore_client.instance_variable_get("@bucket_name")
 
       fog = fog_storage(raw_blobstore_client)
-      dir = fog.directories.get(bucket_name)
+      unless dir = fog.directories.get(bucket_name)
+        err("S3 bucket #{bucket_name} is missing")
+      end
 
       say("\nUploading release...")
       if file = dir.files.new(key: upload_name, body: f)
