@@ -4,7 +4,9 @@ Change Log
 v0.17.0
 -------
 
-- `new --s3` - no more read-only credentials; no more encryption keys
+- `new` - no more read-only credentials; no more encryption keys
+- `new` - no more --s3/--swift flags; prompts instead
+- `share release` - easily upload a final release and get a public URL to share (v0.17.1)
 
 v0.16.0
 -------
