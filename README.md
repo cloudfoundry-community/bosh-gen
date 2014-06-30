@@ -241,6 +241,8 @@ $ bosh upload release https://my-project-boshrelease.s3.amazonaws.com/boshreleas
 
 They no longer require your BOSH release repo to access the BOSH release.
 
+![share-http-tarball](http://f.cl.ly/items/0R3A1w3k2E3h3a2d1g2U/bosh-gen-share-release.gif)
+
 ### BOSH community facilities
 
 You are welcome to re-use the BOSH user community facilities:
