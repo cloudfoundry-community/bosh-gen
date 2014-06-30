@@ -20,7 +20,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency "bosh_common"
   gem.add_dependency "progressbar"
 
-  gem.add_dependency "cyoi", "~> 0.10.0"
+  gem.add_dependency "cyoi", "~> 0.10"
   gem.add_dependency "fog", "~> 1.11"
   gem.add_dependency "readwritesettings", "~> 3.0"
 
