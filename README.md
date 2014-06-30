@@ -14,7 +14,9 @@ Installation
 
 This application requires Ruby 1.9 or 2.0 and is installed via RubyGems:
 
+```
 $ gem install bosh-gen
+```
 
 Usage
 -----
