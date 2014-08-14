@@ -32,7 +32,7 @@ resource_pools:
   network: default
   stemcell:
     name: bosh-stemcell
-    version: 0.6.4
+    version: latest
   cloud_properties:
     instance_type: m1.small
 jobs:
