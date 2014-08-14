@@ -72,6 +72,15 @@ module Bosh
         Bosh::Gen::Generators::JobGenerator.start([name, dependencies, 'simple'])
       end
 
+      desc "errand NAME", "Create a new errand"
+      method_option :dependencies, :aliases => ['-d'], :type => :array,
+        :desc => "List of package dependencies"
+      def errand(name)
+        dependencies = options[:dependencies] || []
+        require 'bosh/gen/generators/errand_generator'
+        Bosh::Gen::Generators::ErrandGenerator.start([name, dependencies])
+      end
+
       desc "micro [JOB]", "Create a micro job - a collection of all jobs and packages"
       method_option :jobs, :aliases => ['-j'], :type => :array,
         :desc => "Ordered list of jobs to include"
