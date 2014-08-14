@@ -1,12 +1,10 @@
 require 'yaml'
 require 'thor/group'
-require 'common/properties/property_helper' # bosh_common
 
 module Bosh::Gen
   module Generators
     class DeploymentManifestGenerator < Thor::Group
       include Thor::Actions
-      include Bosh::Common::PropertyHelper
 
       argument :name
       argument :release_path
@@ -33,8 +31,8 @@ module Bosh::Gen
 
       # Create a deployment manifest (initially for AWS only)
       def create_deployment_manifest
-        cloud_properties = { 
-          "instance_type" => "m1.small", 
+        cloud_properties = {
+          "instance_type" => "m1.small",
         }
         cloud_properties["persistent_disk"] = flags[:disk] if flags[:disk]
         cloud_properties["static_ips"] = ip_addresses
@@ -54,12 +52,12 @@ module Bosh::Gen
       def release_detector
         @release_detector ||= Bosh::Gen::Models::ReleaseDetection.new(release_path)
       end
-      
+
       # Whether +name+ contains .yml suffix or nor, returns a .yml filename for manifest to be generated
       def manifest_file_name
         basename = "#{name}.yml"
       end
-      
+
       def job_manifests
         jobs.map do |job_name|
           {
@@ -67,7 +65,7 @@ module Bosh::Gen
           }
         end
       end
-      
+
       # Return list of job names
       def detect_jobs
         release_detector.latest_dev_release_job_names

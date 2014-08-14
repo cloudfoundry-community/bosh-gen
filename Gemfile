@@ -8,6 +8,5 @@ if File.directory?("../cyoi")
 end
 
 gem 'bosh_cli', '~> 1.1750'
-gem 'bosh_common', '~> 1.1750'
 
 gem 'guard-rspec'

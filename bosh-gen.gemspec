@@ -17,7 +17,6 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency "thor"
   gem.add_dependency "bosh_cli"
-  gem.add_dependency "bosh_common"
   gem.add_dependency "progressbar"
 
   gem.add_dependency "cyoi", "~> 0.10"
