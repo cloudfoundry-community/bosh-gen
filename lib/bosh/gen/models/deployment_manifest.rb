@@ -3,7 +3,7 @@ require "yaml"
 module Bosh::Gen::Models
   class DeploymentManifest
     attr_reader :manifest
-    
+
     def initialize(name, director_uuid, release_properties, cloud_properties, properties)
       @manifest = {}
       @cloud_properties = cloud_properties
@@ -18,7 +18,7 @@ module Bosh::Gen::Models
       # This is much more helpful in early development days
       # of a release
       release_properties["version"] = 'latest'
-      
+
       manifest["name"] = name
       manifest["director_uuid"] = director_uuid
       manifest["release"] = release_properties.dup
@@ -51,7 +51,6 @@ module Bosh::Gen::Models
         {
           "name" => "common",
           "network" => "default",
-          "size" => 0,
           "stemcell" => @stemcell,
           "cloud_properties" => cloud_properties.dup
         }
@@ -60,8 +59,8 @@ module Bosh::Gen::Models
       manifest["jobs"] = []
       manifest["properties"] = @properties
     end
-    
-    # Each item of +jobs+ is a hash. 
+
+    # Each item of +jobs+ is a hash.
     # The minimum hash is:
     # { "name" => "jobname" }
     # This is the equivalent to:
@@ -94,9 +93,8 @@ module Bosh::Gen::Models
         manifest_job["persistent_disk"] = @persistent_disk if @persistent_disk > 0
         manifest["jobs"] << manifest_job
       end
-      manifest["resource_pools"].first["size"] = manifest["jobs"].inject(0) {|total, job| total + job["instances"]}
     end
-    
+
     def to_yaml
       manifest.to_yaml
     end

@@ -30,7 +30,6 @@ networks:
 resource_pools:
 - name: common
   network: default
-  size: 2
   stemcell:
     name: bosh-stemcell
     version: 0.6.4
