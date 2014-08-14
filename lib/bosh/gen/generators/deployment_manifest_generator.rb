@@ -1,10 +1,12 @@
 require 'yaml'
 require 'thor/group'
+require 'bosh/template/property_helper'
 
 module Bosh::Gen
   module Generators
     class DeploymentManifestGenerator < Thor::Group
       include Thor::Actions
+      include Bosh::Template::PropertyHelper
 
       argument :name
       argument :release_path
