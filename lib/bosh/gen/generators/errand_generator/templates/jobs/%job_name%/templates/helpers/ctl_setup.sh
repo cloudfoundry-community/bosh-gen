@@ -20,9 +20,6 @@ export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 chmod 755 $JOB_DIR # to access file via symlink
 
 source $JOB_DIR/helpers/ctl_utils.sh
-redirect_output ${output_label}
-
-export HOME=${HOME:-/home/vcap}
 
 # Add all packages' /bin & /sbin into $PATH
 for package_bin_dir in $(ls -d /var/vcap/packages/*/*bin)
