@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+v0.18.0
+
+- `errand` - generates an errand-style job template
+
 v0.17.0
 -------
 
