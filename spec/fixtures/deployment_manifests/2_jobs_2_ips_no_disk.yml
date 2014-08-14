@@ -37,7 +37,9 @@ resource_pools:
     instance_type: m1.small
 jobs:
 - name: job-with-ips
-  template: job-with-ips
+  templates:
+  - name: job-with-ips
+    release: myrelease
   instances: 1
   resource_pool: common
   networks:
@@ -49,7 +51,9 @@ jobs:
     static_ips:
     - 1.2.3.4
 - name: misc
-  template: misc
+  templates:
+  - name: misc
+    release: myrelease
   instances: 1
   resource_pool: common
   networks:

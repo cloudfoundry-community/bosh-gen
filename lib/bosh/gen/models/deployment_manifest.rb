@@ -7,6 +7,7 @@ module Bosh::Gen::Models
     def initialize(name, director_uuid, release_properties, cloud_properties, properties)
       @manifest = {}
       @cloud_properties = cloud_properties
+      @release_properties = release_properties
       @properties = properties
       @security_groups = ["default"]
       @stemcell_version = "latest"
@@ -73,7 +74,11 @@ module Bosh::Gen::Models
         job_instances = job["instances"] || 1
         manifest_job = {
           "name" => job["name"],
-          "template" => job["template"] || job["name"],
+          "templates" => [
+            { "name" => job["template"] || job["name"],
+              "release" => @release_properties["name"]
+            }
+          ],
           "instances" => job_instances,
           "resource_pool" => "common",
           "networks" => [
