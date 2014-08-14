@@ -4,6 +4,7 @@ Change Log
 v0.18.0
 
 - `errand` - generates an errand-style job template
+- `copy_property` helper now in bosh-templates gem
 
 v0.17.0
 -------
