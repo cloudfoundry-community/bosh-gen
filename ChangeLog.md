@@ -6,6 +6,7 @@ v0.18.0
 - `errand` - generates an errand-style job template
 - `copy_property` helper now in bosh-templates gem
 - `manifest` - `resource_pools` no longer specifies a `size` (modern BOSH has auto-sizing) (v0.18.1)
+- `manifest` - use modern flexible `jobs.templates` format (v0.18.2)
 
 v0.17.0
 -------
