@@ -198,12 +198,12 @@ Look at all that goodness!
 
 A quick summary of these files:
 
-- The `monit` script uses `bin/monit_debugger` to help you debug any glitches in starting/stopping processes.
-- `ctl_setup.sh` setups up lots of common folders and env vars.
-- `ctl_utils.sh` comes from cf-release's common/utils.sh with some extra helper functions
-- `data/properties.sh.erb` is where you extract any `<%= properties.cassandra... %>` values from the deployment manifest.
-- `bin/cassandra_ctl` no longer needs to be an unreadable ERb template! Use the env variables you create in `data/properties.sh.erb` and normal bash if statements instead of ERb `<% if ... %>` templates.
-- `examples/...` is a folder for documenting example, valid deployment manifest properties for the release.
+-	The `monit` script uses `bin/monit_debugger` to help you debug any glitches in starting/stopping processes.
+-	`ctl_setup.sh` setups up lots of common folders and env vars.
+-	`ctl_utils.sh` comes from cf-release's common/utils.sh with some extra helper functions
+-	`data/properties.sh.erb` is where you extract any `<%= properties.cassandra... %>` values from the deployment manifest.
+-	`bin/cassandra_ctl` no longer needs to be an unreadable ERb template! Use the env variables you create in `data/properties.sh.erb` and normal bash if statements instead of ERb `<% if ... %>` templates.
+-	`examples/...` is a folder for documenting example, valid deployment manifest properties for the release.
 
 In `bin/cassandra_ctl` you now change "TODO" to `cassandra` and the rest of the tutorial is left to you, dear cassandra lover.
 
@@ -221,9 +221,9 @@ Share BOSH releases
 
 To share your BOSH release with other BOSH users you need ONLY:
 
-- Use a public blobstore (such as AWS S3)
-- Use a public source control repository
-- Optionally, publicly share pre-created final release tarballs via a HTTP URL.
+-	Use a public blobstore (such as AWS S3)
+-	Use a public source control repository
+-	Optionally, publicly share pre-created final release tarballs via a HTTP URL.
 
 ### Share release tarballs via HTTP
 
@@ -249,13 +249,13 @@ They no longer require your BOSH release repo to access the BOSH release.
 
 You are welcome to re-use the BOSH user community facilities:
 
-- Use the shared AWS S3 account (currently over 30 BOSH release blobstores).
-- Place your release git repository in the [@cloudfoundry-community](https://github.com/cloudfoundry-community) GitHub account (over 50 people have access).
+-	Use the shared AWS S3 account (currently over 30 BOSH release blobstores).
+-	Place your release git repository in the [@cloudfoundry-community](https://github.com/cloudfoundry-community) GitHub account (over 50 people have access).
 
 One time only, please email [Dr Nic Williams](mailto:&#x64;&#x72;&#x6E;&#x69;&#x63;&#x77;&#x69;&#x6C;&#x6C;&#x69;&#x61;&#x6D;&#x73;&#x40;&#x67;&#x6D;&#x61;&#x69;&#x6C;&#x2E;&#x63;&#x6F;&#x6D;) and he will set you up with access:
 
-- Read/write credentials to the AWS S3 account for your BOSH release blobstores/buckets
-- Access to create [@cloudfoundry-community](https://github.com/cloudfoundry-community) GitHub repositories for your BOSH releases
+-	Read/write credentials to the AWS S3 account for your BOSH release blobstores/buckets
+-	Access to create [@cloudfoundry-community](https://github.com/cloudfoundry-community) GitHub repositories for your BOSH releases
 
 When he gives you the AWS S3 credentials, place them in the `~/.fog` file and you'll easily be able to reuse them for each new BOSH release:
 
@@ -278,11 +278,34 @@ Choose an auto-detected infrastructure: 2
 
 You'll only need to do this once. Yes, it would be awesome if there was some public service to do this nicely. Want to build it?
 
+Create BOSH CLI plugins
+-----------------------
+
+You can now (v0.19.0+) quickly create a BOSH CLI plugin within a RubyGem (to share), BOSH workspace or release (local to that project).
+
+Inside your RubyGem, BOSH workspace or release:
+
+```
+$ bosh-gen cli-plugin setup-deployment
+    create  lib
+    create  lib/bosh/cli/commands/setup_deployment.rb
+```
+
+The `setup_deployment.rb` file will now be automatically picked up by `bosh` CLI locally OR if you distribute your project as a RubyGem:
+
+```
+$ bosh setup deployment
+WARNING: loading local plugin: lib/bosh/cli/commands/setup_deployment.rb
+TODO
+```
+
+Note: the hyphenated name `setup-deployment` becomes a space-separated command `setup deployment`.
+
 Contributing
 ------------
 
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Added some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+1.	Fork it
+2.	Create your feature branch (`git checkout -b my-new-feature`\)
+3.	Commit your changes (`git commit -am 'Added some feature'`\)
+4.	Push to the branch (`git push origin my-new-feature`\)
+5.	Create new Pull Request
