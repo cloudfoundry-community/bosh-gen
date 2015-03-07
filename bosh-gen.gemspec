@@ -23,6 +23,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency "cyoi", "~> 0.10"
   gem.add_dependency "fog", "~> 1.11"
   gem.add_dependency "readwritesettings", "~> 3.0"
+  gem.add_dependency "activesupport", ">= 4.0", "< 5.0"
 
   gem.add_development_dependency "rake"
   gem.add_development_dependency "rspec-fire"

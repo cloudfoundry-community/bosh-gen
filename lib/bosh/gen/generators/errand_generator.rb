@@ -60,7 +60,6 @@ module Bosh::Gen
 
       def readme
         say_status "readme", "Add job to deploymemt manifest with lifecycle: errand"
-        
       end
 
       private
