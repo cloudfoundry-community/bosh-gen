@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+v0.19.0
+
+-	`cli-plugin` - generates a BOSH CLI plugin stub (Ruby code)
+
 v0.18.0
 
 - `errand` - generates an errand-style job template
