@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+Coming
+
+-	removed `micro` generator as this concept is no longer needed with colocated job templates
+
 v0.19.0
 
 -	`cli-plugin` - generates a BOSH CLI plugin stub (Ruby code)

@@ -81,14 +81,6 @@ module Bosh
         Bosh::Gen::Generators::ErrandGenerator.start([name, dependencies])
       end
 
-      desc "micro [JOB]", "Create a micro job - a collection of all jobs and packages"
-      method_option :jobs, :aliases => ['-j'], :type => :array,
-        :desc => "Ordered list of jobs to include"
-      def micro(job_name = "micro")
-        specific_jobs = options[:jobs] || []
-        require 'bosh/gen/generators/micro_job_generator'
-        Bosh::Gen::Generators::MicroJobGenerator.start([job_name, specific_jobs])
-      end
 
       desc "template JOB FILE_PATH",
         "Add a Job template (example FILE_PATH: config/httpd.conf)"
