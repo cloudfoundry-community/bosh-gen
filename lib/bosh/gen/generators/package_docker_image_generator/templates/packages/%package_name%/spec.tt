@@ -1,0 +1,4 @@
+---
+name: <%= package_name %>
+dependencies: []
+files: [docker-images/<%= image_filename %>]
