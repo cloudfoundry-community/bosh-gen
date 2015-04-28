@@ -1,4 +1,3 @@
-require 'yaml'
 require 'thor/group'
 
 # for the #sh helper
@@ -9,12 +8,13 @@ module Bosh::Gen
   module Generators
     class PackageDockerImageGenerator < Thor::Group
       include Thor::Actions
-      include FileUtils
+
+      class RakeHelper
+        extend FileUtils
+      end
 
       argument :name
       argument :docker_image
-
-      BLOB_FILE_MIN_SIZE=20_000 # files over 20k are blobs
 
       def self.source_root
         File.join(File.dirname(__FILE__), "package_docker_image_generator", "templates")
@@ -30,18 +30,18 @@ module Bosh::Gen
         raise Thor::Error.new("'#{name}' is not a valid BOSH id") unless name.bosh_valid_id?
       end
 
-      def docker_save
-        mkdir_p("blobs/docker-images")
-        sh "docker pull #{docker_image}"
-        sh "docker save #{docker_image} > blobs/docker-images/#{image_filename}"
-      end
-
       def jobs
         directory "jobs"
       end
 
       def packages
         directory "packages"
+      end
+
+      def docker_save
+        FileUtils.mkdir_p("blobs/docker-images")
+        RakeHelper.sh "docker pull #{docker_image}"
+        RakeHelper.sh "docker save #{docker_image} > blobs/docker-images/#{image_filename}"
       end
 
       private
