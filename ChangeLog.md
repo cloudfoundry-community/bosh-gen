@@ -1,16 +1,35 @@
 Change Log
 ==========
 
-Coming
+v0.20.0
+-------
+
+New generator:
 
 -	`package --docker-image` - create a package that snapshots and stores a docker image
--	removed `micro` generator as this concept is no longer needed with colocated job templates
+
+Improved generators:
+
+-	`new` - spiff templates include modern `templates:` array of `{name: job, release: release}`
+-	`new` - added an Apache `LICENSE.md` file which will be included in final releases
+-	`new --apt` - Vagrant image upgraded to trusty to match trusty stemcells [thx @cyrille-leclerc]
+
+Removed generators:
+
+-	`manifest` in lieu of spiff templates and `./templates/make_manifest` helper
+-	`micro` generator as this concept is no longer needed with collocated job templates
+
+Workarounds:
+
+-	`fog` - I've had issues with `fog-aws 0.1.2` so restricting to 0.1.1 for now.
 
 v0.19.0
+-------
 
 -	`cli-plugin` - generates a BOSH CLI plugin stub (Ruby code)
 
 v0.18.0
+-------
 
 -	`errand` - generates an errand-style job template
 -	`copy_property` helper now in bosh-templates gem
