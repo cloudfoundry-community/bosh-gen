@@ -3,6 +3,7 @@ Change Log
 
 Coming
 
+-	`package --docker-image` - create a package that snapshots and stores a docker image
 -	removed `micro` generator as this concept is no longer needed with colocated job templates
 
 v0.19.0
