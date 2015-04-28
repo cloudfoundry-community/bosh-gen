@@ -10,12 +10,16 @@ update:
 
 jobs:
   - name: s3test_leader_z1
-    template: s3test
+    templates:
+    - name: s3test
+      release: s3test
     instances: 0
     resource_pool: small_z1
     networks: (( merge ))
   - name: s3test_z1
-    template: s3test
+    templates:
+    - name: s3test
+      release: s3test
     instances: 0
     resource_pool: small_z1
     networks: (( merge ))
