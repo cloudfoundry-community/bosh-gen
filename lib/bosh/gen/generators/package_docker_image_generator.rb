@@ -30,6 +30,12 @@ module Bosh::Gen
         raise Thor::Error.new("'#{name}' is not a valid BOSH id") unless name.bosh_valid_id?
       end
 
+      def docker_save
+        FileUtils.mkdir_p("blobs/docker-images")
+        RakeHelper.sh "docker pull #{docker_image}"
+        RakeHelper.sh "docker save #{docker_image} > blobs/docker-images/#{image_filename}"
+      end
+
       def jobs
         directory "jobs"
       end
@@ -38,13 +44,44 @@ module Bosh::Gen
         directory "packages"
       end
 
-      def docker_save
-        FileUtils.mkdir_p("blobs/docker-images")
-        RakeHelper.sh "docker pull #{docker_image}"
-        RakeHelper.sh "docker save #{docker_image} > blobs/docker-images/#{image_filename}"
+      def readme
+        say "Next steps:", :green
+        say <<-README.gsub(/^        /, '')
+          1. To use this BOSH release, first upload it and the docker release to your BOSH:
+            bosh upload release https://bosh.io/releases/cloudfoundry-community/consul-docker
+            bosh upload release https://bosh.io/d/github.com/cf-platform-eng/docker-boshrelease
+
+          2. To use the docker image, your deployment job needs to start with the following:
+
+            jobs:
+            - name: some_job
+            templates:
+              # run docker daemon
+              - {name: docker, release: docker}
+              # warm docker image cache from bosh package
+              - {name: #{job_name}, release: #{project_name_hyphenated}}
+
+          3. To simply run a single container, try the 'containers' job from 'docker' release
+
+            https://github.com/cloudfoundry-community/consul-docker-boshrelease/blob/master/templates/jobs.yml#L18-L40
+
+
+        README
       end
 
       private
+      def root_path
+        File.expand_path("../../../../..", __FILE__)
+      end
+
+      def project_name
+        @project_name ||= root_path.gsub(/-(?:boshrelease|release)$/, '')
+      end
+
+      def project_name_hyphenated
+        project_name.gsub(/[^A-Za-z0-9]+/, '-')
+      end
+
       def package_name
         name
       end
