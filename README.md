@@ -3,6 +3,8 @@ BOSH Generators
 
 Generators for creating and sharing BOSH releases.
 
+New in 0.20: Create packages from embedded Docker images
+
 New in 0.17: Creates blobstore/bucket when creating new release. AWS bucket is publicly readable.
 
 If you would like to share your BOSH release with the world, you can use the [BOSH Community AWS S3 account](#share-bosh-releases).
@@ -122,6 +124,61 @@ This command will copy across the `packages/postgres/spec` & `packages/postgres/
 This is a great command to use. There are a growing number of BOSH releases on GitHub from which to steal, err, extract packages into your own BOSH releases.
 
 Remember, first run `bosh sync blobs` in the target BOSH release project. Otherwise it will not be able to copy over the blobs.
+
+### Fast way - embedded Docker images
+
+This use case assumes you have `docker` CLI installed and access to a Docker daemon.
+
+It will also make your BOSH release dependent upon the [cf-platform-eng/docker-boshrelease](https://bosh.io/d/github.com/cf-platform-eng/docker-boshrelease) release which installs the Docker daemon on VMs; and offers a simple way to run Docker containers if required.
+
+```
+$ bosh-gen package tmate --docker-image nicopace/tmate-docker
+       exist  jobs
+      create  jobs/nicopace_tmate_docker_image/monit
+      create  jobs/nicopace_tmate_docker_image/spec
+      create  jobs/nicopace_tmate_docker_image/templates/bin/install_ctl
+      create  jobs/nicopace_tmate_docker_image/templates/bin/monit_debugger
+      create  jobs/nicopace_tmate_docker_image/templates/helpers/ctl_setup.sh
+      create  jobs/nicopace_tmate_docker_image/templates/helpers/ctl_utils.sh
+       exist  packages
+      create  packages/tmate/packaging
+      create  packages/tmate/spec
+docker pull nicopace/tmate-docker
+Pulling repository nicopace/tmate-docker
+7b9df453c66b: Download complete
+...
+6df853718c80: Download complete
+Status: Image is up to date for nicopace/tmate-docker:latest
+docker save nicopace/tmate-docker > blobs/docker-images/nicopace_tmate_docker.tgz
+
+$ bosh create release --force
+...
+Release name: tmate-server
+Release version: 0+dev.1
+```
+
+The `package --docker-image` flag will display the next steps help as well:
+
+```
+Next steps:
+  1. To use this BOSH release, first upload it and the docker release to your BOSH:
+    bosh upload release https://bosh.io/releases/cloudfoundry-community/consul-docker
+    bosh upload release https://bosh.io/d/github.com/cf-platform-eng/docker-boshrelease
+
+  2. To use the docker image, your deployment job needs to start with the following:
+
+    jobs:
+    - name: some_job
+    templates:
+      # run docker daemon
+      - {name: docker, release: docker}
+      # warm docker image cache from bosh package
+      - {name: nicopace_tmate_docker_image, release: tmate-server}
+
+  3. To simply run a single container, try the 'containers' job from 'docker' release
+
+    https://github.com/cloudfoundry-community/consul-docker-boshrelease/blob/master/templates/jobs.yml#L18-L40
+```
 
 ### Fast way - reuse Aptitude/Debian packages
 
