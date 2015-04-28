@@ -1,27 +1,28 @@
-# BOSH Release for <%= project_name %>
+# BOSH release for <%= project_name %>
 
 ## Usage
 
-To use this bosh release, first upload it to your bosh:
+To use this bosh release, first upload it to your BOSH:
 
 ```
-bosh target BOSH_HOST
-git clone https://github.com/cloudfoundry-community/<%= repository_name %>.git
-cd <%= repository_name %>
-bosh upload release releases/<%= project_name %>-1.yml
+bosh upload release https://bosh.io/d/github.com/cloudfoundry-community/<%= repository_name %>
 ```
 
 For [bosh-lite](https://github.com/cloudfoundry/bosh-lite), you can quickly create a deployment manifest & deploy a cluster:
 
 ```
-templates/make_manifest warden
+git clone https://github.com/cloudfoundry-community/<%= repository_name %>.git
+cd <%= repository_name %>
+./templates/make_manifest warden
 bosh -n deploy
 ```
 
 For AWS EC2, create a single VM:
 
 ```
-templates/make_manifest aws-ec2
+git clone https://github.com/cloudfoundry-community/<%= repository_name %>.git
+cd <%= repository_name %>
+./templates/make_manifest aws-ec2
 bosh -n deploy
 ```
 
@@ -46,6 +47,6 @@ Where `- <%= project_name %>` means you wish to use an existing security group c
 You now suffix this file path to the `make_manifest` command:
 
 ```
-templates/make_manifest openstack-nova my-networking.yml
+./templates/make_manifest openstack-nova my-networking.yml
 bosh -n deploy
 ```
