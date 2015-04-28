@@ -107,26 +107,6 @@ module Bosh
         Bosh::Gen::Generators::ExtractPackageGenerator.start([source_package_path])
       end
 
-      desc "manifest NAME PATH",
-        "Creates a deployment manifest based on the release located at PATH"
-      method_option :force, :type => :boolean,
-        :desc => "Force override existing target manifest file"
-      method_option :addresses, :aliases => ['-a'], :type => :array,
-        :desc => "List of IP addresses available for jobs"
-      method_option :disk, :aliases => ['-d'], :type => :string,
-        :desc => "Attach persistent disks to VMs of specific size, e.g. 8196"
-      method_option :jobs, :type => :array,
-        :desc => "Specific jobs to include in manifest [default: all]"
-      def manifest(name, release_path)
-        release_path = File.expand_path(release_path)
-        ip_addresses = options["addresses"] || []
-        job_names = options["jobs"] || []
-        flags = { :force => options["force"] || false, :disk => options[:disk] }
-        require 'bosh/gen/generators/deployment_manifest_generator'
-        Bosh::Gen::Generators::DeploymentManifestGenerator.start(
-          [name, release_path, ip_addresses, job_names, flags])
-      end
-
       desc "cli-plugin NAME", "Add a BOSH CLI plugin into this project"
       def cli_plugin(plugin_name)
         require 'bosh/gen/generators/bosh_cli_plugin_generator'
