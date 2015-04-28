@@ -1,0 +1,5 @@
+check process <%= job_name %>
+  with pidfile /var/vcap/sys/run/<%= job_name %>/<%= job_name %>.pid
+  start program "/var/vcap/jobs/<%= job_name %>/bin/monit_debugger install_ctl '/var/vcap/jobs/<%= job_name %>/bin/install_ctl start'"
+  stop program "/var/vcap/jobs/<%= job_name %>/bin/monit_debugger install_ctl '/var/vcap/jobs/<%= job_name %>/bin/install_ctl stop'"
+  group vcap

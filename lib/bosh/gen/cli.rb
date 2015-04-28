@@ -21,6 +21,8 @@ module Bosh
       desc "package NAME", "Create a new package"
       method_option :apt, :type => :boolean,
         :desc => "Create package using debian/ubuntu apt .debs"
+      method_option :docker_image, :type => :string,
+        :desc => "Create package from remote docker image"
       method_option :dependencies, :aliases => ['-d'], :type => :array,
         :desc => "List of package dependencies"
       method_option :files,        :aliases => ['-f'], :type => :array,
@@ -32,6 +34,10 @@ module Bosh
         if options[:apt]
           require 'bosh/gen/generators/package_apt_generator'
           Bosh::Gen::Generators::PackageAptGenerator.start([name, dependencies])
+        elsif options[:docker_image]
+          docker_image = options[:docker_image]
+          require 'bosh/gen/generators/package_docker_image_generator'
+          Bosh::Gen::Generators::PackageDockerImageGenerator.start([name, docker_image])
         else
           files        = options[:files] || []
           sources      = options[:src] || []
@@ -80,7 +86,6 @@ module Bosh
         require 'bosh/gen/generators/errand_generator'
         Bosh::Gen::Generators::ErrandGenerator.start([name, dependencies])
       end
-
 
       desc "template JOB FILE_PATH",
         "Add a Job template (example FILE_PATH: config/httpd.conf)"
