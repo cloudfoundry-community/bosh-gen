@@ -33,6 +33,10 @@ module Bosh::Gen
         template "README.md.tt", "README.md"
       end
 
+      def license
+        template "LICENSE.md.tt", "LICENSE.md"
+      end
+
       def rakefile
         copy_file "Rakefile"
       end
@@ -256,6 +260,13 @@ module Bosh::Gen
         @s3_credentials[key] || default
       end
 
+      def year
+        Date.today.year
+      end
+
+      def author
+        `git config --get user.name`.strip
+      end
     end
   end
 end
