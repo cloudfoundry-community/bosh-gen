@@ -71,11 +71,11 @@ module Bosh::Gen
 
       private
       def root_path
-        File.expand_path("../../../../..", __FILE__)
+        File.expand_path(".")
       end
 
       def project_name
-        @project_name ||= root_path.gsub(/-(?:boshrelease|release)$/, '')
+        @project_name ||= File.basename(root_path).gsub(/-(?:boshrelease|release)$/, '')
       end
 
       def project_name_hyphenated
