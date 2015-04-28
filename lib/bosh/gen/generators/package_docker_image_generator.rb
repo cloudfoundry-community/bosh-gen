@@ -36,8 +36,11 @@ module Bosh::Gen
         sh "docker save #{docker_image} > blobs/docker-images/#{image_filename}"
       end
 
-      def copy_files
+      def jobs
         directory "jobs"
+      end
+
+      def packages
         directory "packages"
       end
 
