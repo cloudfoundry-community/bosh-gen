@@ -24,12 +24,13 @@ Usage
 -----
 
 ```
-$ bosh-gen new my-project
+$ bosh-gen new $(whoami)-project
       create  
 Auto-detected infrastructure API credentials at ~/.fog (override with $FOG)
 1. AWS (community)
 2. Alternate credentials
 Choose an auto-detected infrastructure: 2
+Choose AWS region: 1
 
       create  README.md
       create  Rakefile
@@ -59,33 +60,26 @@ $ cd ./my-project-boshrelease
 ```
 
 ```
-$ wget -P /tmp http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p194.tar.gz
-$ bosh-gen package ruby -f /tmp/ruby-1.9.3-p194.tar.gz
+$ wget -P /tmp http://ftp.ruby-lang.org/pub/ruby/2.2/ruby-2.2.2.tar.gz
+$ bosh-gen package ruby -f /tmp/ruby-2.2.2.tar.gz
 
 $ bosh-gen job some-ruby-job -d ruby
 
-$ git add .
-$ git commit -m "added a job + 3 packages"
-
-$ bosh create release
+$ bosh create release --force
 ```
 
-It is not ideal to include large source files, such as the 10Mb ruby tarball, in your git repository. Rather, use the blobstore for those:
+To test out each iteration of your release, you can create a manifest, upload your release, and deploy it:
 
 ```
-$ rm -rf src/ruby/ruby-1.9.3-p194.tar.gz
-$ bosh add blob /tmp/ruby-1.9.3-p194.tar.gz ruby
+./templates/make_manifest warden
+bosh upload release
+bosh -n deploy
+```
+
+The large ruby tarball is automatically placed in the `blobs/` folder. Before you share your boshrelease with other developers you will want to sync it to your blobstore (the S3 bucket created via `bosh-gen new`\):
+
+```
 $ bosh upload blobs
-
-$ bosh create release
-```
-
-Your job may need additional configuration files or executables installed.
-
-```
-$ bosh-gen template some-ruby-job config/some-config.ini
-    create  jobs/some-ruby-job/templates/some-config.ini.erb
-     force  jobs/some-ruby-job/spec
 ```
 
 Quickly creating packages
@@ -97,19 +91,25 @@ There is a slow way to create a package, and there are three faster ways. Slow v
 
 ```
 $ bosh-gen package apache2
+create  packages/apache2/packaging
+create  packages/apache2/spec
 ```
 
 The slowest way to create a package is to run the command above, then get the source, read the "install from source" instructions, and create a package.
 
 ### Slightly faster way
 
+As above, when we created the `ruby` package we included a pre-downloaded asset:
+
 ```
-$ bosh-gen package redis -f ~/Downloads/redis-2.8.3.tar.gz
+$ bosh-gen package ruby -f /tmp/ruby-2.2.2.tar.gz
 ```
 
 If you download the source files first, and reference them with the `bosh-gen package` generator, then it will attempt to guess how to install the package. The generated `packaging` script will include some starting commands that might work.
 
-The command above will also copy the target file into the `blobs/redis/` folder. One less thing for you to do.
+The command above will also copy the target file into the `blobs/ruby/` folder. One less thing for you to do.
+
+You still need to look up "how to install from source" instructions and put them in `packages/ruby/packaging` script.
 
 ### Fastest way - reuse existing packages
 
