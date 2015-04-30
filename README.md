@@ -206,19 +206,25 @@ This is the last option, and it is not the best option. Many Debian packages wil
 Tutorial
 --------
 
-To see how the various commands work together, let's create a new bosh release for [Cassandra](http://cassandra.apache.org/).
+To see how the various commands work together, let's create a new bosh release for running a Ruby process.
+
+First, create a new BOSH release and extract a `ruby-x.y.z` package from `cf-release` (assuming its located in adjacent folder):
 
 ```
-$ bosh-gen new cassandra
-$ cd cassandra
-$ bosh-gen extract-pkg ../cf-release/packages/dea_jvm7
-      create  packages/dea_jvm7
-      create  packages/dea_jvm7/packaging
-      create  packages/dea_jvm7/spec
-      create  blobs/java/jre-7u4-linux-i586.tar.gz
-      create  blobs/java/jre-7u4-linux-x64.tar.gz
+$ bosh-gen new ruby-thing
+$ cd ruby-thing
+$ bosh-gen extract-pkg ../cf-release/packages/ruby-2.1.4
+      create  packages/ruby-2.1.4
+      create  packages/ruby-2.1.4/.git
+      create  packages/ruby-2.1.4/README.md
+      create  packages/ruby-2.1.4/packaging
+      create  packages/ruby-2.1.4/pre_packaging
+      create  packages/ruby-2.1.4/spec
+      create  blobs/ruby-2.1.4/ruby-2.1.4.tar.gz
+      create  blobs/ruby-2.1.4/rubygems-2.4.2.tgz
+      create  blobs/ruby-2.1.4/bundler-1.7.4.gem
+      create  blobs/ruby-2.1.4/yaml-0.1.6.tar.gz
       readme  Upload blobs with 'bosh upload blobs'
-$ mv packages/dea_jvm7 packages/java7
 ```
 
 In `packages/java7/spec`, rename it to `java7`.
