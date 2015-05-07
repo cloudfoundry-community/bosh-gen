@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+v0.21.0 - coming
+
+-	`new` no longer creates a master-slave job template & spiff templates
+-	`new` now creates a wrapper job `just_install_packages` that is useful for initial development of packages prior to creating new job templates with `bosh-gen job`.
+
 v0.20.0
 -------
 
