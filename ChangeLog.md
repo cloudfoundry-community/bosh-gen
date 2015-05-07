@@ -18,7 +18,7 @@ Improved generators:
 -	`new` - spiff templates include modern `templates:` array of `{name: job, release: release}`
 -	`new` - added an Apache `LICENSE.md` file which will be included in final releases
 -	`new --apt` - Vagrant image upgraded to trusty to match trusty stemcells [thx @cyrille-leclerc]
--	`new` - describes how to use release via https://bosh.io; how developers share with https://bosh.io [v0.21.1]
+-	`new` - describes how to use release via https://bosh.io; how developers share with https://bosh.io [v0.20.1]
 
 Removed generators:
 
