@@ -9,28 +9,14 @@ update:
   serial: false
 
 jobs:
-  - name: <%= project_name_underscored %>_leader_z1
+  - name: just_install_packages
     templates:
-    - name: <%= project_name_hyphenated %>
+    - name: just_install_packages
       release: <%= project_name_hyphenated %>
-    instances: 0
+    instances: 1
+    persistent_disk: 0
     resource_pool: small_z1
     networks: (( merge ))
-    persistent_disk: 0
-    properties: {}
-  - name: <%= project_name_underscored %>_z1
-    templates:
-    - name: <%= project_name_hyphenated %>
-      release: <%= project_name_hyphenated %>
-    instances: 0
-    resource_pool: small_z1
-    networks: (( merge ))
-    persistent_disk: 0
-    update:
-      canaries: 10
-    properties:
-      <%= project_name_underscored %>:
-        leader_address: (( merge ))
 
 networks: (( merge ))
 
