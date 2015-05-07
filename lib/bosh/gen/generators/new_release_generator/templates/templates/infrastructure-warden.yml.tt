@@ -12,19 +12,9 @@ update:
   update_watch_time: 1000-30000
 
 jobs:
-  - name: <%= project_name_underscored %>_leader_z1
-    instances: 1
+  - name: just_install_packages
     networks:
       - name: <%= project_name_underscored %>1
-        static_ips: (( static_ips(0) ))
-  - name: <%= project_name_underscored %>_z1
-    instances: 2
-    networks:
-      - name: <%= project_name_underscored %>1
-        static_ips: ~
-    properties:
-      <%= project_name_underscored %>:
-        leader_address: (( jobs.<%= project_name_underscored %>_leader_z1.networks.<%= project_name_underscored %>1.static_ips.[0] ))
 
 compilation:
   cloud_properties:

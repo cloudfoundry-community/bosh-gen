@@ -1,5 +1,0 @@
-# Example of how to do one thing when job is master/leader, and another thing if its follower/slave
-# See templates/infrastructure-warden.yml & templates/jobs.yml for where this value originates
-<%% if_p("<%= project_name_underscored %>.leader_address") do |leader_address| %>
-leader: <%%= leader_address %>
-<%% end %>
