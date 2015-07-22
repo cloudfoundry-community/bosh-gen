@@ -39,6 +39,7 @@ describe Bosh::Gen::Generators::NewReleaseGenerator do
 
       config = YAML.load_file("config/final.yml")
       expect(config).to_not be_nil
+      expect(config["final_name"]).to eq("redis")
       expect(config["blobstore"]).to_not be_nil
       expect(config["blobstore"]["options"]).to_not be_nil
       expect(config["blobstore"]["provider"]).to eq("s3")
@@ -71,6 +72,7 @@ describe Bosh::Gen::Generators::NewReleaseGenerator do
 
       config = YAML.load_file("config/final.yml")
       expect(config).to_not be_nil
+      expect(config["final_name"]).to eq("redis")
       expect(config["blobstore"]).to_not be_nil
       expect(config["blobstore"]["options"]).to_not be_nil
       expect(config["blobstore"]["provider"]).to eq("swift")
