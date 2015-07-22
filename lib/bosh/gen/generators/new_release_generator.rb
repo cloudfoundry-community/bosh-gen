@@ -130,7 +130,7 @@ module Bosh::Gen
         config/dev.yml
         config/private.yml
         config/settings.yml
-        releases/*.tgz
+        releases/**/*.tgz
         dev_releases
         blobs/*
         .blobs
