@@ -120,6 +120,7 @@ module Bosh::Gen
             }
           }
         end
+        config_final["final_name"] = project_name
 
         create_file "config/final.yml", YAML.dump(config_final)
       end
