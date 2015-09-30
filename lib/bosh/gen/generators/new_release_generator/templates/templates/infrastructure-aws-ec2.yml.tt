@@ -1,7 +1,7 @@
 meta:
-  environment: (( merge ))
-  dns_root: (( merge ))
-  security_groups: (( merge ))
+  environment: (( params "please set meta environment" ))
+  dns_root: (( params "please set meta dns_root" ))
+  security_groups: (( params "please set meta security_groups" ))
   persistent_disk: 4096
 
   stemcell:
@@ -12,7 +12,7 @@ jobs:
   - name: just_install_packages
     networks:
       - name: <%= project_name_underscored %>1
-    persistent_disk: (( meta.persistent_disk ))
+    persistent_disk: (( grab meta.persistent_disk ))
 
 compilation:
   cloud_properties:
@@ -30,4 +30,4 @@ networks:
   - name: <%= project_name_underscored %>1
     type: dynamic
     cloud_properties:
-      security_groups: (( meta.security_groups ))
+      security_groups: (( grab meta.security_groups ))
