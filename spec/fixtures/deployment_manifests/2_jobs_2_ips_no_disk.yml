@@ -9,7 +9,7 @@ compilation:
   network: default
   reuse_compilation_vms: true
   cloud_properties:
-    instance_type: m1.small
+    instance_type: m3.medium
 update:
   canaries: 1
   canary_watch_time: 30000
@@ -34,7 +34,7 @@ resource_pools:
     name: bosh-stemcell
     version: latest
   cloud_properties:
-    instance_type: m1.small
+    instance_type: m3.medium
 jobs:
 - name: job-with-ips
   templates:
