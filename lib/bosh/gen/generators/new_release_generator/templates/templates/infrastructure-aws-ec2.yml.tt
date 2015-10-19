@@ -1,7 +1,7 @@
 meta:
-  environment: (( params "please set meta environment" ))
-  dns_root: (( params "please set meta dns_root" ))
-  security_groups: (( params "please set meta security_groups" ))
+  environment: (( param "please set meta environment" ))
+  dns_root: (( param "please set meta dns_root" ))
+  security_groups: (( param "please set meta security_groups" ))
   persistent_disk: 4096
 
   stemcell:

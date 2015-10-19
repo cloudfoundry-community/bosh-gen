@@ -1,20 +1,20 @@
 meta:
-  environment: (( params "please set environment" ))
-  stemcell: (( params "please set stemcell" ))
+  environment: (( param "please set environment" ))
+  stemcell: (( param "please set stemcell" ))
 
 name: (( grab meta.environment ))
 
-director_uuid: (( params "please set director_uuid" ))
+director_uuid: (( param "please set director_uuid" ))
 
-releases: (( params "please set release" ))
+releases: (( param "please set release" ))
 
-jobs: (( params "please set jobs" ))
+jobs: (( param "please set jobs" ))
 
 compilation:
   workers: 6
   network: <%= project_name_underscored %>1
   reuse_compilation_vms: true
-  cloud_properties: (( params "please set compilation cloud properties" ))
+  cloud_properties: (( param "please set compilation cloud properties" ))
 
 update:
   canaries: 1
@@ -27,4 +27,4 @@ resource_pools:
   - name: small_z1
     network: <%= project_name_underscored %>1
     stemcell: (( grab meta.stemcell ))
-    cloud_properties: (( params "please set resource_pool cloud properties" ))
+    cloud_properties: (( param "please set resource_pool cloud properties" ))
