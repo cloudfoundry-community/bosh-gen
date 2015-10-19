@@ -1,9 +1,10 @@
 Change Log
 ==========
 
-v0.21.0 - coming
+v0.21.0
 
--	`new` no longer creates a master-slave job template & spiff templates
+-	`new` assumes using [spruce](https://github.com/geofffranks/spruce) instead of spiff. Yay!
+-	`new` no longer creates a master-slave job template
 -	`new` now creates a wrapper job `just_install_packages` that is useful for initial development of packages prior to creating new job templates with `bosh-gen job`.
 
 v0.20.0
