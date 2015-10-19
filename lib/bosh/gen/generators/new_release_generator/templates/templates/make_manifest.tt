@@ -59,7 +59,11 @@ perl -pi -e "s/PLACEHOLDER-DIRECTOR-UUID/$DIRECTOR_UUID/g" $tmpdir/stub-with-uui
 perl -pi -e "s/NAME/$NAME/g" $tmpdir/stub-with-uuid.yml
 perl -pi -e "s/STEMCELL/$STEMCELL/g" $tmpdir/stub-with-uuid.yml
 
-spiff merge \
+if ! [ -x "$(command -v spruce)" ]; then
+  echo 'spruce is not installed. Please download at https://github.com/geofffranks/spruce/releases' >&2
+fi
+
+spruce merge --prune meta \
   $templates/deployment.yml \
   $templates/jobs.yml \
   $templates/infrastructure-${infrastructure}.yml \
