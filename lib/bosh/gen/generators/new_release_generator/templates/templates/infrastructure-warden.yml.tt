@@ -2,7 +2,7 @@ meta:
   environment: <%= project_name_hyphenated %>-warden
 
   stemcell:
-    name: bosh-warden-boshlite-ubuntu
+    name: bosh-warden-boshlite-ubuntu-trusty-go_agent
     version: latest
 
 update:

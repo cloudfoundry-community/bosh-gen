@@ -5,7 +5,7 @@ meta:
   persistent_disk: 4096
 
   stemcell:
-    name: bosh-aws-xen-ubuntu
+    name: bosh-aws-xen-hvm-ubuntu-trusty-go_agent
     version: latest
 
 jobs:

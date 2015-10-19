@@ -5,7 +5,7 @@ meta:
   network_name: (( merge ))
 
   stemcell:
-    name: bosh-aws-xen-ubuntu
+    name: bosh-aws-xen-hvm-ubuntu-trusty-go_agent
     version: latest
 
 jobs:

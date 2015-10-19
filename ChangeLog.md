@@ -6,6 +6,7 @@ v0.21.0
 -	`new` assumes using [spruce](https://github.com/geofffranks/spruce) instead of spiff. Yay!
 -	`new` no longer creates a master-slave job template
 -	`new` now creates a wrapper job `just_install_packages` that is useful for initial development of packages prior to creating new job templates with `bosh-gen job`.
+-	fixed default stemcell names to be modern `go_agent` variant [v0.21.1]
 
 v0.20.0
 -------
