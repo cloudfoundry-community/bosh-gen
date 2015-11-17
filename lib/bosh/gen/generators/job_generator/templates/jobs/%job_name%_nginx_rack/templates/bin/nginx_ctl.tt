@@ -24,8 +24,7 @@ case $1 in
 
     exec /var/vcap/packages/nginx_next/sbin/nginx \
          -c $JOB_DIR/config/nginx.conf \
-         >>$LOG_DIR/nginx.stdout.log \
-         2>>$LOG_DIR/nginx.stderr.log
+         >>$LOG_DIR/nginx.log 2>&1
     ;;
 
   stop)

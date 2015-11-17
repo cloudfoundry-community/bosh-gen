@@ -19,9 +19,8 @@ case $1 in
 
     time docker \
       --host unix:///var/vcap/sys/run/docker/docker.sock \
-      load -i /var/vcap/packages/<%= package_name %>/<%= image_filename %>
-        >>$LOG_DIR/$JOB_NAME.stdout.log \
-        2>>$LOG_DIR/$JOB_NAME.stderr.log
+      load -i /var/vcap/packages/<%= package_name %>/<%= image_filename %> \
+      >>$LOG_DIR/$JOB_NAME.log 2>&1
 
     # do nothing forever
     exec tail -f /dev/null
