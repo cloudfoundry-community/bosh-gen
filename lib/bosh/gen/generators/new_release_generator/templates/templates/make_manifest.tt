@@ -17,7 +17,7 @@ shift
 
 BOSH_STATUS=$(bosh status)
 DIRECTOR_UUID=$(echo "$BOSH_STATUS" | grep UUID | awk '{print $2}')
-DIRECTOR_CPI=$(echo "$BOSH_STATUS" | grep CPI | awk '{print $2}')
+DIRECTOR_CPI=$(echo "$BOSH_STATUS" | grep CPI | awk '{print $2}' | sed -e 's/_cpi//')
 DIRECTOR_NAME=$(echo "$BOSH_STATUS" | grep Name | awk '{print $2}')
 NAME=$template_prefix-$infrastructure
 
