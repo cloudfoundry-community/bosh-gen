@@ -30,8 +30,7 @@ link_job_file_to_package() {
 redirect_output() {
   SCRIPT=$1
   mkdir -p /var/vcap/sys/log/monit
-  exec 1>> /var/vcap/sys/log/monit/$SCRIPT.log
-  exec 2>> /var/vcap/sys/log/monit/$SCRIPT.err.log
+  exec 1>> /var/vcap/sys/log/monit/$SCRIPT.log 2>&1
 }
 
 pid_guard() {

@@ -18,8 +18,7 @@ case $1 in
     echo $$ > $PIDFILE
 
     exec chpst -u vcap:vcap <%= job_name %> \
-         >>$LOG_DIR/$JOB_NAME.stdout.log \
-         2>>$LOG_DIR/$JOB_NAME.stderr.log
+         >>$LOG_DIR/$JOB_NAME.log 2>&1
 
     ;;
 
