@@ -18,7 +18,7 @@ describe Bosh::Gen::Generators::JobGenerator do
       generate_job("mywebapp")
       expect(File.exist?("jobs/mywebapp/monit")).to eq(true)
       expect(File.exist?("jobs/mywebapp/spec")).to eq(true)
-      job_template_exists "mywebapp", "bin/mywebapp_ctl",       "bin/mywebapp_ctl"
+      job_template_exists "mywebapp", "bin/ctl",                "bin/ctl"
       job_template_exists "mywebapp", "bin/monit_debugger",     "bin/monit_debugger"
       job_template_exists "mywebapp", "data/properties.sh.erb", "data/properties.sh"
       job_template_exists "mywebapp", "helpers/ctl_setup.sh",   "helpers/ctl_setup.sh"

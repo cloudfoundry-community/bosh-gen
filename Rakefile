@@ -6,7 +6,7 @@ require "rspec/core/rake_task"
 
 desc "Run Tests"
 RSpec::Core::RakeTask.new(:spec) do |t|
-  t.pattern = "spec/unit/**/*_spec.rb"
+  t.pattern = "spec/{generators,models}/**/*_spec.rb"
   t.rspec_opts = %w(--format progress --color)
 end
 
