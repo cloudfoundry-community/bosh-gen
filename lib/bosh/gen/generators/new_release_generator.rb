@@ -191,6 +191,10 @@ module Bosh::Gen
         @project_name ||= File.basename(proposed_app_path).gsub(/-(?:boshrelease|release)$/, '')
       end
 
+      def warden_net
+        @warden_net ||= "10.244.#{rand(255) + 1}"
+      end
+
       def job_name
         project_name_underscored
       end
