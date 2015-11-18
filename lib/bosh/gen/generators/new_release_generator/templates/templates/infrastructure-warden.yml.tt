@@ -29,8 +29,8 @@ networks:
 - name: <%= project_name_underscored %>1
   type: manual
   subnets:
-  - range: 10.244.2.0/24
+  - range: <%= warden_net %>.0/24
     name: <%= project_name_underscored %>1
-    gateway: 10.244.2.1
+    gateway: <%= warden_net %>.1
     static:
-      - 10.244.2.2-10.244.2.60
+      - <%= warden_net %>.2 - <%= warden_net %>.60
