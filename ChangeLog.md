@@ -1,6 +1,15 @@
 Change Log
 ==========
 
+v0.22.0
+
+Thanks to James Hunt, Quintessence Anx, and Long Nguyen for this version!
+
+-	Fixed stemcell URLs from `bosh public stemcells` to https://bosh.io
+-	Randomize Warden Network definitions so they don't always clash
+-	Unify stdout/stderr log files everywhere
+-	Fixed issue where dir cpi was found as `warden_cpi' not`warden'
+
 v0.21.0
 
 -	`new` assumes using [spruce](https://github.com/geofffranks/spruce) instead of spiff. Yay!
