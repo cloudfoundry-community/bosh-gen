@@ -1,6 +1,4 @@
-meta:
-  environment: ~
-
+---
 update:
   canaries: 1
   max_in_flight: 50
@@ -16,8 +14,8 @@ jobs:
     instances: 1
     persistent_disk: 0
     resource_pool: small_z1
-    networks: (( param "please set just_install_package networks" ))
+    networks: (( param "Please configure the networks for this job" ))
 
-networks: (( param "please set networks" ))
+networks: (( param "Please configure the global network definitions for this Deployment" ))
 
 properties: {}

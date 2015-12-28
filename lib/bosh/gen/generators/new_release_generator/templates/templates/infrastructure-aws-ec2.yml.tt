@@ -1,7 +1,7 @@
+---
 meta:
-  environment: (( param "please set meta environment" ))
-  dns_root: (( param "please set meta dns_root" ))
-  security_groups: (( param "please set meta security_groups" ))
+  dns_root: (( param "Please configure your root DNS name" ))
+  security_groups: (( param "Please configure your AWS Security Groups" ))
   persistent_disk: 4096
 
   stemcell:
