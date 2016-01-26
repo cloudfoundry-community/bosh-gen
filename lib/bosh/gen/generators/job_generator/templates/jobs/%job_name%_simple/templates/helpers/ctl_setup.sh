@@ -30,15 +30,19 @@ redirect_output ${output_label}
 export HOME=${HOME:-/home/vcap}
 
 # Add all packages' /bin & /sbin into $PATH
-for package_bin_dir in $(ls -d /var/vcap/packages/*/*bin)
+# (except for busybox, which is not for the host OS)
+for package_bin_dir in $(ls -d /var/vcap/packages/*/*bin | grep -v busybox)
 do
   export PATH=${package_bin_dir}:$PATH
 done
 
+# Add all packages' /lib into $LD_LIBRARY_PATH
+# so that dynamically-linked executables still work
+# (except for busybox, which is not for the host OS)
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH:-''} # default to empty
-for package_bin_dir in $(ls -d /var/vcap/packages/*/lib)
+for package_lib_dir in $(ls -d /var/vcap/packages/*/lib | grep -v busybox)
 do
-  export LD_LIBRARY_PATH=${package_bin_dir}:$LD_LIBRARY_PATH
+  export LD_LIBRARY_PATH=${package_lib_dir}:$LD_LIBRARY_PATH
 done
 
 # Setup log, run and tmp folders
