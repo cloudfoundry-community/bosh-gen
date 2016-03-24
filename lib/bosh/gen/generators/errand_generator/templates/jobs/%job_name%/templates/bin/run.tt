@@ -3,10 +3,10 @@
 set -e # exit immediately if a simple command exits with a non-zero status
 set -u # report the usage of uninitialized variables
 
-# Setup env vars and folders for the webapp_ctl script
+# Setup env vars and folders for the errand script
 source /var/vcap/jobs/<%= job_name %>/helpers/ctl_setup.sh '<%= job_name %>'
 
-EXITSTATUS=0
+############################################################################
 
-echo "Errand <%= job_name %> is complete; exit status $EXITSTATUS"
-exit $EXITSTATUS
+# put your errand steps here...
+
