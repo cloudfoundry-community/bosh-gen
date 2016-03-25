@@ -52,7 +52,7 @@ STEMCELL=${STEMCELL:-$(latest_uploaded_stemcell)}
 if [[ -z ${STEMCELL} ]]; then
   echo
   echo "Uploading latest $DIRECTOR_CPI/$STEMCELL_OS stemcell..."
-  STEMCELL_URL=$(bosh public stemcells --full | grep $DIRECTOR_CPI | grep $STEMCELL_OS | sort -nr | head -n1 | awk '{ print $4 }')
+  echo " (from ${STEMCELL_URL})"
   bosh upload stemcell $STEMCELL_URL
 fi
 STEMCELL=${STEMCELL:-$(latest_uploaded_stemcell)}
