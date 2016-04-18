@@ -24,10 +24,27 @@ redirect_output ${output_label}
 
 export HOME=${HOME:-/home/vcap}
 
-# Add all packages' /bin & /sbin into $PATH
-for package_bin_dir in $(ls -d /var/vcap/packages/*/*bin)
+# Setup the PATH and LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH:-''} # default to empty
+for package_dir in $(ls -d /var/vcap/packages/*)
 do
-  export PATH=${package_bin_dir}:$PATH
+  has_busybox=0
+  # Add all packages' /bin & /sbin into $PATH
+  for package_bin_dir in $(ls -d ${package_dir}/*bin)
+  do
+    # Do not add any packages that use busybox, as impacts builtin commands and
+    # is often used for different architecture (via containers)
+    if [ -f ${package_bin_dir}/busybox ]
+    then
+      has_busybox=1
+    else
+      export PATH=${package_bin_dir}:$PATH
+    fi
+  done
+  if [ "$has_busybox" == "0" ] && [ -d ${package_dir}/lib ]
+  then
+    export LD_LIBRARY_PATH=${package_dir}/lib:$LD_LIBRARY_PATH
+  fi
 done
 
 # Setup log, run and tmp folders
