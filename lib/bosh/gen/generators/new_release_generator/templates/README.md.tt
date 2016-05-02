@@ -11,7 +11,7 @@ cd <%= repository_name %>
 bosh upload release releases/<%= project_name %>/<%= project_name %>-1.yml
 ```
 
-For [bosh-lite](https://github.com/cloudfoundry/bosh-lite), you can quickly create a deployment manifest & deploy a cluster:
+For [bosh-lite](https://github.com/cloudfoundry/bosh-lite), you can quickly create a deployment manifest & deploy a cluster. Note that this requires that you have installed [spruce](https://github.com/geofffranks/spruce).
 
 ```
 templates/make_manifest warden
