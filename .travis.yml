@@ -1,8 +1,7 @@
 language: ruby
 script: bundle exec rake spec
 rvm:
-  - ruby-2.1.6
-  - ruby-2.2.2
+  - ruby-2.2.5
 notifications:
   email:
     recipients:
