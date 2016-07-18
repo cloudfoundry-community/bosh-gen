@@ -1,6 +1,17 @@
 Change Log
 ==========
 
+v0.23.0
+
+Appreciation to James Hunt, Dennis Bell and Chris Weibel for the contributions.
+
+- Fix for multiple word deployment names and warden sanity check
+- Additional busybox system binary exclusion protection for containers
+- Ignore busybox for \*bin/lib inclusion, for better diego release compatibility
+- Don't repeat `EXITSTATUS` upon errand run, instead receive complete and useful
+  `BOSH CLI` output.
+
+
 v0.22.0
 
 Thanks to James Hunt, Quintessence Anx, and Long Nguyen for this version!
