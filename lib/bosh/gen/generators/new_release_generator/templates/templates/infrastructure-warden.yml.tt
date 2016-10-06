@@ -12,7 +12,7 @@ update:
   canary_watch_time: 1000-30000
   update_watch_time: 1000-30000
 
-jobs:
+instance_groups:
   - name: just_install_packages
     networks:
       - name: <%= project_name_underscored %>1

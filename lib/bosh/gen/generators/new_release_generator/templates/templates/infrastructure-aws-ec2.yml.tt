@@ -8,7 +8,7 @@ meta:
     name: bosh-aws-xen-hvm-ubuntu-trusty-go_agent
     version: latest
 
-jobs:
+instance_groups:
   - name: just_install_packages
     networks:
       - name: <%= project_name_underscored %>1
