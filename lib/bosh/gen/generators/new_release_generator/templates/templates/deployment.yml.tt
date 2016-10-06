@@ -9,7 +9,7 @@ director_uuid: (( param "Please set the UUID of your BOSH Directory" ))
 
 releases: (( param "Please list the BOSH releases to use for this deployment" ))
 
-jobs: (( param "Please configure the constituent Jobs for this Deployment" ))
+instance_groups: (( param "Please configure the constituent instance groups for this Deployment" ))
 
 compilation:
   workers: 6
