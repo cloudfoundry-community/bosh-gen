@@ -94,6 +94,13 @@ module Bosh
         Bosh::Gen::Generators::JobTemplateGenerator.start([job_name, file_path])
       end
 
+      desc "forge NAME",
+        "Creates a Blacksmith Forge job to get you up and running"
+      def forge(job_name)
+        require 'bosh/gen/generators/blacksmith_forge_generator'
+        Bosh::Gen::Generators::BlacksmithForgeGenerator.start([job_name])
+      end
+
       desc "extract-job SOURCE_PACKAGE_PATH",
         "Extracts a job from another release and all its " +
         "dependent packages and source"

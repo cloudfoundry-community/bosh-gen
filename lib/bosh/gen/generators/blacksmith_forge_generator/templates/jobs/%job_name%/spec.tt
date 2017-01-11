@@ -1,0 +1,51 @@
+name: <%= job_name %>
+packages: []
+templates:
+  bin/configure-blacksmith:         bin/configure-blacksmith
+
+  plans/service.yml:                plans/service.yml
+
+  plans/standalone/manifest.yml:    plans/standalone/manifest.yml
+  plans/standalone/credentials.yml: plans/standalone/credentials.yml
+  plans/standalone/init:            plans/standalone/init
+
+
+properties:
+  service.id:
+    description: Machine-friendly name for this service.
+    default: <%= name %>
+
+  service.name:
+    description: Human-friendly name for this service, to be displayed in the Cloud Foundry marketplace.
+    default: <%= name.capitalize %>
+
+  service.description:
+    description: A description for this service, to be displayed in the Cloud Foundry marketplace.
+    default: A dedicated <%= name.capitalize %> instance, deployed just for you.
+
+  service.tags:
+    description: List of tags to apply to service instances.
+    default: [blacksmith, dedicated, <%= name %>]
+
+  service.limit:
+    description: A global limit on the number of <%= name.capitalize %> services (regardless of the plan); 0 = unlimited.
+    default: 0
+
+  plans:
+    description: |
+      A map of plans.  I.e.:
+
+        standalone:
+          name: Standalone <%= name.capitalize %> Instance
+          description: A single <%= name %> server, with no redundancy or replication
+          limit: 7
+          type: standalone
+          vm_type: default
+
+      Configuration keys beyond `name', `description', `limit', and `type' are type-specific.
+          limit: 7
+
+      For type=standalone:
+
+        vm_type    What VM type to use for the standalone <%= name %> server.
+                   Defaults to 'default'

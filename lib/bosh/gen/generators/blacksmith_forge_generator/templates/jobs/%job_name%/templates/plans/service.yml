@@ -1,0 +1,12 @@
+---
+id:   <%= p('service.id') %>
+name: <%= p('service.name') %>
+description: |
+    <%= p('service.description') %>
+tags:
+  <% p('service.tags', []).each { |tag| %>  - <%= tag %>
+  <% } %>
+bindable: true
+metadata: {}
+plan_updateable: true
+<% if p('service.limit') > 0 %>limit: <%= p('service.limit') %><% end %>
