@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+v0.24.0
+
+- Added new `forge` command to generate new forges for [blacksmith](https://github.com/cloudfoundry-community/blacksmith). Thanks @jhunt
+
 v0.23.0
 
 Appreciation to James Hunt, Dennis Bell and Chris Weibel for the contributions.
