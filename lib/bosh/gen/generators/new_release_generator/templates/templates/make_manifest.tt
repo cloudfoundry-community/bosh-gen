@@ -2,6 +2,54 @@
 
 set -e
 
+version_checker() {
+	if [[ $1 == $2 ]]
+	then
+		return 0
+	fi
+	local IFS=.
+	local i actual=($1) expected=($2)
+	# fill empty fields in actual with zeros
+	for ((i=${#actual[@]}; i<${#expected[@]}; i++))
+	do
+		actual[i]=0
+	done
+	actual_numeric=0
+	expected_numeric=0
+	for ((i=0; i<${#actual[@]}; i++))
+	do
+		if [[ -z ${expected[i]} ]]
+		then
+			# fill empty fields in expected with zeros
+			expected[i]=0
+		fi
+		actual_numeric=$((actual_numeric+${actual[i]}*1000**(${#actual[@]}-i)))
+		expected_numeric=$((expected_numeric+${expected[i]}*1000**(${#expected[@]}-i)))
+	done
+
+
+	if [[ ${actual_numeric} -lt ${expected_numeric} ]]; then
+		return 1
+	fi
+	return 0
+}
+
+required_version="1.8.9"
+dev_version=$(spruce -v 2>&1 | perl -pe 's/.*development.*/DEV/')
+if [[ ${dev_version} == "DEV" ]]; then
+	echo "Treating 'development' version as up-to-date with spruce v${required_version}"
+else
+	spruce_version=$(spruce -v 2>&1 | perl -pe 's|.*?(\d+\.\d+(\.\d+)*).*|$1|')
+	if [[ -z ${spruce_version} || $(echo ${current_version} | egrep '[^0-9\.]') ]]; then
+		echo "make_manifest requires spruce version ${required_version} or newer, but the current version could not be parsed: ${spruce_version}"
+		exit 1
+	fi
+	if ! version_checker ${spruce_version} ${required_version}; then
+		echo "make_manifest requires spruce version ${required_version} or newer, but found version ${spruce_version}"
+		exit
+	fi
+fi
+
 template_prefix="<%= project_name %>"
 STEMCELL_OS=${STEMCELL_OS:-ubuntu}
 
@@ -62,20 +110,31 @@ release=$templates/..
 tmpdir=$release/tmp
 
 mkdir -p $tmpdir
-cp $templates/stub.yml $tmpdir/stub-with-uuid.yml
-echo $DIRECTOR_NAME $DIRECTOR_CPI $DIRECTOR_UUID $STEMCELL
-perl -pi -e "s/PLACEHOLDER-DIRECTOR-UUID/$DIRECTOR_UUID/g" $tmpdir/stub-with-uuid.yml
-perl -pi -e "s/NAME/$NAME/g" $tmpdir/stub-with-uuid.yml
-perl -pi -e "s/STEMCELL/$STEMCELL/g" $tmpdir/stub-with-uuid.yml
+cat <<EOF > $tmpdir/stub-with-uuid.yml
+---
+name: ${NAME}
+director_uuid: ${DIRECTOR_UUID}
+EOF
 
-if ! [ -x "$(command -v spruce)" ]; then
-  echo 'spruce is not installed. Please download at https://github.com/geofffranks/spruce/releases' >&2
+
+if [[ $(bosh cloud-config | spruce json | jq -r '.networks[] | select(.name == "<%= project_name %>") | .name') != "<%= project_name %>" ]]; then
+	echo >&2 "Your cloud-config does not have the 'haproxy' network in it. See templates/cloud-config-warden.yml for an example."
+	exit 1
+fi
+if [[ $(bosh cloud-config | spruce json | jq -r '.vm_types[] | select(.name == "haproxy") | .name') != "haproxy" ]]; then
+	echo >&2 "Your cloud-config does not have the 'haproxy' vm_type in it. See templates/cloud-config-warden.yml for an example."
+	exit 1
 fi
 
-spruce merge --prune meta \
-  $templates/deployment.yml \
-  $templates/jobs.yml \
-  $templates/infrastructure-${infrastructure}.yml \
+bosh cloud-config | spruce merge --cherry-pick networks > $tmpdir/cc-networks.yml
+
+if [[ -n "${KEEPALIVED_VIP}" ]]; then
+	keepalived=$templates/keepalived.yml
+fi
+
+spruce merge --prune meta --prune networks \
+  $templates/<%= project_name %>.yml \
+  $tmpdir/cc-networks.yml \
   $tmpdir/stub-with-uuid.yml \
   $* > $tmpdir/$NAME-manifest.yml
 

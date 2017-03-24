@@ -1,0 +1,32 @@
+instance_groups:
+  - name: just_install_packages
+    instances: 1
+    vm_type: <%= project_name_underscored %>
+    stemcell: ubuntu
+    jobs:
+      - name: just_install_packages
+        release: <%= project_name_hypenated %>
+    persistent_disk: 0
+    networks:
+    - name: <%= project_name_underscored %>
+
+releases:
+  - name: <%= project_name_hyphenated %>
+    version: latest
+
+stemcells:
+  - alias: ubuntu
+    os: ubuntu-trusty
+    version: latest
+
+update:
+  canaries: 1
+  max_in_flight: 50
+  canary_watch_time: 15000-120000
+  update_watch_time: 15000-120000
+  serial: false
+
+properties: {}
+
+name: (( param "Please specify your deployment name" ))
+director_uuid: (( param "Please set the UUID of your BOSH Director" ))

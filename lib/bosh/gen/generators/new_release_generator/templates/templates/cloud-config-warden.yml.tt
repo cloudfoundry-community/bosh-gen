@@ -1,0 +1,18 @@
+compilation:
+  workers: 5
+  reuse_compilation_vms: true
+  vm_type: <%= project_name_underscored %>
+  network: <%= project_name_underscored %>
+
+vm_types:
+- name: <%= project_name_underscored %>
+  cloud_properties: ~
+
+networks:
+  - name: <%= project_name_underscored %>
+    type: manual
+    subnets:
+      - cloud_properties: ~
+        range: <%= warden_net %>.0/24
+        static:
+          - <%= warden_net %>.2 - <%= warden_net %>.60
