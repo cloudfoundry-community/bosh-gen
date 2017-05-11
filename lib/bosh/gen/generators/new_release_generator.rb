@@ -65,7 +65,8 @@ module Bosh::Gen
         when :local
           config_private = {
             "blobstore" => {
-              "simple" => {
+              "provider" => "simple",
+              "options" => {
                 "user" => "USER",
                 "password" => "PASSWORD"
               }
@@ -74,7 +75,8 @@ module Bosh::Gen
         when :s3
           config_private = {
             "blobstore" => {
-              "s3" => {
+              "provider" => "s3",
+              "options" => {
                 "access_key_id" => settings.provider.credentials.aws_access_key_id,
                 "secret_access_key" => settings.provider.credentials.aws_secret_access_key
               }
@@ -84,7 +86,8 @@ module Bosh::Gen
         when :swift
           config_private = {
             "blobstore" => {
-              "swift" => {
+              "provider" => "swift",
+              "options" => {
                 settings.provider.name => settings.provider.credentials.to_hash
               }
             }
