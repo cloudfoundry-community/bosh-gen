@@ -19,11 +19,6 @@ output_label=${2:-${JOB_NAME}}
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 chmod 755 $JOB_DIR # to access file via symlink
 
-# Load some bosh deployment properties into env vars
-# Try to put all ERb into data/properties.sh.erb
-# incl $NAME, $JOB_INDEX, $WEBAPP_DIR
-source $JOB_DIR/data/properties.sh
-
 source $JOB_DIR/helpers/ctl_utils.sh
 redirect_output ${output_label}
 
