@@ -44,7 +44,6 @@ module GeneratorSpecHelper
   #
   # generate_job 'JOBNAME'
   # generate_job 'JOBNAME', '-d', 'nginx'
-  # generate_job "JOBNAME", "--template", "nginx_rack", '-d', 'nginx', 'ruby', 'myapp'
   def generate_job(*args)
     stdout, stderr = capture_stdios do
       Bosh::Gen::Command.start(["job", *args])
