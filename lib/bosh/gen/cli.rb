@@ -119,12 +119,6 @@ module Bosh
         Bosh::Gen::Generators::ExtractPackageGenerator.start([source_package_path])
       end
 
-      desc "cli-plugin NAME", "Add a BOSH CLI plugin into this project"
-      def cli_plugin(plugin_name)
-        require 'bosh/gen/generators/bosh_cli_plugin_generator'
-        Bosh::Gen::Generators::BoshCliPluginGenerator.start([plugin_name])
-      end
-
       no_tasks do
         def cyan; "\033[36m" end
         def clear; "\033[0m" end
