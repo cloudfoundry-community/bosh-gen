@@ -42,13 +42,9 @@ module Bosh::Gen
       end
 
       def directories
-        %w[jobs packages src blobs templates].each do |dir|
+        %w[jobs packages src blobs manifests].each do |dir|
           directory dir
         end
-      end
-
-      def executables
-        chmod "templates/make_manifest", 0755
       end
 
       def blobs_yaml
