@@ -5,8 +5,6 @@ module Bosh; end
 require "cli/config"
 require "cli/core_ext"
 
-require 'bosh/gen/models'
-
 module Bosh
   module Gen
     class Command < Thor
