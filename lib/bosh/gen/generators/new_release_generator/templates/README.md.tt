@@ -7,8 +7,10 @@ This BOSH release and deployment manifest deploy a cluster of <%= project_name %
 ```
 export BOSH_ENVIRONMENT=<bosh-alias>
 export BOSH_DEPLOYMENT=<%= project_name %>
-bosh2 deploy manifests/<%= project_name %>.yml
+bosh2 deploy manifests/<%= project_name %>.yml --vars-store tmp/creds.yml
 ```
+
+If your BOSH has Credhub, then you can omit `--vars-store` flag. It is used to generate any passwords/credentials/certificates required by `manifests/<%= project_name %>.yml`.
 
 
 ## Development
@@ -18,5 +20,7 @@ As a developer of this release, create new releases, upload and deploy them:
 ```
 bosh2 create-release --force && \
   bosh2 -n upload-release && \
-  bosh2 deploy manifests/<%= project_name %>.yml
+  bosh2 deploy manifests/<%= project_name %>.yml --vars-store tmp/creds.yml
 ```
+
+If your BOSH has Credhub, then you can omit `--vars-store` flag. It is used to generate any passwords/credentials/certificates required by `manifests/<%= project_name %>.yml`.
