@@ -1,5 +1,0 @@
----
-name: apache2
-
-files:
-  - apache2/httpd-2.2.21.tar.gz
