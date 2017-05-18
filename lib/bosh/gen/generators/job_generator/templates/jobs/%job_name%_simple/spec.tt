@@ -1,0 +1,23 @@
+---
+name: <%= job_name %>
+
+packages: []
+templates:
+  bin/ctl: bin/ctl
+  bin/monit_debugger: bin/monit_debugger
+  helpers/ctl_setup.sh: helpers/ctl_setup.sh
+  helpers/ctl_utils.sh: helpers/ctl_utils.sh
+
+# See https://bosh.io/docs/links.html
+consumes: []
+
+provides:
+- name: <%= job_name %>
+  type: <%= job_name %>
+  properties:
+  - port
+
+properties:
+  port:
+    description: Bind to this port
+    default: 8080
