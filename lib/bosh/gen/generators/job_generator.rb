@@ -61,7 +61,14 @@ module Bosh::Gen
       end
 
       def job_specification
-        config = { "name" => job_name, "packages" => dependencies, "templates" => @template_files }
+        config = {
+          "name" => job_name,
+          "packages" => dependencies,
+          "templates" => @template_files,
+          "consumes" => [],
+          "provides" => [],
+          "properties" => {}
+        }
         create_file job_dir("spec"), YAML.dump(config)
       end
 
