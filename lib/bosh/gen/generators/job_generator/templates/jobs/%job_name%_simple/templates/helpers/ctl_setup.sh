@@ -61,27 +61,6 @@ do
 done
 export TMPDIR=$TMP_DIR
 
-export C_INCLUDE_PATH=/var/vcap/packages/mysqlclient/include/mysql:/var/vcap/packages/sqlite/include:/var/vcap/packages/libpq/include
-export LIBRARY_PATH=/var/vcap/packages/mysqlclient/lib/mysql:/var/vcap/packages/sqlite/lib:/var/vcap/packages/libpq/lib
-
-# consistent place for vendoring python libraries within package
-if [[ -d ${WEBAPP_DIR:-/xxxx} ]]
-then
-  export PYTHONPATH=$WEBAPP_DIR/vendor/lib/python
-fi
-
-if [[ -d /var/vcap/packages/java7 ]]
-then
-  export JAVA_HOME="/var/vcap/packages/java7"
-fi
-
-# setup CLASSPATH for all jars/ folders within packages
-export CLASSPATH=${CLASSPATH:-''} # default to empty
-for java_jar in $(ls -d /var/vcap/packages/*/*/*.jar)
-do
-  export CLASSPATH=${java_jar}:$CLASSPATH
-done
-
 PIDFILE=$RUN_DIR/$output_label.pid
 
 echo '$PATH' $PATH
