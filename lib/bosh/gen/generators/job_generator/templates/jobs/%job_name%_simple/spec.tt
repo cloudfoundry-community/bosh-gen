@@ -8,7 +8,8 @@ templates:
   helpers/ctl_setup.sh: helpers/ctl_setup.sh
   helpers/ctl_utils.sh: helpers/ctl_utils.sh
 
-# See https://bosh.io/docs/links.html
+# Documentation https://bosh.io/docs/links.html
+# Tutorial      https://gist.github.com/Amit-PivotalLabs/c39528248b8cdc4ba8e347f8aa68abb6
 consumes: []
 
 provides:
