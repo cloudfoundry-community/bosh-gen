@@ -13,7 +13,7 @@ instance_groups:
     release: <%= project_name %>
     properties: {}
 
-variables: {}
+variables: []
 
 stemcells:
 - alias: default
