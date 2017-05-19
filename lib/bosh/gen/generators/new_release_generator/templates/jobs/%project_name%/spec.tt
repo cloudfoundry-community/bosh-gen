@@ -1,5 +1,5 @@
 ---
-name: just_install_packages
+name: <%= project_name %>
 packages: []
 templates:
   ignoreme: ignoreme
