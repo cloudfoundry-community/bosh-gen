@@ -1,7 +1,0 @@
----
-name: php5
-dependencies:
-  - apache2
-  - mysqlclient
-files:
-  - php5/php-5.3.10.tar.gz

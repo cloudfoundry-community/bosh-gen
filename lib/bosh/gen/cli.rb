@@ -5,8 +5,6 @@ module Bosh; end
 require "cli/config"
 require "cli/core_ext"
 
-require 'bosh/gen/models'
-
 module Bosh
   module Gen
     class Command < Thor
@@ -117,12 +115,6 @@ module Bosh
         source_package_path = File.expand_path(source_package_path)
         require 'bosh/gen/generators/extract_package_generator'
         Bosh::Gen::Generators::ExtractPackageGenerator.start([source_package_path])
-      end
-
-      desc "cli-plugin NAME", "Add a BOSH CLI plugin into this project"
-      def cli_plugin(plugin_name)
-        require 'bosh/gen/generators/bosh_cli_plugin_generator'
-        Bosh::Gen::Generators::BoshCliPluginGenerator.start([plugin_name])
       end
 
       no_tasks do

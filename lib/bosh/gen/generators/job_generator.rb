@@ -60,11 +60,6 @@ module Bosh::Gen
         end
       end
 
-      def job_specification
-        config = { "name" => job_name, "packages" => dependencies, "templates" => @template_files }
-        create_file job_dir("spec"), YAML.dump(config)
-      end
-
       private
       def filenames
         files.map {|f| File.basename(f) }

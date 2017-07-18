@@ -22,7 +22,8 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency "cyoi", "~> 0.10"
   gem.add_dependency "fog", "~> 1.11"
-  gem.add_dependency "fog-aws", "0.1.1" # 0.1.2 causes issues
+  gem.add_dependency "fog-aws"
+  gem.add_dependency "mime-types"
   gem.add_dependency "readwritesettings", "~> 3.0"
   gem.add_dependency "activesupport", ">= 4.0", "< 5.0"
 

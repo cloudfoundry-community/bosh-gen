@@ -1,0 +1,38 @@
+---
+name: <%= project_name %>
+
+instance_groups:
+- name: <%= project_name %>
+  azs: [z1, z2, z3]
+  instances: 1
+  vm_type: default
+  stemcell: default
+  networks: [{name: default}]
+  jobs:
+  - name: <%= project_name %>
+    release: <%= project_name %>
+    properties: {}
+
+variables: []
+
+stemcells:
+- alias: default
+  os: ubuntu-trusty
+  version: latest
+
+update:
+  canaries: 1
+  canary_watch_time: 1000-60000
+  update_watch_time: 1000-60000
+  max_in_flight: 1
+  serial: false
+
+releases:
+- name: <%= project_name %>
+  version: latest
+  # In future, for the benefit of users, please replace with final release URL/version/sha1:
+  #
+  # For example:
+  # version: 0.1.0
+  # url: https://github.com/cloudfoundry-community/<%= project_name %>-boshrelease/releases/download/v0.1.0/<%= project_name %>-0.1.0.tgz
+  # sha1: d6b67ccc255c4d7019702573d829a7ff29fa0dc8

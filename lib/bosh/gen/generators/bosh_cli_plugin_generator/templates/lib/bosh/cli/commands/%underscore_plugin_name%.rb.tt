@@ -1,9 +1,0 @@
-module Bosh::Cli::Command
-  class <%= camelcase_plugin_name %> < Base
-    usage "<%= spaced_plugin_name %>"
-    desc "DESCRIPTION"
-    def <%= underscore_plugin_name %>
-      say "TODO".make_red
-    end
-  end
-end

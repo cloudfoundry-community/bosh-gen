@@ -1,6 +1,0 @@
----
-name: just_install_packages
-packages: []
-templates:
-  ignoreme: ignoreme
-properties: {}

@@ -19,11 +19,6 @@ output_label=${2:-${JOB_NAME}}
 export JOB_DIR=/var/vcap/jobs/$JOB_NAME
 chmod 755 $JOB_DIR # to access file via symlink
 
-# Load some bosh deployment properties into env vars
-# Try to put all ERb into data/properties.sh.erb
-# incl $NAME, $JOB_INDEX, $WEBAPP_DIR
-source $JOB_DIR/data/properties.sh
-
 source $JOB_DIR/helpers/ctl_utils.sh
 redirect_output ${output_label}
 
@@ -65,27 +60,6 @@ do
   chmod 775 ${dir}
 done
 export TMPDIR=$TMP_DIR
-
-export C_INCLUDE_PATH=/var/vcap/packages/mysqlclient/include/mysql:/var/vcap/packages/sqlite/include:/var/vcap/packages/libpq/include
-export LIBRARY_PATH=/var/vcap/packages/mysqlclient/lib/mysql:/var/vcap/packages/sqlite/lib:/var/vcap/packages/libpq/lib
-
-# consistent place for vendoring python libraries within package
-if [[ -d ${WEBAPP_DIR:-/xxxx} ]]
-then
-  export PYTHONPATH=$WEBAPP_DIR/vendor/lib/python
-fi
-
-if [[ -d /var/vcap/packages/java7 ]]
-then
-  export JAVA_HOME="/var/vcap/packages/java7"
-fi
-
-# setup CLASSPATH for all jars/ folders within packages
-export CLASSPATH=${CLASSPATH:-''} # default to empty
-for java_jar in $(ls -d /var/vcap/packages/*/*/*.jar)
-do
-  export CLASSPATH=${java_jar}:$CLASSPATH
-done
 
 PIDFILE=$RUN_DIR/$output_label.pid
 

@@ -1,0 +1,6 @@
+---
+name: <%= project_name %>
+packages: []
+templates:
+  ignoreme: ignoreme
+properties: {}

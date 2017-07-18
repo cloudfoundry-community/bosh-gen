@@ -27,7 +27,7 @@ case $1 in
 
     ;;
   *)
-    echo "Usage: <%= job_name %>_ctl {start|stop}"
+    echo "Usage: ctl {start|stop}"
 
     ;;
 

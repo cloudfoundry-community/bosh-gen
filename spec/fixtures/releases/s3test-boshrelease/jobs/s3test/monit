@@ -1,5 +1,0 @@
-check process s3test
-  with pidfile /var/vcap/sys/run/s3test/s3test.pid
-  start program "/var/vcap/jobs/s3test/bin/monit_debugger s3test_ctl '/var/vcap/jobs/s3test/bin/s3test_ctl start'"
-  stop program "/var/vcap/jobs/s3test/bin/monit_debugger s3test_ctl '/var/vcap/jobs/s3test/bin/s3test_ctl stop'"
-  group vcap

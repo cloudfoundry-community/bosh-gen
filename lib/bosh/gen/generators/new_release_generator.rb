@@ -42,13 +42,9 @@ module Bosh::Gen
       end
 
       def directories
-        %w[jobs packages src blobs templates].each do |dir|
+        %w[jobs packages src blobs manifests].each do |dir|
           directory dir
         end
-      end
-
-      def executables
-        chmod "templates/make_manifest", 0755
       end
 
       def blobs_yaml
@@ -65,7 +61,8 @@ module Bosh::Gen
         when :local
           config_private = {
             "blobstore" => {
-              "simple" => {
+              "provider" => "simple",
+              "options" => {
                 "user" => "USER",
                 "password" => "PASSWORD"
               }
@@ -74,7 +71,8 @@ module Bosh::Gen
         when :s3
           config_private = {
             "blobstore" => {
-              "s3" => {
+              "provider" => "s3",
+              "options" => {
                 "access_key_id" => settings.provider.credentials.aws_access_key_id,
                 "secret_access_key" => settings.provider.credentials.aws_secret_access_key
               }
@@ -84,7 +82,8 @@ module Bosh::Gen
         when :swift
           config_private = {
             "blobstore" => {
-              "swift" => {
+              "provider" => "swift",
+              "options" => {
                 settings.provider.name => settings.provider.credentials.to_hash
               }
             }
