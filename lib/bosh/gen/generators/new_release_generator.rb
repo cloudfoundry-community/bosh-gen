@@ -144,7 +144,6 @@ module Bosh::Gen
         *#
         #*
         tmp
-        my*.yml
         IGNORE
       end
 
