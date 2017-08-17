@@ -1,5 +1,6 @@
 require "thor"
 
+require "fileutils"
 require "bosh/gen/bosh-config"
 require "bosh/gen/core-ext"
 
