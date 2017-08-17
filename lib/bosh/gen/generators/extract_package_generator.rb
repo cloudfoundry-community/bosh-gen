@@ -64,7 +64,7 @@ module Bosh::Gen
             source_files = Dir.glob(File.join(source_release_path, "blobs", file_glob))
             source_files.each do |source_path|
               target_path = source_path.scan(%r{/blobs/(.*)}).flatten.first
-              `bosh add-blob "#{source_path}" "#{target_path}"`
+              BoshCli.run "add-blob #{source_path} #{target_path}"
               say_status "add-blob", target_path
               @blobs = true
             end
