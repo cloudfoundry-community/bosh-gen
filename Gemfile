@@ -6,7 +6,3 @@ gemspec
 if File.directory?("../cyoi")
   gem "cyoi", path: "../cyoi"
 end
-
-gem 'bosh_cli', '~> 1.1750'
-
-gem 'guard-rspec'

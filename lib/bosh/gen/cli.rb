@@ -1,9 +1,7 @@
 require "thor"
 
-# bosh_cli libraries
-module Bosh; end
-require "cli/config"
-require "cli/core_ext"
+require "bosh/gen/bosh-config"
+require "bosh/gen/core-ext"
 
 module Bosh
   module Gen
