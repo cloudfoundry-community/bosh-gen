@@ -50,13 +50,22 @@ module Bosh::Gen
         @blobs = false
         @packages.each do |package|
           spec = source_file("packages", package, "spec")
-          files = YAML.load_file(spec)["files"]
+          file_globs = YAML.load_file(spec)["files"]
 
-          files.each do |relative_file|
-            if File.exist?(source_file("src", relative_file))
-              copy_file "src/#{relative_file}"
-            elsif File.exist?(source_file("blobs", relative_file))
-              copy_file "blobs/#{relative_file}"
+          file_globs.each do |file_glob|
+            source_files = Dir.glob(File.join(source_release_path, "src", file_glob))
+            source_files.each do |source_path|
+              target_path = source_path.scan(%r{/blobs/(.*)}).flatten.first
+              copy_file(File.join("src", target_path))
+            end
+          end
+
+          file_globs.each do |file_glob|
+            source_files = Dir.glob(File.join(source_release_path, "blobs", file_glob))
+            source_files.each do |source_path|
+              target_path = source_path.scan(%r{/blobs/(.*)}).flatten.first
+              `bosh add-blob "#{source_path}" "#{target_path}"`
+              say_status "add-blob", target_path
               @blobs = true
             end
           end
