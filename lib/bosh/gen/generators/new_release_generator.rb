@@ -105,7 +105,8 @@ module Bosh::Gen
           config_final = { "blobstore" => {
               "provider" => "s3",
               "options" => {
-                "bucket_name" => repository_name
+                "bucket_name" => repository_name,
+                "region" => settings.provider.regon
               }
             }
           }
