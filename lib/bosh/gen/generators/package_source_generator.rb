@@ -61,7 +61,7 @@ module Bosh::Gen
       
       def readme
         if flags[:blob]
-          say_status "readme", "Upload blobs with 'bosh upload blobs'"
+          say_status "readme", "Upload blobs with 'bosh upload-blobs'"
         end
       end
       

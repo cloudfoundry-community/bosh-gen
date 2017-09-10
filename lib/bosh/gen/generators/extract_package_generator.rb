@@ -74,7 +74,7 @@ module Bosh::Gen
 
       def readme
         if @blobs
-          say_status "readme", "Upload blobs with 'bosh upload blobs'"
+          say_status "readme", "Upload blobs with 'bosh upload-blobs'"
         end
       end
 
