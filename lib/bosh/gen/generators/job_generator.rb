@@ -70,7 +70,7 @@ module Bosh::Gen
       end
 
       def valid_purposes
-        %w[simple]
+        %w[bpm simple]
       end
 
       # Run a command in git.

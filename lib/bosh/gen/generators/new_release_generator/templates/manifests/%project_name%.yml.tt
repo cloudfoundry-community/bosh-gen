@@ -1,6 +1,12 @@
 ---
 name: <%= project_name %>
 
+addons:
+- name: bpm
+  jobs:
+  - name: bpm
+    release: bpm
+
 instance_groups:
 - name: <%= project_name %>
   azs: [z1, z2, z3]
@@ -28,6 +34,9 @@ update:
   serial: false
 
 releases:
+- name: bpm
+  version: 0.2.0
+  url: git+https://github.com/cloudfoundry-incubator/bpm-release
 - name: <%= project_name %>
   version: latest # TODO: update after first final release
   # url:            TODO: update after first final release

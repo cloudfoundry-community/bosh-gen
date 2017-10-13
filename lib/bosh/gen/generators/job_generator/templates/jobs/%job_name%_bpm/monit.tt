@@ -1,0 +1,5 @@
+check process <%= job_name %>
+  with pidfile /var/vcap/sys/run/bpm/<%= job_name %>/<%= job_name %>.pid
+  start program "/var/vcap/jobs/bpm/bin/bpm start <%= job_name %>"
+  stop program "/var/vcap/jobs/bpm/bin/bpm stop <%= job_name %>"
+  group vcap

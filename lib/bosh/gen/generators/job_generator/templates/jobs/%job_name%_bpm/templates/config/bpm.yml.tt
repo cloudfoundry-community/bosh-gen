@@ -1,0 +1,15 @@
+---
+processes:
+- name: <%= job_name %>
+  executable: /var/vcap/packages/<%= job_name %>/bin/<%= job_name %>
+  args: []
+  ephemeral_disk: true
+  persistent_disk: false
+  env:
+    PORT: <%%= p("port") %>
+  limits:
+    memory: 1G
+    open_files: 1024
+
+# example at https://github.com/cloudfoundry-incubator/bpm-release/blob/master/jobs/bpm-test-agent/templates/bpm.yml.erb
+# example at https://github.com/cloudfoundry-incubator/bpm-release/blob/master/jobs/bpm-test-agent/templates/bpm.yml.erb

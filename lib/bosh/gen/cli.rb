@@ -70,10 +70,13 @@ module Bosh
       desc "job NAME", "Create a new job"
       method_option :dependencies, :aliases => ['-d'], :type => :array,
         :desc => "List of package dependencies"
+      method_option :bpm, :type => :boolean, :default => true,
+        :desc => "Use bpm to containerise job processes"
       def job(name)
         dependencies = options[:dependencies] || []
         require 'bosh/gen/generators/job_generator'
-        Bosh::Gen::Generators::JobGenerator.start([name, dependencies, 'simple'])
+        job_type = options[:bpm] ? 'bpm' : 'simple'
+        Bosh::Gen::Generators::JobGenerator.start([name, dependencies, job_type])
       end
 
       desc "errand NAME", "Create a new errand"
