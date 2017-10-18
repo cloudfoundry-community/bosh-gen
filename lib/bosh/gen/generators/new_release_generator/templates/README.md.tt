@@ -2,25 +2,28 @@
 
 This BOSH release and deployment manifest deploy a cluster of <%= project_name %>.
 
-## Install
+## Usage
+
+This repository includes base manifests and operator files. They can be used for initial deployments and subsequently used for updating your deployments:
 
 ```
 export BOSH_ENVIRONMENT=<bosh-alias>
 export BOSH_DEPLOYMENT=<%= project_name %>
-bosh deploy manifests/<%= project_name %>.yml --vars-store tmp/creds.yml
+git clone https://github.com/cloudfoundry-community/<%= project_name %>-boshrelease.git
+bosh deploy <%= project_name %>-boshrelease/manifests/<%= project_name %>.yml
 ```
 
-If your BOSH has Credhub, then you can omit `--vars-store` flag. It is used to generate any passwords/credentials/certificates required by `manifests/<%= project_name %>.yml`.
+If your BOSH does not have Credhub/Config Server, then remember `--vars-store` to allow generation of passwords and certificates.
 
+### Update
 
-## Development
-
-As a developer of this release, create new releases, upload and deploy them:
+When new versions of `redis-boshrelease` are released the `manifests/redis.yml` file will be updated. This means you can easily `git pull` and `bosh deploy` to upgrade.
 
 ```
-bosh create-release --force && \
-  bosh -n upload-release && \
-  bosh deploy manifests/<%= project_name %>.yml --vars-store tmp/creds.yml
+export BOSH_ENVIRONMENT=<bosh-alias>
+export BOSH_DEPLOYMENT=<%= project_name %>
+cd <%= project_name %>-boshrelease
+git pull
+cd -
+bosh deploy <%= project_name %>-boshrelease/manifests/redis.yml
 ```
-
-If your BOSH has Credhub, then you can omit `--vars-store` flag. It is used to generate any passwords/credentials/certificates required by `manifests/<%= project_name %>.yml`.
