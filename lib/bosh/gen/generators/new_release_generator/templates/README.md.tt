@@ -25,5 +25,5 @@ export BOSH_DEPLOYMENT=<%= project_name %>
 cd <%= project_name %>-boshrelease
 git pull
 cd -
-bosh deploy <%= project_name %>-boshrelease/manifests/redis.yml
+bosh deploy <%= project_name %>-boshrelease/manifests/<%= project_name %>.yml
 ```
