@@ -12,4 +12,3 @@ processes:
     open_files: 1024
 
 # example at https://github.com/cloudfoundry-incubator/bpm-release/blob/master/jobs/bpm-test-agent/templates/bpm.yml.erb
-# example at https://github.com/cloudfoundry-incubator/bpm-release/blob/master/jobs/bpm-test-agent/templates/bpm.yml.erb
