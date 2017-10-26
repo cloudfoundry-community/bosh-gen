@@ -17,7 +17,7 @@ If your BOSH does not have Credhub/Config Server, then remember `--vars-store` t
 
 ### Update
 
-When new versions of `redis-boshrelease` are released the `manifests/redis.yml` file will be updated. This means you can easily `git pull` and `bosh deploy` to upgrade.
+When new versions of `<%= project_name %>-boshrelease` are released the `manifests/<%= project_name %>.yml` file will be updated. This means you can easily `git pull` and `bosh deploy` to upgrade.
 
 ```
 export BOSH_ENVIRONMENT=<bosh-alias>
