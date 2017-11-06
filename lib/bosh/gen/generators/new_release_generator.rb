@@ -45,6 +45,7 @@ module Bosh::Gen
         %w[jobs packages src blobs manifests].each do |dir|
           directory dir
         end
+        chmod 'manifests/operators/pick-from-cloud-config.sh', 0755
       end
 
       def blobs_yaml
