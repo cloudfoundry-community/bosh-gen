@@ -37,10 +37,6 @@ module Bosh::Gen
         template "LICENSE.md.tt", "LICENSE.md"
       end
 
-      def rakefile
-        copy_file "Rakefile"
-      end
-
       def directories
         %w[jobs packages src blobs manifests].each do |dir|
           directory dir
