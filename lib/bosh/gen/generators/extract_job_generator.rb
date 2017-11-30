@@ -60,8 +60,11 @@ module Bosh::Gen
           file_globs.each do |file_glob|
             source_files = Dir.glob(File.join(source_release_path, "src", file_glob))
             source_files.each do |source_path|
-              target_path = source_path.scan(%r{/blobs/(.*)}).flatten.first
-              copy_file(File.join("src", target_path))
+              if target_path = source_path.scan(%r{/blobs/(.*)}).flatten.first
+                copy_file(File.join("src", target_path))
+              else
+                puts("Failed to copy file: #{source_path}")
+              end
             end
           end
 
