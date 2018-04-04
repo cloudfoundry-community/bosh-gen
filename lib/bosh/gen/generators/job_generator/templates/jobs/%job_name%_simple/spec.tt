@@ -1,7 +1,7 @@
 ---
 name: <%= job_name %>
 
-packages: []
+packages: <%= dependencies.to_json %>
 templates:
   bin/ctl: bin/ctl
   bin/monit_debugger: bin/monit_debugger

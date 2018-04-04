@@ -1,4 +1,5 @@
 require 'yaml'
+require 'json'
 require 'thor/group'
 
 module Bosh::Gen

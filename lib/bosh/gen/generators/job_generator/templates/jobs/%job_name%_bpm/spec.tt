@@ -1,7 +1,7 @@
 ---
 name: <%= job_name %>
 
-packages: []
+packages: <%= dependencies.to_json %>
 templates:
   config/bpm.yml: config/bpm.yml
 
