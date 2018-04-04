@@ -53,7 +53,11 @@ module Bosh::Gen
           
           SHELL
 
-          dependencies.each do |package|
+          language_packs.each do |package|
+            packaging << "source /var/vcap/packages/#{package}/bosh/compile.env\n"
+          end
+
+          simple_dependencies.each do |package|
             packaging << "PATH=/var/vcap/packages/#{package}/bin:$PATH\n"
           end
 
@@ -161,6 +165,19 @@ module Bosh::Gen
         end
         
         archives
+      end
+
+      def language_packs
+        dependencies.select do |dep|
+          File.exist?(File.join("packages", dep, "spec.lock"))
+        end
+      end
+
+      # dependencies that are not language_packs
+      def simple_dependencies
+        dependencies.select do |dep|
+          !File.exist?(File.join("packages", dep, "spec.lock"))
+        end
       end
 
       # Returns all .tar.gz in the files list
