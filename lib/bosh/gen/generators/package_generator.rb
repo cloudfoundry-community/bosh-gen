@@ -108,7 +108,7 @@ module Bosh::Gen
       def package_specification
         src_files = 
           files.map {|f| "#{name}/#{File.basename(f)}"} + # new blobs
-          existing_sources                                # existing files/sources, like 'myapp/**/*'
+          existing_sources_as_globs                       # existing directories, like 'myapp'
         config = { "name" => name, "dependencies" => dependencies, "files" => src_files }
         create_file package_dir("spec"), YAML.dump(config)
       end
@@ -188,6 +188,16 @@ module Bosh::Gen
       # Returns all .zip in the files list
       def zipfiles_in_files
         files.select { |file| file =~ /\.zip/  }
+      end
+
+      def existing_sources_as_globs
+        existing_sources.map do |src|
+          if File.directory?(File.join("src", src))
+            "#{src}/**/*"
+          else
+            src
+          end
+        end
       end
       
       # If primary_package_file was mysql's client-5.1.62-rel13.3-435-Linux-x86_64.tar.gz
