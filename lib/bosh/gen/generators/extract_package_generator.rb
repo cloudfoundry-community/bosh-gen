@@ -55,7 +55,7 @@ module Bosh::Gen
           file_globs.each do |file_glob|
             source_files = Dir.glob(File.join(source_release_path, "src", file_glob))
             source_files.each do |source_path|
-              target_path = source_path.scan(%r{/blobs/(.*)}).flatten.first
+              target_path = source_path.scan(%r{/src/(.*)}).flatten.first
               copy_file(File.join("src", target_path))
             end
           end
