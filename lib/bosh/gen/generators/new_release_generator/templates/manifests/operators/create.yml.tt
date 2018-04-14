@@ -3,4 +3,5 @@
   path: /releases/name=<%= project_name %>
   value:
     name: <%= project_name %>
-    version: latest
+    url: .
+    version: create

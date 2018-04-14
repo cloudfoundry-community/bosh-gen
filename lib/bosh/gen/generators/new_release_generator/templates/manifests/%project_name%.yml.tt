@@ -38,6 +38,6 @@ releases:
   version: 0.5.0
   url: git+https://github.com/cloudfoundry-incubator/bpm-release
 - name: <%= project_name %>
-  version: latest # TODO: update after first final release
-  # url:            TODO: update after first final release
-  # sha1:           TODO: update after first final release
+  version: create  # TODO: update after first final release
+  url: .           # TODO: update after first final release
+  # sha1:            TODO: update after first final release
