@@ -171,3 +171,56 @@ git clone https://github.com/cloudfoundry-community/redis-boshrelease ~/workspac
 
 bosh vendor-package redis-4 ~/workspace/redis-boshrelease
 ```
+
+## Hard-forking another package
+
+You might like to start with other BOSH release's package and make changes (for example, change the upstream blobs or modify the compilation flags).
+
+The `bosh-gen extract-pkg` command is very helpful here. It will copy not just the `packaging` script, but also any blobs or source files from the target BOSH release.
+
+Let's replace our vendored package with a hard fork using `bosh-gen extract-pkg`:
+
+```plain
+pushd ~/workspace/redis-boshrelease
+bosh sync-blobs
+popd
+
+rm -rf packages/redis-4/spec.lock
+bosh-gen extract-pkg ~/workspace/redis-boshrelease/packages/redis-4
+```
+
+The output will show that your BOSH release now has its own `redis.tgz` blob:
+
+```plain
+       exist  packages/redis-4
+      create  packages/redis-4/packaging
+       chmod  packages/redis-4/packaging
+      create  packages/redis-4/spec
+       chmod  packages/redis-4/spec
+    add-blob  redis/redis-4.0.9.tar.gz
+      readme  Upload blobs with 'bosh upload-blobs'
+```
+
+Your BOSH release now has a `packages/redis-4/packaging` script to describe how to convert the `redis/redis-4.0.9.tar.gz` file into the compiled `redis-server`, `redis-cli` binaries we saw earlier.
+
+You can now edit `packages/redis-4/packaging` to modify the `make install` flags etc if you want.
+
+Or you can change the `redis/redis-4.0.9.tar.gz` blob. Visit http://download.redis.io/releases/ and find a newer release (or older release) and download it.
+
+First, remove the current blob:
+
+```plain
+bosh remove-blob redis/redis-4.0.9.tar.gz
+```
+
+Next, add the new blob:
+
+```plain
+bosh add-blob ~/Downloads/redis-3.2.8.tar.gz redis/redis-3.2.8.tar.gz
+```
+
+As early, to create/upload/deploy your new package:
+
+```plain
+bosh deploy manifests/my-system.yml
+```
