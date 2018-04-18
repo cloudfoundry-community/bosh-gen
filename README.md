@@ -118,3 +118,43 @@ Added package 'redis-4/5c3e41...'
 ```
 
 It will then reference this uploaded blob with the `packages/redis-4/spec.lock` file in your BOSH release project folder.
+
+To include the `redis-4` package in your deployment, it needs to be referenced by a job.
+
+Change `jobs/my-system/spec` YAML file's `packages` section to reference your `redis-4` package:
+
+```yaml
+---
+name: my-system
+packages: [redis-4]
+templates:
+  ignoreme: ignoreme
+properties: {}
+```
+
+Now re-deploy to see your `redis-4` package compiled:
+
+```plain
+bosh deploy manifests/my-system.yml
+```
+
+The output will include:
+
+```plain
+Task 4550 | 12:24:46 | Compiling packages: redis-4/5c3e41... (00:00:57)
+```
+
+We can `bosh ssh` into our running `my-system` instance to confirm that `redis-server` and `redis-cli` binaries are available to us:
+
+```plain
+bosh ssh
+```
+
+Inside the VM, list the binaries that have been installed with our package:
+
+```plain
+$ ls /var/vcap/packages/redis-4/bin
+redis-benchmark  redis-check-aof  redis-check-rdb  redis-cli  redis-sentinel  redis-server
+```
+
+A note in advance for writing our BOSH job, these binaries are not in the normal `$PATH` location. They are in `/var/vcap/packages/redis-4` folder.
