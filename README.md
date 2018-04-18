@@ -45,6 +45,7 @@ You're up and running and can now iterate towards your final BOSH release.
 
 Your initial BOSH release scaffold includes:
 
+* An initial `README.md` for your users (please keep this updated with any instructions specific to your release and deployment manifests)
 * 0 packages
 * 1 job called `my-system` with an empty `monit` file
 * 1 deployment manifest `manifests/my-system.yml` with `version: create` set so that every `bosh deploy` will always create/upload a new version of your release during initial development
@@ -71,3 +72,49 @@ addons:
 ```
 
 It is possible that BPM will become a first-class built-in feature of BOSH environments in the future, and then this `addons` section can be removed. For now, it is an addon for your deployment manifest. BPM will make your life as a BOSH release developer easier.
+
+## Jobs and packages
+
+When you're finished and have a working BOSH release, base deployment manifest (`manifests/my-system.yml`), and optional operator files (`manifests/operators`) your BOSH release will include one or more jobs, and one or more packages.
+
+I personally tend to iterate by writing packages first, getting them to compile, and then writing jobs to configure and run the packaged software. So I'll suggest this approach to you.
+
+## Writing a package
+
+Helpful commands from `bosh-gen`:
+
+* `bosh-gen package name` - create a `packages/name` folder with initial `spec` and `packaging` file
+* `bosh-gen extract-pkg /path/to/release/packages/name` - import a package folder from other BOSH release on your local machine, and its blobs and src files.
+
+The `bosh` CLI also has helpful commands to create/borrow packages:
+
+* `bosh generate-package name` - create a `packages/name` folder with initial `spec` and `packaging` file
+* `bosh vendor-package name /path/to/release` - import the final release of a package from other BOSH release ([see blog post](https://starkandwayne.com/blog/build-bosh-releases-faster-with-language-packs/)), not the source of the package and its blobs.
+
+Let's create a `redis` package a few different ways to see the differences.
+
+## Vendoring a package from another release
+
+If there is another BOSH release that has a package that you want, consider vendoring it.
+
+There is already a [redis-boshrelease](https://github.com/cloudfoundry-community/redis-boshrelease) with a `redis-4` package.
+
+```plain
+mkdir ~/workspace
+git clone https://github.com/cloudfoundry-community/redis-boshrelease ~/workspace/redis-boshrelease
+
+bosh vendor-package redis-4 ~/workspace/redis-boshrelease
+```
+
+This command will download the final release version of the `redis-4` package from the `redis-boshrelease` S3 bucket, and then upload it to your own BOSH release's S3 bucket:
+
+```plain
+-- Finished downloading 'redis-4/5c3e41...'
+Adding package 'redis-4/5c3e41...'...
+-- Started uploading 'redis-4/5c3e41...'
+2018/04/18 08:18:25 Successfully uploaded file to https://s3.amazonaws.com/my-system-boshrelease/108682c9...
+-- Finished uploading 'redis-4/5c3e41...'
+Added package 'redis-4/5c3e41...'
+```
+
+It will then reference this uploaded blob with the `packages/redis-4/spec.lock` file in your BOSH release project folder.
