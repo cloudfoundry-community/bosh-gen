@@ -11,4 +11,6 @@ processes:
     memory: 1G
     open_files: 1024
 
-# example at https://github.com/cloudfoundry-incubator/bpm-release/blob/master/jobs/bpm-test-agent/templates/bpm.yml.erb
+# examples/docs at:
+# - https://github.com/cloudfoundry-incubator/bpm-release/blob/master/jobs/test-server/templates/bpm.yml.erb
+# - https://github.com/cloudfoundry-incubator/bpm-release/tree/master/docs

@@ -274,3 +274,58 @@ If your bespoke software is already being compiled from an internal team, then y
 More commonly, you will include your bespoke project via a `git submodule` in the `src` folder, and then delegate the compilation and preparation to your BOSH package's `packaging` script.
 
 I've written up a blob article/tutorial for submoduling bespoke projects, using language packs (`bosh vendor-package`), and packaging your bespoke app at https://www.starkandwayne.com/blog/build-bosh-releases-faster-with-language-packs/.
+
+## Running things with Jobs
+
+The ultimate goal of your deployment manifest is to describe a set of VMs that have installed software that is configured and running.
+
+A deployment manifest describes a common groups of VMs as an "instance group", which includes one or more jobs from BOSH releases. When you ran `bosh-gen new` an initial deployment manifest was generated that references a single job:
+
+```yaml
+instance_groups:
+- name: my-system
+  instances: 1
+  jobs:
+  - name: my-system
+    release: my-system
+    properties: {}
+  ...
+```
+
+The `release: my-system` references an uploaded BOSH release that is described at the bottom of the manifest:
+
+```yaml
+releases:
+- name: bpm
+  version: 0.5.0
+  url: git+https://github.com/cloudfoundry-incubator/bpm-release
+- name: my-system
+  version: create
+  url: .
+```
+
+Later, when you've created your first final BOSH release, you will update this `releases:` section from `version: create` to `version: 1.0.0` to reference your final release version.
+
+The `jobs: [{name: my-system, release: my-system}]` reference in the manifest describes the `jobs/my-system` folder in our BOSH release.
+
+In the initial `bosh-gen new` scaffold, a relatively empty `jobs/my-system` folder was provided so that `bosh deploy` initially works.
+
+The `jobs/my-system/monit` file describes all running processes for a job. In the initial scaffold generated this file is empty.
+
+We want to add a `redis` process to our VM, so let's create a `redis` job.
+
+```plain
+bosh-gen job redis -d redis-4
+```
+
+The output shows that a `config/bpm.yml` file is created.
+
+The `monit` file is now updated to create/monitor a Linux process using BPM:
+
+```plain
+check process my-system
+  with pidfile /var/vcap/sys/run/bpm/my-system/my-system.pid
+  start program "/var/vcap/jobs/bpm/bin/bpm start my-system"
+  stop program "/var/vcap/jobs/bpm/bin/bpm stop my-system"
+  group vcap
+```
