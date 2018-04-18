@@ -215,6 +215,15 @@ Your BOSH release now has a `packages/redis-4/packaging` script to describe how 
 
 You can now edit `packages/redis-4/packaging` to modify the `make install` flags etc if you want.
 
+The `redis/redis-4.0.9.tar.gz` blob has been copied into the `blobs` folder:
+
+```plain
+$ tree blobs
+blobs
+└── redis
+    └── redis-4.0.9.tar.gz
+```
+
 Or you can change the `redis/redis-4.0.9.tar.gz` blob. Visit http://download.redis.io/releases/ and find a newer release (or older release) and download it.
 
 First, remove the current blob:
@@ -249,3 +258,19 @@ redis/redis-4.0.8.tar.gz:
   object_id: 9c954728-d998-459f-7be5-27b8de003b29
   sha: f723b327022cef981b4e1d69c37a8db2faeb0622
 ```
+
+## Create package from scratch
+
+There is something unique and special about your BOSH release. Probably you have some bespoke software you want to deploy.
+
+There are some core components to a bespoke package:
+
+* `blobs` - yet-to-be-compiled or precompiled assets that are cached within your S3 blobstore, rather than inside your BOSH release
+* `src` - git submodules to your bespoke code repositories
+* `packages/name/packaging` - bash script to compile and prepare the package for runtime environments; this script is run within a BOSH compilation VM during `bosh deploy`
+
+If your bespoke software is already being compiled from an internal team, then you can use the `bosh remove-blob` and `bosh add-blob` combo discussed in the preceding section.
+
+More commonly, you will include your bespoke project via a `git submodule` in the `src` folder, and then delegate the compilation and preparation to your BOSH package's `packaging` script.
+
+I've written up a blob article/tutorial for submoduling bespoke projects, using language packs (`bosh vendor-package`), and packaging your bespoke app at https://www.starkandwayne.com/blog/build-bosh-releases-faster-with-language-packs/.
