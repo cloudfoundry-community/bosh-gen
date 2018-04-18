@@ -158,3 +158,16 @@ redis-benchmark  redis-check-aof  redis-check-rdb  redis-cli  redis-sentinel  re
 ```
 
 A note in advance for writing our BOSH job, these binaries are not in the normal `$PATH` location. They are in `/var/vcap/packages/redis-4` folder.
+
+## Upgrading a vendored package
+
+If you're vendoring another release's package, you will need to keep an eye on updates and to re-vendor them into your release.
+
+Essentially, you will re-clone or update the upstream release locally, and re-run `bosh vendor-package`:
+
+```plain
+mkdir ~/workspace
+git clone https://github.com/cloudfoundry-community/redis-boshrelease ~/workspace/redis-boshrelease
+
+bosh vendor-package redis-4 ~/workspace/redis-boshrelease
+```
