@@ -50,6 +50,9 @@ Your initial BOSH release scaffold includes:
 * 1 job called `my-system` with an empty `monit` file
 * 1 deployment manifest `manifests/my-system.yml` with `version: create` set so that every `bosh deploy` will always create/upload a new version of your release during initial development
 * Some sample operator files that you or your users might use to deploy your BOSH release
+* `config/final.yml` describes your public S3 bucket
+* `config/private.yml` is your local-only private AWS API credentials
+* `config/blobs.yml` will be updated when you run `bosh add-blob` to add 3rd-party blobs into your project
 
 ### BPM
 
@@ -90,6 +93,11 @@ The `bosh` CLI also has helpful commands to create/borrow packages:
 
 * `bosh generate-package name` - create a `packages/name` folder with initial `spec` and `packaging` file
 * `bosh vendor-package name /path/to/release` - import the final release of a package from other BOSH release ([see blog post](https://starkandwayne.com/blog/build-bosh-releases-faster-with-language-packs/)), not the source of the package and its blobs.
+
+The `bosh` CLI also has commands for adding/removing blobs:
+
+* `bosh add-blob`
+* `bosh remove-blob`
 
 Let's create a `redis` package a few different ways to see the differences.
 
@@ -216,11 +224,26 @@ bosh remove-blob redis/redis-4.0.9.tar.gz
 Next, add the new blob:
 
 ```plain
-bosh add-blob ~/Downloads/redis-3.2.8.tar.gz redis/redis-3.2.8.tar.gz
+bosh add-blob ~/Downloads/redis-4.0.8.tar.gz redis/redis-4.0.8.tar.gz
 ```
 
 As early, to create/upload/deploy your new package:
 
 ```plain
 bosh deploy manifests/my-system.yml
+```
+
+So that other developers can access your BOSH releases you need to upload your blobs to your S3 bucket:
+
+```plain
+bosh upload-blobs
+```
+
+Your uploaded blobs are referenced in `config/blobs.yml`:
+
+```yaml
+redis/redis-4.0.8.tar.gz:
+  size: 1729973
+  object_id: 9c954728-d998-459f-7be5-27b8de003b29
+  sha: f723b327022cef981b4e1d69c37a8db2faeb0622
 ```
