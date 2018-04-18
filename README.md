@@ -2,6 +2,8 @@
 
 Generators for creating, updating, and sharing BOSH releases.
 
+The https://bosh.io documentation includes a long guide to [explaining BOSH releases and how to create them](https://bosh.io/docs/create-release/). The `bosh-gen` project boosts your speed and guides you towards some newer best practises (e.g. BPM for jobs).
+
 ## Install
 
 `bosh-gen` is distributed as a RubyGem:
