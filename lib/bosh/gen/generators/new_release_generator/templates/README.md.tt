@@ -6,7 +6,7 @@ This BOSH release and deployment manifest deploy a cluster of <%= project_name %
 
 This repository includes base manifests and operator files. They can be used for initial deployments and subsequently used for updating your deployments:
 
-```
+```plain
 export BOSH_ENVIRONMENT=<bosh-alias>
 export BOSH_DEPLOYMENT=<%= project_name %>
 git clone https://github.com/cloudfoundry-community/<%= project_name %>-boshrelease.git
@@ -19,11 +19,12 @@ If your BOSH does not have Credhub/Config Server, then remember `--vars-store` t
 
 When new versions of `<%= project_name %>-boshrelease` are released the `manifests/<%= project_name %>.yml` file will be updated. This means you can easily `git pull` and `bosh deploy` to upgrade.
 
-```
+```plain
 export BOSH_ENVIRONMENT=<bosh-alias>
 export BOSH_DEPLOYMENT=<%= project_name %>
 cd <%= project_name %>-boshrelease
 git pull
 cd -
-bosh deploy <%= project_name %>-boshrelease/manifests/<%= project_name %>.yml
+bosh deploy <%= project_name %>-boshrelease/manifests/<%= project_name %>.yml \
+  -o manifests/operators/create.yml
 ```
