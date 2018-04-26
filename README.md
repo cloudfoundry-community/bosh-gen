@@ -301,7 +301,7 @@ releases:
   url: git+https://github.com/cloudfoundry-incubator/bpm-release
 - name: my-system
   version: create
-  url: .
+  url: file://.
 ```
 
 Later, when you've created your first final BOSH release, you will update this `releases:` section from `version: create` to `version: 1.0.0` to reference your final release version.
