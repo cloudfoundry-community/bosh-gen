@@ -3,7 +3,7 @@
 Vagrant.configure('2') do |config|
 
   config.vm.hostname='boshrelease-builder'
-  config.vm.box = "ubuntu/trusty64"
+  config.vm.box = "ubuntu/xenial64"
 
   # Need NFS enabled, and hence a private network for virtualbox
   # as discussed in this project's patch
