@@ -1,0 +1,5 @@
+---
+name: <%= name %>-pkg-install
+packages: ["<%= name %>"]
+templates:
+  bin/pre-start.sh: bin/pre-start

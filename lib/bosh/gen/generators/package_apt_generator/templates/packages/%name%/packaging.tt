@@ -1,0 +1,33 @@
+#!/bin/bash
+
+set -eux
+
+# SEE BELOW to specify the Debian packages to install
+
+baseDir=$BOSH_INSTALL_TARGET
+cacheDir="$baseDir/apt/cache"
+mkdir -p "$cacheDir"
+
+# https://bugs.launchpad.net/ubuntu/+source/apt/+bug/1577926
+ls -al /tmp
+chmod 1777 /tmp
+
+apt-get install -y apt-transport-https apt-utils
+
+curl -sL https://raw.githubusercontent.com/starkandwayne/homebrew-cf/master/public.key | apt-key add -
+echo "deb http://apt.starkandwayne.com stable main" | tee /etc/apt/sources.list.d/starkandwayne.list
+apt-get update
+apt-get install install-debs-in-order
+
+apt-get update
+
+######################################
+#
+# Add list of packages to install here
+apt-get install -o debug::nolocking=true -o dir::cache=$cacheDir -y -d \
+  <%= deb_package_name %>
+#
+######################################
+
+cd $cacheDir/archives
+install-debs-in-order . > install-packages.sh
