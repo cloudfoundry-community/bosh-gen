@@ -297,8 +297,8 @@ The `release: my-system` references an uploaded BOSH release that is described a
 ```yaml
 releases:
 - name: bpm
-  version: 0.5.0
-  url: git+https://github.com/cloudfoundry-incubator/bpm-release
+  version: 1.1.8
+  url: git+https://github.com/cloudfoundry/bpm-release
 - name: my-system
   version: create
   url: file://.
